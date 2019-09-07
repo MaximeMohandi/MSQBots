@@ -1,22 +1,22 @@
 import json
-from jsonDecryptorException import *
+import jsonDecryptorException
 
-class JsonDecrypt :
-    def __init__(self):
-        self._jsonFile = None
+_jsonFile = None
+
+def ChargeJsonFile(file):
+    _jsonFile = file
+    if FileIsJson() != True:
+        raise jsonDecryptorException.NotJsonFormatException
+    else:
+        #TODO creer objet a partir du JSON
+        pass
     
-    def ChargeJsonFile(self, file):
-        self._jsonFile = file
-        if self.FileIsJson() != True:
-            raise NotJsonFormatException
-        return None
-    
-    def FileIsJson(self):
-        try:
-            json.loads(self._jsonFile)
-            return True
-        except ValueError:
-            return False
-    
-    def GetJsonObject(self):
-        return None
+def FileIsJson():
+    try:
+        json.loads(_jsonFile)
+        return True
+    except ValueError:
+        return False
+
+def GetJsonObject():
+    return None
