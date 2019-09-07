@@ -1,0 +1,2 @@
+this is just a text file made to test if the methode FileIsJson can detect 
+json file.

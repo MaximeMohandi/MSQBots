@@ -1,5 +1,6 @@
 {
-    "host":"",
-    "username":"mysqlReporter",
+    "host":"192.168.1.79",
+    "database":"msqbitReporter",
+    "username":"msqbitReporter",
     "password":"pqOIB9TPbA4yL5JK"
 }
