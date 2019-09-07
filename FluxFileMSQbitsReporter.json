@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "nom": "Le Monde IT",
+        "site": "https://www.lemagit.fr/",
+        "lien": "https://www.lemagit.fr/rss/ContentSyndication.xml",
+        "categorie": "IT"
+    },
+    {
+        "id": 2,
+        "nom": "TechCrunch",
+        "site": "https://techcrunch.com/",
+        "lien": "http://feeds.feedburner.com/TechCrunch/",
+        "categorie": "IT"
+    },
+    {
+        "id": 3,
+        "nom": "Korben",
+        "site": "https://korben.info/",
+        "lien": "https://korben.info/feed",
+        "categorie": "IT"
+    },
+    {
+        "id": 4,
+        "nom": "Le Monde",
+        "site": "https://www.lemonde.fr/",
+        "lien": "https://www.lemonde.fr/rss/une.xml",
+        "categorie": "ACTU"
+    },
+    {
+        "id": 5,
+        "nom": "Zdnet",
+        "site": "https://www.zdnet.fr/",
+        "lien": "https://www.zdnet.fr/feeds/rss/actualites/",
+        "categorie": "IT"
+    }
+]
