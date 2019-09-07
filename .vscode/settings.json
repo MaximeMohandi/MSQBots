@@ -1,3 +1,9 @@
 {
-    "python.pythonPath": "c:\\Projet\\MSQBitsReporter2.0\\msqbitsreporterVenv\\Scripts\\python.exe"
+    "python.pythonPath": "c:\\Projet\\MSQBitsReporter2.0\\msqbitsreporterVenv\\Scripts\\python.exe",
+    "python.testing.pytestArgs": [
+        "msqbitsreporterVenv"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true
 }
