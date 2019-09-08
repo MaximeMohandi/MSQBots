@@ -1,8 +1,15 @@
 import pytest
-from msqbitsReporter.msqbitsReporter_jsonDecryptor import jsonDecrypt, jsonDecryptorException
+import sys
+from msqbitsReporter.msqbitsReporter_jsonDecryptor import jsonDecryptorException,jsonDecrypt
 
-def test_ChargeJsonFile():
-    falseJsonFile = open('ressources/test_falseJsonFile.txt').read()
-    decrypt = jsonDecrypt.JsonDecrypt()
-    with pytest.raises(jsonDecryptorException.NotJsonFormatException):
-        decrypt.ChargeJsonFile(falseJsonFile)
+class TestJsoDecryptor:
+    
+    def test_ChargeJsonFile(self):
+        falseJsonFile = open('test/test_msqbitsReporter_jsonDecryptor/ressources/test_falseJsonFile.txt','r')
+        
+        with pytest.raises(jsonDecryptorException.NotJsonFormatException):
+            jsonDecryptor = jsonDecrypt.JsonDecrypt()
+            jsonDecryptor.ChargeJsonFile(falseJsonFile)
+
+    def test_GetJsonObject(self):
+        pass
