@@ -14,6 +14,9 @@
 * [Python 3.7](https://www.python.org/downloads/)
 * [discord.py](https://github.com/Rapptz/discord.py)
 * [feedparser](https://pypi.org/project/feedparser/)
+* [mysql-connector-python](https://dev.mysql.com/doc/connector-python/en/connector-python-introduction.html)
+* [pytest](https://docs.pytest.org/en/latest/getting-started.html)
+* [sphynx](http://www.sphinx-doc.org/en/master/)
 * A linux virtual machine with database server (sorry I can't host it for you)
 
 ### Usage
