@@ -2,7 +2,7 @@
 /.pytest_cache
 /.vscode
 /__pycache__
-/test/test_msqbitsReporter_jsonDecryptor/__pycache__
 /msqbitsReporter/__pycache__
+/test/__pycache__
 /msqbitsReporter/msqbitsReporter_jsonDecryptor/__pycache__
 *.pyc
