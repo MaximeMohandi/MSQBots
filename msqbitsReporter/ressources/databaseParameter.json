@@ -1,7 +1,7 @@
 {
-    "host":"192.168.1.79",
-    "port":"3306",
-    "database":"msqbitReporter",
-    "username":"msqbitReporter",
-    "password":"pqOIB9TPbA4yL5JK"
+    "host":"HOST",
+    "port":"PORT",
+    "database":"DATABASE",
+    "username":"USERNAME",
+    "password":"PWD"
 }
