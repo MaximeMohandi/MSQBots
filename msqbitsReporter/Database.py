@@ -75,16 +75,41 @@ class Database:
             cursor.close()
 
     def getJournalAll(self):
-        #requete pour récupérer tous les journaux 
-        pass
+        cursor = self.cnx.cursor()
+        query = """SELECT * FROM flux"""
+
+        try:
+            cursor.execute(query)
+            return cursor.fetchall()
+        except mysql.Error:
+            raise error.FetchException
+        finally:
+            cursor.close() 
     
     def getListCategory(self):
-        #requete retourne toutes les catégories
-        pass
+        cursor = self.cnx.cursor()
+        query = """SELECT * FROM categorie"""
+
+        try:
+            cursor.execute(query)
+            return cursor.fetchall()
+        except mysql.Error:
+            raise error.FetchException
+        finally:
+            cursor.close() 
 
     def updateJournal(self, journalObject):
         #update un journal
         pass
 
     def removeJournal(self, journalID):
-        pass
+        cursor = self.cnx.cursor()
+        query = """DELETE FROM flux WHERE id_flux = %s """
+
+        try:
+            cursor.execute(query, journalID)
+            return True
+        except mysql.Error:
+            raise error.FetchException
+        finally:
+            cursor.close()

@@ -32,19 +32,24 @@ def test_getJournauxByCat():
 def test_getJournalById():
     db = Database.Database()
     testRow = db.getJournauxByCat(5) #we get a list of test row to select one row
-    testRowFluxId = testRow[0].id_flux #TODO get the correct value to pass at getJournalByID
+    testRowFluxId = testRow['idFlux'] #TODO get the correct value to pass at getJournalByID
     result = db.getJournalById(testRowFluxId)
     assert result > 0
 
-
 def test_getJournalAll():
-    pass
+    db = Database.Database()
+    result = db.getJournalAll()
+    assert len(result) > 0
 
 def test_getListCategory():
-    pass
+    db = Database.Database()
+    result = db.getListCategory()
+    assert len(result) > 0
 
 def test_updateJournal():
     pass
 
 def test_removeJournal():
-    pass
+    db = Database.Database()
+    result = db.getListCategory()
+    assert result == True
