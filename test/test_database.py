@@ -1,5 +1,6 @@
 import pytest
 import msqbitsReporter.Database as Database
+from msqbitsReporter.msqbitsReporterException import DatabaseException
 
 #if the host is not null then we correctly get the credentials
 def test_getDatabaseCredentials():
@@ -31,10 +32,11 @@ def test_getJournauxByCat():
 
 def test_getJournalById():
     db = Database.Database()
-    testRow = db.getJournauxByCat(5) #we get a list of test row to select one row
-    testRowFluxId = testRow['idFlux'] #TODO get the correct value to pass at getJournalByID
-    result = db.getJournalById(testRowFluxId)
-    assert result > 0
+    testRows = db.getJournauxByCat(5) #we get a list of test row to select one row
+    testFirstRow = testRows[0]
+    idFirstRow = testFirstRow[0]
+    result = db.getJournalById(idFirstRow)
+    assert len(result) > 0
 
 def test_getJournalAll():
     db = Database.Database()
@@ -51,5 +53,7 @@ def test_updateJournal():
 
 def test_removeJournal():
     db = Database.Database()
-    result = db.getListCategory()
-    assert result == True
+    toRemoveJournalList = db.getJournauxByCat(5) #get all journal from test category
+    toRemoveJournal = toRemoveJournalList[0] #get the first journal from the test journal list
+    idJournalToRemove = toRemoveJournal[0]
+    assert db.removeJournal(idJournalToRemove) == True     

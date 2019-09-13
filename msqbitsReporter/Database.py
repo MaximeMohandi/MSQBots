@@ -67,8 +67,8 @@ class Database:
         query = """SELECT * FROM flux WHERE id_flux = %s """
 
         try:
-            cursor.execute(query, journalID)
-            return cursor.fetchall()
+            cursor.execute(query, (journalID,))
+            return cursor.fetchone()
         except mysql.Error:
             raise error.FetchException
         finally:
@@ -104,10 +104,11 @@ class Database:
 
     def removeJournal(self, journalID):
         cursor = self.cnx.cursor()
-        query = """DELETE FROM flux WHERE id_flux = %s """
+        query = """DELETE FROM flux WHERE flux.id_flux = %s """
 
         try:
-            cursor.execute(query, journalID)
+            cursor.execute(query, (journalID,))
+            self.cnx.commit()
             return True
         except mysql.Error:
             raise error.FetchException

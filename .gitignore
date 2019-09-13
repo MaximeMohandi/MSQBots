@@ -1,6 +1,6 @@
 /env
 /.pytest_cache
-/.vscode
+.vscode
 /__pycache__
 /msqbitsReporter/__pycache__
 test/__pycache__
