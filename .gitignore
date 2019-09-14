@@ -10,3 +10,4 @@ test/test_msqbitsReporter_discord/__pycache__
 test/__pycache__/test_jsonDecryptor.cpython-37-pytest-5.1.2.pyc
 test/__pycache__/test_database.cpython-37-pytest-5.1.2.pyc
 test/__pycache__/__init__.cpython-37.pyc
+msqbitsReporter/msqbitsReporter_discord/ressources/discordsCredentials.json
