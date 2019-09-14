@@ -1,12 +1,13 @@
 import msqbitsReporter.msqbitsReporterException as msqException
 import msqbitsReporter.JsonDecryptor as JsonDecryptor
 import msqbitsReporter.Database as Database
+from discord.ext import commands
 import feedparser
 
 db = Database.Database()
 json = JsonDecryptor.JsonDecryptor()
 
-async def displayAllNews(ctx, arg):
+async def displayAllNews(self, ctx):
     allNewsPaper = db.getJournalAll()
     for journal in allNewsPaper:
         await ctx.send(
@@ -24,8 +25,9 @@ async def displayAllNews(ctx, arg):
             if nbDisplayedArticles == 0:
                 break
     return True
-        
-async def displayAllJournalsDetails(ctx, arg):
+
+#display a list of saved newsPapers
+async def displayAllJournalsDetails(self, ctx):
     allNewspaper = db.getJournalAll()
     for journal in allNewspaper:
         await ctx.send(
@@ -35,18 +37,18 @@ async def displayAllJournalsDetails(ctx, arg):
         return True
     pass
 
-async def displayAllNewsFromCat(ctx, arg):
-    #display list of journal from a defined category
+#display 5 news for each newspaper from a category
+async def displayAllNewsFromCat(self, ctx, arg):
     pass
 
-async def displayAllNewsFromJournal(ctx, arg):
-    #display a limited but larger amount of articles from an unique journal (define the amount in arg with a limited number)
+#display a limited but larger amount of articles from an unique journal (define the amount in arg with a limited number)
+async def displayAllNewsFromJournal(self, ctx, arg):
     pass
 
-async def addNewJournal(ctx, *args):
-    #add a journal to the database
+#add a journal to the database
+async def addNewJournal(self, ctx, *args):
     pass
 
-async def removeJournal(ctx, arg):
-    #remove a journal from an id
+#remove a journal with specified id
+async def removeJournal(self, ctx, arg):
     pass
