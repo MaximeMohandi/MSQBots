@@ -40,10 +40,6 @@ class DiscordClient(discord.Client):
     def on_error(self, event, *args, **kwargs):
         print('une erreur est survenue')
 
-
-
-
-
     def run(self):
         print('run')
         message = self.messageActivity

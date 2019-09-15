@@ -7,6 +7,11 @@ import feedparser
 db = Database.Database()
 json = JsonDecryptor.JsonDecryptor()
 
+Bot 
+
+@Bot.command(
+    brie
+)
 async def displayAllNews(self, ctx):
     allNewsPaper = db.getJournalAll()
     for journal in allNewsPaper:
