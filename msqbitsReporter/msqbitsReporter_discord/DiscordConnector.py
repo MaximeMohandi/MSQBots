@@ -5,51 +5,32 @@ from msqbitsReporter.msqbitsReporterException import msqbitsReporterException
 from msqbitsReporter.msqbitsReporter_discord import CommandReaction
 import msqbitsReporter.JsonDecryptor as JsonDecryptor
 
+credentials = getCredential()
+bot = commands.Bot(comman_prefix=credentials['commandPrefix'])
 
+def getCredentials():
+    try:
+        credentialsPath = 'msqbitsReporter/msqbitsReporter_discord/ressources/discordsCredentials.json'
+        reader = JsonDecryptor.JsonDecryptor()
+        reader.chargeJsonFile(credentialsPath)
+        return reader.getJsonObject()
+    except msqbitsReporterException:
+        print('erreur pendant la récupération des credentials')
 
-class DiscordClient(discord.Client):
-    def __init__(self):
-        super(DiscordClient, self).__init__()
-        self.getCredentials()
+@bot.event
+def on_ready():
+    await bot.change_presence(activity=discord.Game(name = credentials['messageActivity']))
+    print("I'm on the case")
         
-        print('init bot')
+@bot.event
+def on_error(event, *args, **kwargs):
+    print('une erreur est survenue')
 
-    def getCredentials(self):
-        print('getting credential')
-        try:
-            credentialsPath = 'msqbitsReporter/msqbitsReporter_discord/ressources/discordsCredentials.json'
-            reader = JsonDecryptor.JsonDecryptor()
-            reader.chargeJsonFile(credentialsPath)
-            credentialsData = reader.getJsonObject()
-
-            self.commandsPrefix = credentialsData['commandPrefix']
-            self.TOKEN = credentialsData['token']
-            self.messageActivity = credentialsData['messageActivity']
-            self.channelId = credentialsData['channelId']
-        except msqbitsReporterException:
-            print('erreur pendant la récupération des credentials')
-
-    def CommandController(self):
-        pass
-
-    @asyncio.coroutine
-    def on_ready(self):
-        print("I'm on the case")
-            
-    @asyncio.coroutine
-    def on_error(self, event, *args, **kwargs):
-        print('une erreur est survenue')
-
-    def run(self):
-        print('run')
-        message = self.messageActivity
-        try:
-            super(DiscordClient,self).change_presence(
-                activity=discord.Game(name=message)
-            )
-            super(DiscordClient,self).run(self.TOKEN)
-        except Exception:
-            print('erreur')
+def run():
+    try:
+        bot.run(credentials['token'])
+    except Exception:
+        print('erreur')
 
 
 

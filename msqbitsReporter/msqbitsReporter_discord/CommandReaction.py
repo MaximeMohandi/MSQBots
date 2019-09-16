@@ -1,17 +1,15 @@
 import msqbitsReporter.msqbitsReporterException as msqException
 import msqbitsReporter.JsonDecryptor as JsonDecryptor
 import msqbitsReporter.Database as Database
-from discord.ext import commands
+import msqbitsReporter.msqbitsReporter_discord as discordReporter
 import feedparser
+
 
 db = Database.Database()
 json = JsonDecryptor.JsonDecryptor()
+bot = discordReporter.bot
 
-Bot 
-
-@Bot.command(
-    brie
-)
+@bot.command
 async def displayAllNews(self, ctx):
     allNewsPaper = db.getJournalAll()
     for journal in allNewsPaper:
@@ -31,6 +29,7 @@ async def displayAllNews(self, ctx):
                 break
     return True
 
+@bot.command
 #display a list of saved newsPapers
 async def displayAllJournalsDetails(self, ctx):
     allNewspaper = db.getJournalAll()
@@ -42,18 +41,22 @@ async def displayAllJournalsDetails(self, ctx):
         return True
     pass
 
+@bot.command
 #display 5 news for each newspaper from a category
 async def displayAllNewsFromCat(self, ctx, arg):
     pass
 
+@bot.command
 #display a limited but larger amount of articles from an unique journal (define the amount in arg with a limited number)
 async def displayAllNewsFromJournal(self, ctx, arg):
     pass
 
+@bot.command
 #add a journal to the database
 async def addNewJournal(self, ctx, *args):
     pass
 
+@bot.command
 #remove a journal with specified id
 async def removeJournal(self, ctx, arg):
     pass
