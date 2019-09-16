@@ -30,7 +30,6 @@ async def displayAllNews(self, ctx):
     return True
 
 @bot.command
-#display a list of saved newsPapers
 async def displayAllJournalsDetails(self, ctx):
     allNewspaper = db.getJournalAll()
     for journal in allNewspaper:
@@ -42,21 +41,17 @@ async def displayAllJournalsDetails(self, ctx):
     pass
 
 @bot.command
-#display 5 news for each newspaper from a category
 async def displayAllNewsFromCat(self, ctx, arg):
     pass
 
 @bot.command
-#display a limited but larger amount of articles from an unique journal (define the amount in arg with a limited number)
 async def displayAllNewsFromJournal(self, ctx, arg):
     pass
 
 @bot.command
-#add a journal to the database
 async def addNewJournal(self, ctx, *args):
     pass
 
 @bot.command
-#remove a journal with specified id
 async def removeJournal(self, ctx, arg):
     pass

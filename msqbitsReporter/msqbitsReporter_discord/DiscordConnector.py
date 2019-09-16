@@ -5,7 +5,7 @@ from msqbitsReporter.msqbitsReporterException import msqbitsReporterException
 from msqbitsReporter.msqbitsReporter_discord import CommandReaction
 import msqbitsReporter.JsonDecryptor as JsonDecryptor
 
-credentials = getCredential()
+credentials = getCredentials()
 bot = commands.Bot(comman_prefix=credentials['commandPrefix'])
 
 def getCredentials():
@@ -18,7 +18,7 @@ def getCredentials():
         print('erreur pendant la récupération des credentials')
 
 @bot.event
-def on_ready():
+async def on_ready():
     await bot.change_presence(activity=discord.Game(name = credentials['messageActivity']))
     print("I'm on the case")
         

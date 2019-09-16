@@ -1,4 +1,3 @@
-import msqbitsReporter.msqbitsReporter_discord.DiscordConnector as discord
+import msqbitsReporter.msqbitsReporter_discord.DiscordConnector as discordAPI
 
-bot = discord.DiscordClient()
-test = bot.run()
+discordAPI.run()
