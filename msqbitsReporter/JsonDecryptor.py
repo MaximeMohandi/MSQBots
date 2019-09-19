@@ -6,11 +6,11 @@ class JsonDecryptor:
         pass
 
     def chargeJsonFile(self, file):
-         try:
-             with open(file) as jsonData:
-                 self._jsonFile = json.load(jsonData)
-         except (ValueError, TypeError):
-             raise error.JsonFormatFileException
+        try:
+            with open(file) as jsonData:
+                self._jsonFile = json.load(jsonData)
+        except (ValueError, TypeError):
+            raise error.JsonFormatFileException
 
     def getJsonObject(self):
         return self._jsonFile

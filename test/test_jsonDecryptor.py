@@ -1,4 +1,5 @@
 import pytest
+import os
 import msqbitsReporter.msqbitsReporterException as msqbitsReporterException
 import msqbitsReporter.JsonDecryptor as JsonDecryptor
 
@@ -15,7 +16,7 @@ def test_getJsonObject():
     assert returnedJson['test'] == True
 
 def getFakeJsonFile():
-    return 'test/ressources/test_fakeJsonFile.txt'
+    return os.path.join(os.path.dirname(__file__), 'ressources/test_fakeJsonFile.txt')
 
 def getTrueJsonFile():
-    return 'test/ressources/test_TrueJsonFile.json'
+    return os.path.join(os.path.dirname(__file__), 'ressources/test_TrueJsonFile.json')

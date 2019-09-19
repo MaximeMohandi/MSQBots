@@ -1,7 +1,6 @@
-import msqbitsReporter.msqbitsReporterException as msqException
 import msqbitsReporter.JsonDecryptor as JsonDecryptor
 import msqbitsReporter.Database as Database
-import msqbitsReporter.msqbitsReporter_discord as discordReporter
+import msqbitsReporter.msqbitsReporter_discord.DiscordConnector as discordReporter
 import feedparser
 
 
@@ -10,7 +9,7 @@ json = JsonDecryptor.JsonDecryptor()
 bot = discordReporter.bot
 
 @bot.command
-async def displayAllNews(self, ctx):
+async def displayAllNews(ctx):
     allNewsPaper = db.getJournalAll()
     for journal in allNewsPaper:
         await ctx.send(
@@ -30,7 +29,7 @@ async def displayAllNews(self, ctx):
     return True
 
 @bot.command
-async def displayAllJournalsDetails(self, ctx):
+async def displayAllJournalsDetails(ctx):
     allNewspaper = db.getJournalAll()
     for journal in allNewspaper:
         await ctx.send(
@@ -41,17 +40,17 @@ async def displayAllJournalsDetails(self, ctx):
     pass
 
 @bot.command
-async def displayAllNewsFromCat(self, ctx, arg):
+async def displayAllNewsFromCat(ctx, arg):
     pass
 
 @bot.command
-async def displayAllNewsFromJournal(self, ctx, arg):
+async def displayAllNewsFromJournal(ctx, arg):
     pass
 
 @bot.command
-async def addNewJournal(self, ctx, *args):
+async def addNewJournal(ctx, *args):
     pass
 
 @bot.command
-async def removeJournal(self, ctx, arg):
+async def removeJournal(ctx, arg):
     pass

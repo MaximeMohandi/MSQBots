@@ -1,3 +1,4 @@
+import os
 import mysql.connector as mysql
 import msqbitsReporter.JsonDecryptor as JsonDecryptor
 import msqbitsReporter.msqbitsReporterException as error
@@ -22,7 +23,7 @@ class Database:
         
     def getDataBaseCredentials(self):
         jsonData = JsonDecryptor.JsonDecryptor()
-        credentialsPath = 'msqbitsReporter/ressources/databaseParameter.json'
+        credentialsPath = os.path.join(os.path.dirname(__file__), 'ressources/databaseParameter.json')
         try :
             jsonData.chargeJsonFile(credentialsPath)
             self.credentials = jsonData.getJsonObject()
