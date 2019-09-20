@@ -1,6 +1,5 @@
-import pytest
-import msqbitsReporter.Database as Database
-from msqbitsReporter.msqbitsReporterException import DatabaseException
+import msqbitsReporter.common.Database as Database
+
 
 #if the host is not null then we correctly get the credentials
 def test_getDatabaseCredentials():

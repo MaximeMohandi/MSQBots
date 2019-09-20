@@ -1,7 +1,7 @@
 import pytest
 import os
-import msqbitsReporter.msqbitsReporterException as msqbitsReporterException
-import msqbitsReporter.JsonDecryptor as JsonDecryptor
+import msqbitsReporter.common.msqbitsReporterException as msqbitsReporterException
+import msqbitsReporter.common.JsonDecryptor as JsonDecryptor
 
 def test_ChargeJsonFile():
     fakeFilePath = getFakeJsonFile()

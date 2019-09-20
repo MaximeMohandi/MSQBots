@@ -1,7 +1,5 @@
-import os
 import mysql.connector as mysql
-import msqbitsReporter.JsonDecryptor as JsonDecryptor
-import msqbitsReporter.msqbitsReporterException as error
+from msqbitsReporter.common import constant, JsonDecryptor, msqbitsReporterException
 
 class Database:
     def __init__(self):
@@ -19,15 +17,15 @@ class Database:
             )
             return True
         except mysql.Error:
-            raise error.DatabaseException
+            raise msqbitsReporterException.DatabaseException
         
     def getDataBaseCredentials(self):
         jsonData = JsonDecryptor.JsonDecryptor()
-        credentialsPath = os.path.join(os.path.dirname(__file__), 'ressources/databaseParameter.json')
+        credentialsPath = constant.DATABASE_CREDENTIALS_FILE
         try :
             jsonData.chargeJsonFile(credentialsPath)
             self.credentials = jsonData.getJsonObject()
-        except error.JsonFormatFileException:
+        except msqbitsReporterException.JsonFormatFileException:
             return None
 
     def insertJournal(self, nomFlux, adresseFlux, rssFlux, categorieFlux):
@@ -47,7 +45,7 @@ class Database:
             self.cnx.commit()
             return cursor.lastrowid
         except mysql.Error:
-            raise error.InsertException
+            raise msqbitsReporterException.InsertException
         finally:
             cursor.close()
 
@@ -59,7 +57,7 @@ class Database:
             cursor.execute(query, (catId,))
             return cursor.fetchall()
         except mysql.Error:
-            raise error.FetchException
+            raise msqbitsReporterException.FetchException
         finally:
             cursor.close()
 
@@ -71,7 +69,7 @@ class Database:
             cursor.execute(query, (journalID,))
             return cursor.fetchone()
         except mysql.Error:
-            raise error.FetchException
+            raise msqbitsReporterException.FetchException
         finally:
             cursor.close()
 
@@ -83,7 +81,7 @@ class Database:
             cursor.execute(query)
             return cursor.fetchall()
         except mysql.Error:
-            raise error.FetchException
+            raise msqbitsReporterException.FetchException
         finally:
             cursor.close() 
     
@@ -95,7 +93,7 @@ class Database:
             cursor.execute(query)
             return cursor.fetchall()
         except mysql.Error:
-            raise error.FetchException
+            raise msqbitsReporterException.FetchException
         finally:
             cursor.close() 
 
@@ -112,6 +110,6 @@ class Database:
             self.cnx.commit()
             return True
         except mysql.Error:
-            raise error.FetchException
+            raise msqbitsReporterException.FetchException
         finally:
             cursor.close()

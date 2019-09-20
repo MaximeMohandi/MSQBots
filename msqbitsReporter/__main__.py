@@ -1,3 +1,3 @@
-import msqbitsReporter.msqbitsReporter_discord.DiscordConnector as discordAPI
+from msqbitsReporter.discord.DiscordConnector import run
 
-discordAPI.run()
+run()

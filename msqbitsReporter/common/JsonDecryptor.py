@@ -1,5 +1,5 @@
 import json
-import msqbitsReporter.msqbitsReporterException as error
+import msqbitsReporter.common.msqbitsReporterException as error
 
 class JsonDecryptor:
     def __init__(self):

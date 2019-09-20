@@ -1,6 +1,7 @@
 /env
+/.idea
 *.pyc
-.vscode
+/.vscode
 /__pycache__
 /.pytest_cache
 test/__pycache__
@@ -10,4 +11,4 @@ test/test_msqbitsReporter_discord/__pycache__
 /msqbitsReporter/msqbitsReporter_jsonDecryptor/__pycache__
 test/__pycache__/test_database.cpython-37-pytest-5.1.2.pyc
 test/__pycache__/test_jsonDecryptor.cpython-37-pytest-5.1.2.pyc
-msqbitsReporter/msqbitsReporter_discord/ressources/discordsCredentials.json
+msqbitsReporter/ressources/discordsCredentials.json
