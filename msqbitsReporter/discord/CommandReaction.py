@@ -5,27 +5,27 @@ import msqbitsReporter.discord.DiscordConnector as discordReporter
 bot = discordReporter.bot
 
 @bot.command
-async def displayAllNews(ctx):
+async def news(ctx):
     for message in news_message.getArticlesByNewspaper():
         await ctx.send(message)
 
 @bot.command
-async def displayAllJournalsDetails(ctx):
+async def listNp(ctx):
     for message in news_message.getAllNewspapersSaved():
         await ctx.send(message)
 
 @bot.command
-async def displayAllNewsFromCat(ctx, arg):
+async def newsFromCat(ctx, arg):
     pass
 
 @bot.command
-async def displayAllNewsFromJournal(ctx, arg):
+async def newsFrom(ctx, arg):
     pass
 
 @bot.command
-async def addNewJournal(ctx, *args):
+async def add(ctx, *args):
     pass
 
 @bot.command
-async def removeJournal(ctx, arg):
+async def remove(ctx, arg):
     pass

@@ -1,4 +1,5 @@
-import msqbitsReporter.common.Database as Database
+import pytest
+from msqbitsReporter.common import Database
 
 
 #if the host is not null then we correctly get the credentials
