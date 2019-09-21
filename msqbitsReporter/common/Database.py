@@ -78,8 +78,13 @@ class Database:
 
     def getJournalAll(self):
         cursor = self.cnx.cursor()
-        query = """SELECT * FROM flux"""
-
+        query = """SELECT 
+                    f.nom_flux, 
+                    f.adresse_flux,
+                    c.nom_categorie, 
+                    f.rss_flux
+                FROM flux f 
+                INNER JOIN categorie c ON c.id_categorie = f.categorie_flux"""
         try:
             cursor.execute(query)
             return cursor.fetchall()

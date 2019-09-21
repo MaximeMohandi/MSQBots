@@ -37,3 +37,7 @@ async def on_ready():
 @bot.event
 async def on_error(event, *args, **kwargs):
     print('une erreur est survenue')
+
+@bot.event
+async def on_disconnect():
+    print('Free time !!')

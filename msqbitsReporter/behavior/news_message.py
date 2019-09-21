@@ -3,8 +3,6 @@ import feedparser
 
 db = Database.Database()
 
-#Return a list of message which correspond to a newspaper name and 4 articles
-#for each saved newspapers
 def getArticlesByNewspaper() :
     messageStack = []
     allNewspaper = db.getJournalAll()
@@ -13,7 +11,7 @@ def getArticlesByNewspaper() :
     for newsPaper in allNewspaper:
         messageStack.append(
             """_ _{0}**📰  {1}   📰** - <{2}>\n***🔖 {3}***"""
-            .format('\n',newsPaper[1],newsPaper[2],newsPaper[4])
+            .format('\n', newsPaper[0], newsPaper[1], newsPaper[2])
         )
         newsPaperArticles = feedparser.parse(newsPaper[3])
 
@@ -24,9 +22,9 @@ def getArticlesByNewspaper() :
                 format(article.title, article.link, article.published)
             )
             articleCounter+=1
+        messageStack.append('\n\n')
     return messageStack
 
-#Return a list of message which corrspond to a list of newspapers saved
 def getAllNewspapersSaved() :
     messageStack = []
     allNewpapers = db.getJournalAll()
@@ -37,10 +35,9 @@ def getAllNewspapersSaved() :
             .format(newspaper[0], newspaper[1],
                     newspaper[2],newspaper[3])
         )
-
+    messageStack.append('\n\n')
     return messageStack
 
-#Return a list of message containing all categories saved in database
 def getAllCategoriesSaved() :
     messageStack = []
     allCategories = db.getListCategory()
@@ -50,9 +47,9 @@ def getAllCategoriesSaved() :
             """{0} - {1} """
             .format(category[0], category[1])
         )
+    messageStack.append('\n\n')
     return messageStack
 
-#Return a list of message containing 8 articles of a single newspaper
 def getAllArticlesFromNewspaper(nomJournal) :
     messageStack = []
     newspaper = db.getJournalByNom(nomJournal)
@@ -72,8 +69,28 @@ def getAllArticlesFromNewspaper(nomJournal) :
                 format(article.title, article.link, article.published)
             )
             articleCounter+=1
-
+        messageStack.append('\n\n')
     return messageStack
 
 def getArticlesFromNewspaperBycat(nomCat):
-    pass
+    messageStack = []
+    newspapers = db.getJournauxByCat(nomCat)
+    if newspapers != None:
+        for newspaper in newspapers:
+            messageStack.append(
+                """_ _{0}**📰  {1}   📰** - <{2}>\n***🔖 {3}***"""
+                .format('\n', newspaper['nom_flux'], newspaper['adresse_flux'], newspaper['categorie_flux'])
+            )
+
+            articles = feedparser.parse(newspaper['rss_flux'])
+            articleCounter = 0
+
+            while (len(articles.entries) > 0 and articleCounter < 8):
+                article = articles.entries[articleCounter]
+                messageStack.append(
+                    """**{0}**\n<{1}>\n*{2}*""".
+                        format(article.title, article.link, article.published)
+                )
+                articleCounter += 1
+        messageStack.append('\n\n')
+    return messageStack
