@@ -2,7 +2,8 @@ class msqbitsReporterException(Exception):
     pass
 
 class JsonFormatFileException(msqbitsReporterException):
-    """The File is not a Json File, please charge a json file"""
+    def __init__(self):
+        self.message = 'The File is not a Json File, please charge a json file'
     pass
 
 class DatabaseException(msqbitsReporterException):

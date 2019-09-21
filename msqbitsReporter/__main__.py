@@ -1,3 +1,3 @@
-from msqbitsReporter.discord.DiscordConnector import run
+from msqbitsReporter.discordAPI.connector import run
 
 run()

@@ -1,7 +1,6 @@
-import os
 import discord
-from msqbitsReporter.common import constant,msqbitsReporterException, JsonDecryptor
 from discord.ext import commands
+from msqbitsReporter.common import constant, msqbitsReporterException, JsonDecryptor
 
 def getCredentials():
     try:
@@ -14,11 +13,21 @@ def getCredentials():
 credentials = getCredentials()
 bot = commands.Bot(command_prefix=credentials['commandPrefix'])
 
+def load_command_files():
+    try:
+        for file in constant.DISCORD_COMMANDS_FILES:
+            bot.load_extension(file)
+    except Exception as ex:
+        print('error loading extension :')
+        print(ex)
+
 def run():
     try:
-        bot.run(credentials['token'])
-    except Exception:
-        print('erreur')
+        load_command_files()
+        bot.run(credentials['token'], bot=True, reconnect=True)
+    except Exception as ex:
+        print('erreur lors du démarrage :')
+        print(ex)
 
 @bot.event
 async def on_ready():
