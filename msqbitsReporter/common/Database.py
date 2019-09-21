@@ -49,24 +49,27 @@ class Database:
         finally:
             cursor.close()
 
-    def getJournauxByCat(self, catId):
+    def getJournauxByCat(self, catNom):
         cursor = self.cnx.cursor()
-        query = """SELECT * FROM flux WHERE categorie_flux = %s """
+        query = """SELECT * FROM flux f
+                INNER JOIN categorie c ON c.id_categorie = f.categorie_flux
+                WHERE c.nom_categorie = %s """
 
         try:
-            cursor.execute(query, (catId,))
+            cursor.execute(query, (catNom,))
             return cursor.fetchall()
         except mysql.Error:
             raise msqbitsReporterException.FetchException
         finally:
             cursor.close()
 
-    def getJournalById(self, journalID):
-        cursor = self.cnx.cursor()
-        query = """SELECT * FROM flux WHERE id_flux = %s """
+    def getJournalByNom(self, nomJournal):
+        cursor = self.cnx.cursor(buffered=True)
+        query = """SELECT * FROM flux f
+                WHERE f.nom_flux = %s """
 
         try:
-            cursor.execute(query, (journalID,))
+            cursor.execute(query, (nomJournal,))
             return cursor.fetchone()
         except mysql.Error:
             raise msqbitsReporterException.FetchException
@@ -101,12 +104,12 @@ class Database:
         #update un journal
         pass
 
-    def removeJournal(self, journalID):
+    def removeJournal(self, nomJournal):
         cursor = self.cnx.cursor()
-        query = """DELETE FROM flux WHERE flux.id_flux = %s """
+        query = """DELETE FROM flux WHERE flux.nom_flux = %s """
 
         try:
-            cursor.execute(query, (journalID,))
+            cursor.execute(query, (nomJournal,))
             self.cnx.commit()
             return True
         except mysql.Error:

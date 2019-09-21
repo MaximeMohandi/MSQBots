@@ -27,15 +27,15 @@ def test_insertJournal():
 
 def test_getJournauxByCat():
     db = Database.Database()
-    result = db.getJournauxByCat(5) #here 5 is the index for the test cat
+    result = db.getJournauxByCat('TEST') #here 5 is the index for the test cat
     assert len(result) > 0
 
-def test_getJournalById():
+def test_getJournalByNom():
     db = Database.Database()
-    testRows = db.getJournauxByCat(5) #we get a list of test row to select one row
+    testRows = db.getJournauxByCat('TEST') #we get a list of test row to select one row
     testFirstRow = testRows[0]
-    idFirstRow = testFirstRow[0]
-    result = db.getJournalById(idFirstRow)
+    nomFirstRow = testFirstRow[1]
+    result = db.getJournalByNom(nomFirstRow)
     assert len(result) > 0
 
 def test_getJournalAll():
@@ -53,7 +53,7 @@ def test_updateJournal():
 
 def test_removeJournal():
     db = Database.Database()
-    toRemoveJournalList = db.getJournauxByCat(5) #get all journal from test category
+    toRemoveJournalList = db.getJournauxByCat('TEST') #get all journal from test category
     toRemoveJournal = toRemoveJournalList[0] #get the first journal from the test journal list
     idJournalToRemove = toRemoveJournal[0]
     assert db.removeJournal(idJournalToRemove) == True     

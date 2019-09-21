@@ -32,12 +32,15 @@ class ReporterCommands(commands.Cog):
         for message in newspaper.getAllCategoriesSaved():
             await ctx.send(message)
 
+    @commands.command(name='getNewsBy', aliases=['newsBy', 'parCatégories'],
+                      brief='Display a list of all news by selected category',
+                      help='Display a list of all news by selected category, this command can be'
+                           'by typing $stop')
+    async def display_news_by_category(self, ctx, arg):
+        for message in newspaper.getArticlesFromNewspaperBycat(arg):
+            await ctx.send(message)
 
-    @bot.command
-    async def newsFromCat(ctx, arg):
-        pass
-
-    @bot.command
+    @commands.command(name='')
     async def newsFrom(ctx, arg):
         pass
 
