@@ -16,14 +16,17 @@ def get_week_planning():
     while cursor < len(weekdays):
         daytitle = weekdays[cursor].td.text
         daycaseposition = weekdays[cursor]["style"].split(';')[1].split('.')[0].split(':')[1] #get the left posiotion of the day column in the html document
-
+        daycourse ={}
         for course in weekcourses:
             coursecasepostion = course["style"].split(';')[3].split('.')[0].split(':')[1] #get the left posiotion of the course column in the html document
             if coursecasepostion == daycaseposition:
-                daycourse = {'day':daytitle, 'courses':[]}
+
+                daycourse['day'] = daytitle
                 courseinfo = course.findAll('td')
                 coursedetails = {}
-                for info in courseinfo:
+                temparray= []
+
+                for info in courseinfo :
                     if info['class'][0] == 'TChdeb':
                         coursedetails['hours'] = info.text
                     elif info['class'][0] == 'TCase':
@@ -32,9 +35,13 @@ def get_week_planning():
                         coursedetails['prof'] = info.text.replace('INGENIERIE', '.').split('.')[0]
                     elif info['class'][0] == 'TCSalle':
                         coursedetails['room'] = info.text
-                daycourse['courses'].append(coursedetails)
+
+                temparray.append(coursedetails)
+                daycourse['course'] = temparray
                 listweekcourse.append(daycourse)
         cursor += 1
     return listweekcourse
-print(get_week_planning())
-#TODO voir comment mieux formatter ces données
+
+def get_detail_nearest_course():
+    pass
+
