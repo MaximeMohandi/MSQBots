@@ -1,5 +1,5 @@
 # MSQBitsReporter2.0
-![alt text](ressources/reporterLogo.png)
+<img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/ressources/reporterLogo.png" width="40%"/>
 
 ## Refactor of MSQBitsReporter
 *TODO add description here*
