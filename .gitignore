@@ -11,4 +11,5 @@ test/test_msqbitsReporter_discord/__pycache__
 /msqbitsReporter/msqbitsReporter_jsonDecryptor/__pycache__
 test/__pycache__/test_database.cpython-37-pytest-5.1.2.pyc
 test/__pycache__/test_jsonDecryptor.cpython-37-pytest-5.1.2.pyc
-msqbitsReporter/ressources/discordsCredentials.json
+/msqbitsReporter/ressources/discordsCredentials.json
+/msqbitsReporter/ressources/databaseParameter.json
