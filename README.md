@@ -1,4 +1,6 @@
 # MSQBitsReporter2.0
+![alt text](ressources/reporterLogo.png)
+
 ## Refactor of MSQBitsReporter
 *TODO add description here*
 
