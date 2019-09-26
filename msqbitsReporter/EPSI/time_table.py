@@ -1,15 +1,27 @@
+"""
+This module is higly depend of the EPSI school planning website. if you want to use it for your own
+school planning you can test your function with the test module
+"""
 import requests
 from bs4 import BeautifulSoup
-from datetime import date
+from datetime import datetime, timedelta
 
-URL_EPSI_API = 'https://edtmobiliteng.wigorservices.net//WebPsDyn.aspx?action=posEDTBEECOME&serverid=C&Tel=maxime.mohandi&date=09/30/2019'
+URL_EPSI_API = '=maxime.mohandi&date=09/30/2019'
+PLANNING_URI = 'https://edtmobiliteng.wigorservices.net//WebPsDyn.aspx?action=posEDTBEECOME&serverid=C&Tel={0}&date={1}'
 
-#the api return an HTML document this function split it using the tag representing the needed information
+def get_first_day_week() :
+    numbertoday = datetime.today().weekday()
+    return datetime.today() - timedelta(days=numbertoday)
+
 def get_week_planning():
-    response = requests.get(URL_EPSI_API)
+    request = URL_EPSI_API.format('maxime.mohandi',get_week_planning())
+    response = requests.get(request)
     soup = BeautifulSoup(response.text, "html.parser")
-    weekdays = soup.findAll('div', {'class': 'Jour'})
-    weekcourses = soup.findAll('div', {'class': 'Case'})
+    return parse_hmtl_result(soup)
+
+def parse_hmtl_result(parsedhtml):
+    weekdays = parsedhtml.findAll('div', {'class': 'Jour'})
+    weekcourses = parsedhtml.findAll('div', {'class': 'Case'})
     listweekcourse = []
     cursor = 0
 
@@ -40,6 +52,7 @@ def get_week_planning():
                 daycourse['course'] = temparray
                 listweekcourse.append(daycourse)
         cursor += 1
+
     return listweekcourse
 
 def get_detail_nearest_course():
