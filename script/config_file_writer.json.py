@@ -73,17 +73,3 @@ def check_mandatory_field(tocheck):
 ask_database_credentials()
 ask_discord_credentials()
 
-# {
-#     "host":"serveur.maximemohandi.fr",
-#     "port":"33306",
-#     "database":"msqbitReporter",
-#     "username":"msqbitReporter",
-#     "password":"pqOIB9TPbA4yL5JK"
-# }
-#
-# {
-#     "token":"NDA2OTQwNzIyMDc2NTgxOTA4.XYxl4Q.V7o77ru2U7nt4kBhBv6YRG17sI8",
-#     "channelId":565845358261829641,
-#     "messageActivity":"Beta-v.1.0.3",
-#     "commandPrefix":"$",
-# }
