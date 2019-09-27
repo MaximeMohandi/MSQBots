@@ -20,7 +20,7 @@ _TODO explain docker integration + local run_
 
 ### Local Installation
 * Pro : You just need python installed
-* Cons: You'll have to install all the dependencies and manage eventual compatibility problem 
+* Cons: You'll have to install all the dependencies and manage eventual compatibility problem and you'll also have to configure a database
 
 _TODO put instruction here_
 
