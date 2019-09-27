@@ -1,13 +1,13 @@
 # MSQBitsReporter2.0
 <img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/ressources/reporterLogo.png" width="25%"/>
 
-The first vesrion of this bot as been developped to as an pratical project to train my python skills. However after sometimes I started to use it more often and thinking of new features.
+The first vesrion of this bot has been developed as a pratical project to train my python skills. However, sometimes I thaught of new features and here we are.
 
 ## Main Features
 *This bot is entirely modulable, this main features has been design for my usage but I developped it to be easly adapted.* 
 
 * Display RSS feed articles
-* Display planning from school API
+* Display timetable planning from school API
 * Discord Bot API
 
 ## Installation
