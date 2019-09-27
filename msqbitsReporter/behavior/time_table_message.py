@@ -14,3 +14,18 @@ def getPlanningWeek():
                 .format(course['hours'], course['label'], course['prof'], course['room'])
             )
     return messageStack
+
+def getTodayPlanning(date):
+    messageStack = []
+    allCourse = time_table.get_detail_nearest_course(date)
+
+    for workedday in allCourse:
+        messageStack.append(
+            """🗓️ **{0}**""".format(workedday['day'])
+        )
+        for course in workedday['course']:
+            messageStack.append(
+                """⏰ {0}\n 📓 {1}\n 👨‍🏫 {2}\n 🚪 {3}\n"""
+                    .format(course['hours'], course['label'], course['prof'], course['room'])
+            )
+    return messageStack
