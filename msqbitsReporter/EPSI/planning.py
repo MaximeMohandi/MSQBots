@@ -5,7 +5,6 @@ def get_first_day_week() :
     numbertoday = datetime.today().weekday()
     return datetime.today() - timedelta(days=numbertoday)
 
-
 def convert_full_french_date(frenchdate):
     dictmonthnumber = [
         ['janvier', '01'], ['fevrier', '02'], ['mars', '03'],
@@ -22,9 +21,6 @@ def convert_full_french_date(frenchdate):
             datemonth = date[1]
 
             return datetime(year=int(yeardate), month=int(datemonth), day=int(dateday)).strftime('%m/%d/%y')
-
-
-
 
 def parse_hmtl_result(parsedhtml):
     weekdays = parsedhtml.findAll('div', {'class': 'Jour'})

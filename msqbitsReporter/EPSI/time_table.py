@@ -31,7 +31,3 @@ def get_detail_nearest_course(date):
         return 'No event today'
     except Exception as ex:
         print(ex)
-
-
-
-print(get_detail_nearest_course('02/10/2019'))
