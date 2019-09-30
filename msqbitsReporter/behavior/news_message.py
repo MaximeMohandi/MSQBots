@@ -6,9 +6,9 @@ db = Database.Database()
 def getArticlesByNewspaper() :
     messageStack = []
     allNewspaper = db.getJournalAll()
-    articleCounter = 0
 
     for newsPaper in allNewspaper:
+        articleCounter = 0
         messageStack.append(
             """_ _{0}**📰  {1}   📰** - <{2}>\n***🔖 {3}***"""
             .format('\n', newsPaper[0], newsPaper[1], newsPaper[2])
@@ -21,8 +21,7 @@ def getArticlesByNewspaper() :
                 """**{0}**\n<{1}>\n*{2}*""".
                 format(article.title, article.link, article.published)
             )
-            articleCounter+=1
-        messageStack.append('\n\n')
+            articleCounter += 1
     return messageStack
 
 def getAllNewspapersSaved() :
@@ -31,11 +30,10 @@ def getAllNewspapersSaved() :
 
     for newspaper in allNewpapers :
         messageStack.append(
-            """{0} - {1} : {2} : {3}"""
+            """{0} - <{1}> : {2} : <{3}>"""
             .format(newspaper[0], newspaper[1],
-                    newspaper[2],newspaper[3])
+                    newspaper[2], newspaper[3])
         )
-    messageStack.append('\n\n')
     return messageStack
 
 def getAllCategoriesSaved() :
@@ -47,7 +45,6 @@ def getAllCategoriesSaved() :
             """{0} - {1} """
             .format(category[0], category[1])
         )
-    messageStack.append('\n\n')
     return messageStack
 
 def getAllArticlesFromNewspaper(nomJournal) :
@@ -69,7 +66,6 @@ def getAllArticlesFromNewspaper(nomJournal) :
                 format(article.title, article.link, article.published)
             )
             articleCounter+=1
-        messageStack.append('\n\n')
     return messageStack
 
 def getArticlesFromNewspaperBycat(nomCat):
@@ -92,5 +88,4 @@ def getArticlesFromNewspaperBycat(nomCat):
                         format(article.title, article.link, article.published)
                 )
                 articleCounter += 1
-        messageStack.append('\n\n')
     return messageStack
