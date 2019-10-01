@@ -21,7 +21,8 @@ The first vesrion of this bot has been developed as a pratical project to train 
 * Pro : Can be installed on any machines with a minimum configuration
 * Cons: You'll have to install Docker
 
-_TODO explain docker integration + local run_
+Refere to [this](https://docs.docker.com/install/) official documentation to install docker
+
 
 ### 🏠 Local Installation
 * Pro : You just need python installed
