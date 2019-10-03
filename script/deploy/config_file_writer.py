@@ -1,7 +1,7 @@
 import json
 import os.path as path
 
-respath = path.join(path.dirname(path.dirname(path.abspath(__file__))), 'msqbitsReporter/ressources/')
+respath = path.join(path.dirname(path.dirname(path.abspath(__file__))), '../msqbitsReporter/ressources/')
 
 def ask_database_credentials():
     checked = False
