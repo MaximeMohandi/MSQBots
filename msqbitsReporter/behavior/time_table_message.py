@@ -19,13 +19,15 @@ def getTodayPlanning(date):
     messageStack = []
     allCourse = time_table.get_detail_nearest_course(date)
 
-    for workedday in allCourse:
+    if type(allCourse) is not dict:
+        messageStack.append(allCourse)
+    else:
         messageStack.append(
-            """🗓️ **{0}**""".format(workedday['day'])
+            """🗓️ **{0}**""".format(allCourse['day'])
         )
-        for course in workedday['course']:
+        for course in allCourse['course']:
             messageStack.append(
                 """⏰ {0}\n 📓 {1}\n 👨‍🏫 {2}\n 🚪 {3}\n"""
                     .format(course['hours'], course['label'], course['prof'], course['room'])
-            )
+        )
     return messageStack
