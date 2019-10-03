@@ -21,10 +21,17 @@ The first vesrion of this bot has been developed as a pratical project to train 
 
 ### 🐳 Docker Installation
 * Pro : Can be installed on any machines with a minimum configuration
-* Cons: You'll have to install Docker
+* Cons: You'll have to install Docker. Refere to [this](https://docs.docker.com/install/) official documentation to install docker
 
-Refere to [this](https://docs.docker.com/install/) official documentation to install docker
+To build the msqbitsreporter image you have to execute the deployReporter.bat file on Windows and the deployReporter.sh file on Linux. these scripts will also create the credentials json files needed to connect to your database and dicord
 
+to run the reporter execute :
+```shell
+docker -d run msqbitreporter
+```
+
+_note: you can check if the bot is running by using_
+```docker container ps```
 
 ### 🏠 Local Installation
 * Pro : You just need python installed
