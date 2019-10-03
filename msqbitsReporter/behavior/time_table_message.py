@@ -15,9 +15,9 @@ def getPlanningWeek():
             )
     return messageStack
 
-def getTodayPlanning(date):
+def getPlanningFor(date):
     messageStack = []
-    allCourse = time_table.get_detail_nearest_course(date)
+    allCourse = time_table.get_detail_course(date)
 
     if type(allCourse) is not dict:
         messageStack.append(allCourse)

@@ -1,16 +1,16 @@
 from datetime import datetime, timedelta
 
 
-def get_first_day_week() :
+def get_first_day_week():
     numbertoday = datetime.today().weekday()
     return datetime.today() - timedelta(days=numbertoday)
 
 def convert_full_french_date(frenchdate):
     dictmonthnumber = [
-        ['janvier', '01'], ['fevrier', '02'], ['mars', '03'],
-        ['avril', '04'], ['mai', '05'], ['juin', '06'],
-        ['juillet', '07'], ['aout', '08'], ['septembre', '09'],
-        ['octobre', '10'], ['novembre', '11'], ['décembre', '12']
+        ['jan', '01'], ['feb', '02'], ['mar', '03'],
+        ['apr', '04'], ['may', '05'], ['jun', '06'],
+        ['jul', '07'], ['aug', '08'], ['sep', '09'],
+        ['oct', '10'], ['nov', '11'], ['dec', '12']
     ]
     correctdate = frenchdate.split(' ')
 
@@ -30,18 +30,23 @@ def parse_hmtl_result(parsedhtml):
 
     while cursor < len(weekdays):
         daytitle = weekdays[cursor].td.text
-        daycaseposition = weekdays[cursor]["style"].split(';')[1].split('.')[0].split(':')[1] #get the left posiotion of the day column in the html document
+        daycaseLposition = weekdays[cursor]["style"].split(';')[1].split('.')[0].split(':')[1] # get the left posiotion of the day column in the html document
         daycourse ={}
         for course in weekcourses:
-            coursecasepostion = course["style"].split(';')[3].split('.')[0].split(':')[1] #get the left posiotion of the course column in the html document
-            if coursecasepostion == daycaseposition:
-
-                daycourse['day'] = daytitle
+            coursecasepostion = course["style"].split(';')[3].split('.')[0].split(':')[1] # get the left posiotion of the course column in the html document
+            if coursecasepostion == daycaseLposition:
                 courseinfo = course.findAll('td')
                 coursedetails = {}
                 temparray= []
+                daycourse['day'] = daytitle
 
-                for info in courseinfo :
+                # if the day is the same as the previous course we add new entry in temparray
+                if len(listweekcourse) > 0:
+                    lastentry = listweekcourse.pop()
+                    if lastentry['day'] == daytitle:
+                        temparray = lastentry['course']
+
+                for info in courseinfo:
                     if info['class'][0] == 'TChdeb':
                         coursedetails['hours'] = info.text
                     elif info['class'][0] == 'TCase':
@@ -57,3 +62,4 @@ def parse_hmtl_result(parsedhtml):
         cursor += 1
 
     return listweekcourse
+

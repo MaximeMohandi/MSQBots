@@ -7,7 +7,7 @@ import msqbitsReporter.EPSI.planning as planning
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
-PLANNING_URI = 'https://edtmobiliteng.wigorservices.net//WebPsDyn.aspx?action=posEDTBEECOME&serverid=C&Tel={0}&date={1}'
+PLANNING_URI = 'http://edtmobilite.wigorservices.net/WebPsDyn.aspx?Action=posETUDSEM&serverid=C&tel=maxime.mohandi&date={1}'
 
 def get_week_planning():
     try:
@@ -18,7 +18,7 @@ def get_week_planning():
     except Exception as ex:
         print(ex)
 
-def get_detail_nearest_course(date):
+def get_detail_course(date):
     try:
         formateddate = datetime.strptime(date,'%d/%m/%Y').strftime('%m/%d/%y')
         request = PLANNING_URI.format('maxime.mohandi', formateddate)
@@ -26,8 +26,10 @@ def get_detail_nearest_course(date):
         soup = BeautifulSoup(response.text, "html.parser")
         weeksevent =planning.parse_hmtl_result(soup)
         for day in weeksevent:
-            if planning.convert_full_french_date(day['day']) == formateddate:
+            convertedDate = planning.convert_full_french_date(day['day'])
+            if convertedDate == formateddate:
                 return day
         return 'No event today'
     except Exception as ex:
         print(ex)
+
