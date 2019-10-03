@@ -19,11 +19,12 @@ The first vesrion of this bot has been developed as a pratical project to train 
 | 8, 10   | 16.04 LTS to 18.04 LTS |
 ## 📦 Installation
 
+
 ### 🐳 Docker Installation
 * Pro : Can be installed on any machines with a minimum configuration
 * Cons: You'll have to install Docker. Refere to [this](https://docs.docker.com/install/) official documentation to install docker
 
-To build the msqbitsreporter image you have to execute the deployReporter.bat file on Windows and the deployReporter.sh file on Linux. these scripts will also create the credentials json files needed to connect to your database and dicord
+To build the msqbitsreporter image you have to execute the [deployReporter.bat](https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/script/deploy/deployReporter.bat) file on Windows and the [deployReporter.sh](https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/script/deploy/deployMsqbitreporter.sh) file on Linux. these scripts will also create the credentials json files needed to connect to your database and dicord
 
 to run the reporter execute :
 ```shell
