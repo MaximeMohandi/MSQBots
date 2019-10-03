@@ -1,6 +1,8 @@
 # MSQBitsReporter2.0
 <img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/ressources/reporterLogo.png" width="25%"/>
 
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+
 The first vesrion of this bot has been developed as a pratical project to train my python skills. However, sometimes I thaught of new features and here we are.
 
 ## ✨Features
