@@ -4,36 +4,40 @@ import feedparser
 db = Database.Database()
 
 def getArticlesByNewspaper() :
-    messageStack = []
+    newspapers = []
     allNewspaper = db.getJournalAll()
 
     for newsPaper in allNewspaper:
         articleCounter = 0
-        messageStack.append(
-            """_ _{0}**📰  {1}   📰** - <{2}>\n***🔖 {3}***"""
-            .format('\n', newsPaper[0], newsPaper[1], newsPaper[2])
-        )
-        newsPaperArticles = feedparser.parse(newsPaper[3])
+        newspaperarticles = {}
 
-        while(len(newsPaperArticles.entries) > 0 and articleCounter < 4) :
-            article = newsPaperArticles.entries[articleCounter]
-            messageStack.append(
-                """**{0}**\n<{1}>\n*{2}*""".
-                format(article.title, article.link, article.published)
-            )
+        newspaperarticles['title'] = newsPaper[0]
+        newspaperarticles['description'] = newsPaper[2]
+        newspaperarticles['footer'] = newsPaper[1]
+        newspaperarticles['articles'] = []
+
+        articles = feedparser.parse(newsPaper[3])
+        while len(articles.entries) > 0 and articleCounter < 4:
+            article = articles.entries[articleCounter]
+            newspaperarticles['articles'].append({
+                'titlearticle': article.title,
+                'link': article.link,
+                'date': article.published
+            })
             articleCounter += 1
-    return messageStack
+        newspapers.append(newspaperarticles)
+    return newspapers
 
 def getAllNewspapersSaved() :
     messageStack = []
     allNewpapers = db.getJournalAll()
 
     for newspaper in allNewpapers :
-        messageStack.append(
-            """{0} - <{1}> : {2} : <{3}>"""
-            .format(newspaper[0], newspaper[1],
-                    newspaper[2], newspaper[3])
-        )
+        newspaperdict = {
+            'name': "{0} - {1}".format(newspaper[2], newspaper[0]),
+            'value': newspaper[1]
+        }
+        messageStack.append(newspaperdict)
     return messageStack
 
 def getAllCategoriesSaved() :
@@ -41,51 +45,53 @@ def getAllCategoriesSaved() :
     allCategories = db.getListCategory()
 
     for category in allCategories :
-        messageStack.append(
-            """{0} - {1} """
-            .format(category[0], category[1])
-        )
+        messageStack.append("{0} - {1}".format(category[0],category[1]))
     return messageStack
 
 def getAllArticlesFromNewspaper(nomJournal) :
-    messageStack = []
-    newspaper = db.getJournalByNom(nomJournal)
-    if newspaper != None:
-        messageStack.append(
-            """_ _{0}**📰  {1}   📰** - <{2}>\n***🔖 {3}***"""
-            .format('\n', newspaper['nom_flux'], newspaper['adresse_flux'], newspaper['categorie_flux'])
-        )
-
-        articles = feedparser.parse(newspaper['rss_flux'])
+    newspapers = []
+    allnews = db.getJournalByNom(nomJournal)
+    if allnews != None:
         articleCounter = 0
+        newspaperarticles = {}
 
-        while(len(articles.entries) > 0 and articleCounter < 8) :
+        newspaperarticles['title'] = allnews[1]
+        newspaperarticles['description'] = "//"
+        newspaperarticles['footer'] = allnews[2]
+        newspaperarticles['articles'] = []
+
+        articles = feedparser.parse(allnews[3])
+        while len(articles.entries) > 0 and articleCounter < 4:
             article = articles.entries[articleCounter]
-            messageStack.append(
-                """**{0}**\n<{1}>\n*{2}*""".
-                format(article.title, article.link, article.published)
-            )
-            articleCounter+=1
-    return messageStack
+            newspaperarticles['articles'].append({
+                'titlearticle': article.title,
+                'link': article.link,
+                'date': article.published
+            })
+            articleCounter += 1
+        newspapers.append(newspaperarticles)
+    return newspapers
 
 def getArticlesFromNewspaperBycat(nomCat):
-    messageStack = []
-    newspapers = db.getJournauxByCat(nomCat)
-    if newspapers != None:
-        for newspaper in newspapers:
-            messageStack.append(
-                """_ _{0}**📰  {1}   📰** - <{2}>\n***🔖 {3}***"""
-                .format('\n', newspaper['nom_flux'], newspaper['adresse_flux'], newspaper['categorie_flux'])
-            )
+    newspapers = []
+    allnews = db.getJournauxByCat(nomCat)
+    for newsPaper in allnews:
+        articleCounter = 0
+        newspaperarticles = {}
 
-            articles = feedparser.parse(newspaper['rss_flux'])
-            articleCounter = 0
+        newspaperarticles['title'] = newsPaper[1]
+        newspaperarticles['description'] = " "
+        newspaperarticles['footer'] = newsPaper[2]
+        newspaperarticles['articles'] = []
 
-            while (len(articles.entries) > 0 and articleCounter < 8):
-                article = articles.entries[articleCounter]
-                messageStack.append(
-                    """**{0}**\n<{1}>\n*{2}*""".
-                        format(article.title, article.link, article.published)
-                )
-                articleCounter += 1
-    return messageStack
+        articles = feedparser.parse(newsPaper[3])
+        while len(articles.entries) > 0 and articleCounter < 4:
+            article = articles.entries[articleCounter]
+            newspaperarticles['articles'].append({
+                'titlearticle': article.title,
+                'link': article.link,
+                'date': article.published
+            })
+            articleCounter += 1
+        newspapers.append(newspaperarticles)
+    return newspapers

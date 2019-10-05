@@ -1,9 +1,11 @@
 from msqbitsReporter.behavior import news_message, newspaper_manager
 import msqbitsReporter.discordAPI.connector as discordReporter
 from discord.ext import commands
+from discord import embeds,colour
 
 bot = discordReporter.bot
-
+embededcoulour = colour.Colour.dark_red()
+thumbmaillink = 'https://raw.githubusercontent.com/MaximeMohandi/MSQBitsReporter2.0/master/msqbitsReporter/ressources/reporterLogo.png'
 
 class ReporterCommands(commands.Cog):
     def __init__(self, bot):
@@ -15,23 +17,47 @@ class ReporterCommands(commands.Cog):
                            'can be stop by typing $stop at anytime.')
     async def display_x_news(self, ctx):
         for message in news_message.getArticlesByNewspaper():
-            await ctx.send(message)
+            embedmessage = embeds.Embed(
+                title=message['title'],
+                description=message['description'],
+                colour=embededcoulour
+            )
+            embedmessage.set_footer(text=message['footer'])
+            embedmessage.set_thumbnail(url=thumbmaillink)
+            for article in message['articles']:
+                embedmessage.add_field(name=article['titlearticle'], value=article['link'])
+
+            await ctx.send(embed=embedmessage)
 
     @commands.command(name='getnewspapers', aliases=['newspapers', 'journaux'],
                       brief='Display a list of all the saved newspapers',
                       help='Display a list of all the saved newspapers with their ID and their titles. Useful'
                            'to then get articles for a specific newpaper')
     async def display_list_newspapers(self, ctx):
-        for message in news_message.getAllNewspapersSaved():
-            await ctx.send(message)
+        newspaperslist = news_message.getAllNewspapersSaved()
+        embedmessage = embeds.Embed(
+            title='Newspapers List',
+            colour=embededcoulour
+        )
+        embedmessage.set_thumbnail(url=thumbmaillink)
+        for message in newspaperslist:
+            embedmessage.add_field(name=message['name'], value=message['value'], inline=False)
 
     @commands.command(name='getcategories', aliases=['categories', 'catégories'],
                       brief='Display a list of all news categories saved',
                       help='Display a list of all news categories saved with their ID and their titles. Useful'
                            'to then get news from a specific category')
     async def display_list_categories(self, ctx):
-        for message in news_message.getAllCategoriesSaved():
-            await ctx.send(message)
+        newspaperslist = news_message.getAllCategoriesSaved()
+        embedmessage = embeds.Embed(
+            title='Category List',
+            colour=embededcoulour
+        )
+        embedmessage.set_thumbnail(url=thumbmaillink)
+        for message in newspaperslist:
+            embedmessage.add_field(name=message, value="category", inline=False)
+
+        await ctx.send(embed=embedmessage)
 
     @commands.command(name='getnewsby', aliases=['newsby', 'parcatégories'],
                       brief='Display a list of all news by selected category',
@@ -39,14 +65,34 @@ class ReporterCommands(commands.Cog):
                            'by typing $stop')
     async def display_news_by_category(self, ctx, arg):
         for message in news_message.getArticlesFromNewspaperBycat(arg):
-            await ctx.send(message)
+            embedmessage = embeds.Embed(
+                title=message['title'],
+                description=message['description'],
+                colour=embededcoulour
+            )
+            embedmessage.set_footer(text=message['footer'])
+            embedmessage.set_thumbnail(url=thumbmaillink)
+            for article in message['articles']:
+                embedmessage.add_field(name=article['titlearticle'], value=article['link'])
+
+            await ctx.send(embed=embedmessage)
 
     @commands.command(name='getnewsfrom', aliases=['newsfrom', 'parjournal'],
                       brief='Display articles from a selected newspaper.',
                       help='Display 8 articles from a selected newspaper. This command can be stopped by typing $stop')
     async def display_news_by_newspaper(self, ctx, arg):
         for message in news_message.getAllArticlesFromNewspaper(arg):
-            await ctx.send(message)
+            embedmessage = embeds.Embed(
+                title=message['title'],
+                description=message['description'],
+                colour=embededcoulour
+            )
+            embedmessage.set_footer(text=message['footer'])
+            embedmessage.set_thumbnail(url=thumbmaillink)
+            for article in message['articles']:
+                embedmessage.add_field(name=article['titlearticle'], value=article['link'])
+
+            await ctx.send(embed=embedmessage)
 
     @commands.command(name='addnewspaper', aliases=['ajouterjournal'],
                       brief='Add a new newspaper',
