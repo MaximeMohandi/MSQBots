@@ -23,17 +23,17 @@ def convert_full_french_date(frenchdate):
             return datetime(year=int(yeardate), month=int(datemonth), day=int(dateday)).strftime('%m/%d/%y')
 
 def parse_hmtl_result(parsedhtml):
-    weekdays = parsedhtml.findAll('div', {'class': 'Jour'})
-    weekcourses = parsedhtml.findAll('div', {'class': 'Case'})
+    weekdays = parsedhtml.findAll('div', {'class': 'Jour'})  # get the div with the day content in it
+    weekcourses = parsedhtml.findAll('div', {'class': 'Case'})  # get the div with the course information in it
     listweekcourse = []
     cursor = 0
 
     while cursor < len(weekdays):
         daytitle = weekdays[cursor].td.text
-        daycaseLposition = weekdays[cursor]["style"].split(';')[1].split('.')[0].split(':')[1] # get the left posiotion of the day column in the html document
+        daycaseLposition = weekdays[cursor]["style"].split(';')[1].split('.')[0].split(':')[1]  # parse the div to get the left position of the day div
         daycourse ={}
         for course in weekcourses:
-            coursecasepostion = course["style"].split(';')[3].split('.')[0].split(':')[1] # get the left posiotion of the course column in the html document
+            coursecasepostion = course["style"].split(';')[3].split('.')[0].split(':')[1]  # parse get the left posiotion of the course div
             if coursecasepostion == daycaseLposition:
                 courseinfo = course.findAll('td')
                 coursedetails = {}
