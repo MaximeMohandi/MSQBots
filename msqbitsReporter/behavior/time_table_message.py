@@ -1,18 +1,22 @@
 from msqbitsReporter.EPSI import time_table
 
-def getPlanningWeek():
+def getFormatedPlanningWeek():
     messageStack = []
     allCourse = time_table.get_week_planning()
 
-    for workedday in allCourse:
-        messageStack.append(
-            """🗓️ **{0}**""".format(workedday['day'])
-        )
-        for course in workedday['course']:
-            messageStack.append(
-                """**{0} - {1} :**\n {2}\n -  {3}\n"""
-                .format(course['hours'], course['label'], course['room'], course['prof'])
-            )
+    for daycourse in allCourse:
+        embedcourse = {
+            'title': daycourse['day'],
+            'courses': []
+        }
+        for course in daycourse['course']:
+            embedcourse['courses'].append({
+                'hourscourse': course['hours'],
+                'courselabel': course['label'],
+                'courseroom': course['room'],
+                'courseteacher': course['prof']
+            })
+        messageStack.append(embedcourse)
     return messageStack
 
 def getPlanningFor(date):
@@ -20,16 +24,24 @@ def getPlanningFor(date):
     allCourse = time_table.get_detail_course(date)
 
     if type(allCourse) is not dict:
-        messageStack.append(allCourse)
+        embedcourse = {
+            'title': allCourse,
+            'courses': []
+        }
+        messageStack.append(embedcourse)
     else:
-        messageStack.append(
-            """🗓️ **{0}**""".format(allCourse['day'])
-        )
+        embedcourse = {
+            'title': allCourse['day'],
+            'courses': []
+        }
         for course in allCourse['course']:
-            messageStack.append(
-                """**{0} - {1} :**\n {2}\n -  {3}\n"""
-                .format(course['hours'], course['label'], course['room'], course['prof'])
-            )
+            embedcourse['courses'].append({
+                'hourscourse': course['hours'],
+                'courselabel': course['label'],
+                'courseroom': course['room'],
+                'courseteacher': course['prof']
+            })
+        messageStack.append(embedcourse)
     return messageStack
 
 def getThePlanningForToday():
@@ -37,26 +49,32 @@ def getThePlanningForToday():
     allcoursethisday = time_table.get_detail_course_today()
 
     if type(allcoursethisday) is not dict:
-        messageStack.append(allcoursethisday)
+        embedcourse = {
+            'title': allcoursethisday,
+            'courses': []
+        }
+        messageStack.append(embedcourse)
     else:
-        messageStack.append(
-            """🗓️ **{0}**""".format(allcoursethisday['day'])
-        )
+        embedcourse = {
+            'title': allcoursethisday['day'],
+            'courses': []
+        }
         for course in allcoursethisday['course']:
-            messageStack.append(
-                """**{0} - {1} :**\n {2}\n -  {3}\n"""
-                    .format(course['hours'], course['label'], course['room'], course['prof'])
-            )
+            embedcourse['courses'].append({
+                'hourscourse': course['hours'],
+                'courselabel': course['label'],
+                'courseroom': course['room'],
+                'courseteacher': course['prof']
+            })
+        messageStack.append(embedcourse)
     return messageStack
 
 def getRoomNextClassRoom():
     messageStack = []
     todaycourses = time_table.get_next_classroom_today()
-
-    if type(todaycourses) is not dict:
-        messageStack.append(todaycourses)
-    else:
-        messageStack.append(
-            """next classroom : {0}""".format(todaycourses)
-        )
+    embedcourse = {
+        'title': todaycourses,
+        'courses': []
+    }
+    messageStack.append(embedcourse)
     return messageStack
