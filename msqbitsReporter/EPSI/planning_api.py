@@ -45,6 +45,9 @@ def parse_hmtl_result(parsedhtml):
                     lastentry = listweekcourse.pop()
                     if lastentry['day'] == daytitle:
                         temparray = lastentry['course']
+                    else:
+                        listweekcourse.append(lastentry) # pop function destroy the entry, if there's no match we restore it
+
 
                 for info in courseinfo:
                     if info['class'][0] == 'TChdeb':

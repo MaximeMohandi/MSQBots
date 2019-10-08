@@ -3,7 +3,7 @@ This module is higly depend of the EPSI school planning website. if you want to 
 school planning you can test your function with the test module
 """
 import requests
-import msqbitsReporter.EPSI.planning as planning
+import msqbitsReporter.EPSI.planning_api as planning
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -62,3 +62,4 @@ def get_next_classroom_today():
     except Exception as ex:
         print(ex)
         return 'Probably No event today'
+
