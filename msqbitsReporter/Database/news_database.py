@@ -1,32 +1,10 @@
 import mysql.connector as mysql
-from msqbitsReporter.common import constant, JsonDecryptor, msqbitsReporterException
+from msqbitsReporter.Database.db_connector import DbConnector
+from msqbitsReporter.common import msqbitsReporterException
 
-class Database:
+class News(DbConnector):
     def __init__(self):
-        self.connection()
-    
-    def connection(self):
-        try:
-            self.getDataBaseCredentials()
-            self.cnx = mysql.connect(
-                host = self.credentials['host'],
-                port = self.credentials['port'],
-                database = self.credentials['database'],
-                user = self.credentials['username'],
-                password = self.credentials['password']
-            )
-            return True
-        except mysql.Error:
-            raise msqbitsReporterException.DatabaseException
-        
-    def getDataBaseCredentials(self):
-        jsonData = JsonDecryptor.JsonDecryptor()
-        credentialsPath = constant.DATABASE_CREDENTIALS_FILE
-        try :
-            jsonData.chargeJsonFile(credentialsPath)
-            self.credentials = jsonData.getJsonObject()
-        except msqbitsReporterException.JsonFormatFileException:
-            return None
+        super().__init__()
 
     def insertJournal(self, nomFlux, adresseFlux, rssFlux, categorieFlux):
         cursor = self.cnx.cursor()
@@ -54,7 +32,6 @@ class Database:
         query = """SELECT * FROM flux f
                 INNER JOIN categorie c ON c.id_categorie = f.categorie_flux
                 WHERE c.nom_categorie = %s """
-
         try:
             cursor.execute(query, (catNom,))
             return cursor.fetchall()

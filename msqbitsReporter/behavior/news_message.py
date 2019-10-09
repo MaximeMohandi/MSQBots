@@ -1,7 +1,7 @@
-from msqbitsReporter.common import Database
+from msqbitsReporter.Database import news_database
 import feedparser
 
-db = Database.Database()
+db = news_database.News()
 
 def getArticlesByNewspaper() :
     newspapers = []

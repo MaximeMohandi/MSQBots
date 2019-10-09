@@ -1,7 +1,6 @@
-from msqbitsReporter.common import Database
-import feedparser
+from msqbitsReporter.Database import news_database
 
-db = Database.Database()
+db = news_database.News()
 
 def addNewsPaper(newNewspaper) :
     db.insertJournal(
