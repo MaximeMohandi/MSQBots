@@ -1,5 +1,5 @@
 import mysql.connector as mysql
-from msqbitsReporter.Database.db_connector import DbConnector
+from msqbitsReporter.database.db_connector import DbConnector
 from msqbitsReporter.common import msqbitsReporterException
 
 class News(DbConnector):

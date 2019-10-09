@@ -1,4 +1,4 @@
-from msqbitsReporter.Database import news_database
+from msqbitsReporter.database import news_database
 
 db = news_database.News()
 

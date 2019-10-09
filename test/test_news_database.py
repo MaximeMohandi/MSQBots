@@ -1,16 +1,5 @@
-from msqbitsReporter.Database import news_database
+from msqbitsReporter.database import news_database
 
-
-#if the host is not null then we correctly get the credentials
-def test_getDatabaseCredentials():
-    db = news_database.News()
-    credentials = db.getDataBaseCredentials()
-    assert db.credentials['host'] != None
-
-#if connection() return true then we've connected to the database
-def test_connection():
-    db = news_database.News()
-    assert db.connection() == True
 
 #if result is superio to 0 then we've get the last id inserted
 def test_insertJournal():
