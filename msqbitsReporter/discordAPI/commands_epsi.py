@@ -16,66 +16,38 @@ class EpsiCommands(commands.Cog) :
                       help='Display course programmed for each day nearest the actual week')
     async def display_planning_course(self, ctx):
         for message in time_table_message.getFormatedPlanningWeek():
-            embedmessage = embeds.Embed(
-                title=message['title'],
-                colour=embededcoulour
-            )
-            embedmessage.set_footer(text=embedsepsifooter)
-            embedmessage.set_thumbnail(url=thumbmaillink)
-            for fields in message['courses']:
-                embedmessage.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=True)
-                embedmessage.add_field(name=fields['courseroom'], value=fields['courseteacher'], inline=True)
-
-            await ctx.send(embed=embedmessage)
+            await ctx.send(embed=self.embed_message(message))
 
     @commands.command(name='daycourse', aliases=['coursefor', 'cours'],
                       brief='Display planed course for given day',
                       usage='date in format : dd/mm/yyyy')
     async def display_planning_for_date(self, ctx, arg):
         for message in time_table_message.getPlanningFor(arg):
-            embedmessage = embeds.Embed(
-                title=message['title'],
-                colour=embededcoulour
-            )
-            embedmessage.set_footer(text=embedsepsifooter)
-            embedmessage.set_thumbnail(url=thumbmaillink)
-            for fields in message['courses']:
-                embedmessage.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=True)
-                embedmessage.add_field(name=fields['courseroom'], value=fields['courseteacher'], inline=True)
-
-            await ctx.send(embed=embedmessage)
+            await ctx.send(embed=self.embed_message(message))
 
     @commands.command(name="todayedt", aliases=['edttoday','coursjours'],
                       brief='display course scheduled today')
     async def display_today_planning(self,ctx):
         for message in time_table_message.getThePlanningForToday():
-            embedmessage = embeds.Embed(
-                title=message['title'],
-                colour=embededcoulour
-            )
-            embedmessage.set_footer(text=embedsepsifooter)
-            embedmessage.set_thumbnail(url=thumbmaillink)
-            for fields in message['courses']:
-                embedmessage.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=True)
-                embedmessage.add_field(name=fields['courseroom'], value=fields['courseteacher'], inline=True)
-
-            await ctx.send(embed=embedmessage)
+            await ctx.send(embed=self.embed_message(message))
 
     @commands.command(name="nextroom", aliases=['classroom','lasalle'],
                       brief="give next classroom")
     async def display_today_next_classroom(self,ctx):
         for message in time_table_message.getRoomNextClassRoom():
-            embedmessage = embeds.Embed(
-                title=message['title'],
-                colour=embededcoulour
-            )
-            embedmessage.set_footer(text=embedsepsifooter)
-            embedmessage.set_thumbnail(url=thumbmaillink)
-            for fields in message['courses']:
-                embedmessage.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=True)
-                embedmessage.add_field(name=fields['courseroom'], value=fields['courseteacher'], inline=True)
+            await ctx.send(embed=self.embed_message(message))
 
-            await ctx.send(embed=embedmessage)
+    def embed_message(self, rawmessage):
+        embedmessage = embeds.Embed(
+            title=rawmessage['title'],
+            colour=embededcoulour
+        )
+        embedmessage.set_footer(text="si vous trouvez ça long faite savoir à C&D que retourner un html aussi claqué en réponse d'API c'est pas très efficace :)")
+        embedmessage.set_thumbnail(url=thumbmaillink)
+        for fields in rawmessage['courses']:
+            embedmessage.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=True)
+            embedmessage.add_field(name=fields['courseroom'], value=fields['courseteacher'], inline=True)
+        return embedmessage
 
 
 def setup(bot):
