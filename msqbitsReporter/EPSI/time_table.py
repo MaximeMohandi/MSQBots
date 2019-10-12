@@ -7,7 +7,7 @@ import msqbitsReporter.EPSI.planning_api as planning
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-PLANNING_URI = 'http://edtmobilite.wigorservices.net/WebPsDyn.aspx?Action=posETUDSEM&serverid=C&tel=maxime.mohandi&date={1}'
+PLANNING_URI = 'https://edtmobiliteng.wigorservices.net//WebPsDyn.aspx?action=posEDTBEECOME&serverid=C&Tel=maxime.mohandi&date={1}'
 
 def get_week_planning():
     try:
