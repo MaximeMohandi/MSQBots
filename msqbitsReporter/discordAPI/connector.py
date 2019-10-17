@@ -15,6 +15,7 @@ bot = commands.Bot(command_prefix=credentials['commandPrefix'])
 
 def load_command_files():
     try:
+        bot.remove_command('help')
         for file in constant.DISCORD_COMMANDS_FILES:
             bot.load_extension(file)
     except Exception as ex:
