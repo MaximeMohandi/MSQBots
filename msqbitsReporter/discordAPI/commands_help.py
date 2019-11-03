@@ -46,7 +46,7 @@ class HelpCommands(commands.Cog):
                 cog_commands = bot.get_cog(cog).get_commands()
                 commands_list = ''
                 for comm in cog_commands:
-                    commands_list += f'**{comm.name}** - *{comm.help}*\n'
+                    commands_list += f'**{comm.name}** - *{comm.brief}*\n'
 
                 # Add the cog's details to the embed.
 
