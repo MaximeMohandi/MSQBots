@@ -1,64 +1,108 @@
-"""This custom help command is a perfect replacement for the default one on any Discord Bot written in Discord.py Rewrite!
-However, you must put "bot.remove_command('help')" in your bot, and the command must be in a cog for it to work.
-Written by Jared Newsom (AKA Jared M.F.)!"""
-
 import msqbitsReporter.discordAPI.connector as discordReporter
 from discord.ext import commands
-from discord import embeds,colour
+from discord import embeds, colour
+
 bot = discordReporter.bot
 embededcoulour = colour.Colour.dark_green()
-thumbmaillink = 'http://www.epsi.fr/wp-content/uploads/2017/04/Notre-futur-campus-en-video-!-101483_reference.png'
-embedHelpfooter = "https://beecome.io"
+thumbmaillink = 'https://img.icons8.com/officel/80/000000/help.png'
+embedHelpfooter = "Contact @Criptics#3966 for more details"
 
-class HelpCommands(commands.Cog) :
-    def __init__(self, bot):
-        self.bot = bot
 
-    @commands.command(name='help')
-    async def help(self, ctx, *cogs):
-        """Gets all cogs and commands of mine."""
-        try:
-            if not cogs:
-                self.help_message = embeds.Embed(title='Command List',
-                                                 description='Use `$help *command*` to find out more about them!\n(BTW, The Command Name Must Be in Title Case, Just Like this Sentence.)')
-                cogs_desc = ''
-                for x in self.bot.cogs:
-                    cogs_desc += ('{} - {}'.format(x, self.bot.cogs[x].__doc__)+'\n')
-                self.help_message.add_field(name='Cogs',
-                                            value=cogs_desc[0:len(cogs_desc)-1],
-                                            inline=False)
-                cmds_desc = ''
-                for y in self.bot.walk_commands():
-                    cmds_desc += ('{} - {}'.format(y.name, y.help)+'\n')
-                self.help_message.add_field(name='Uncatergorized Commands',
-                                            value=(cmds_desc[0:len(cmds_desc)-1] if cmds_desc[0:len(cmds_desc)-1] else 'None'),
-                                            inline=False)
-                await ctx.message.add_reaction(emoji='✉')
-                await ctx.message.author.send(embed=self.help_message)
-            else:
-                if len(cogs) > 1:
-                    print('This is way too many cog')
-                else:
-                    found = False
-                    for x in self.bot.cogs:
-                        for y in cogs:
-                            if x == y:
-                                self.help_message = embeds.Embed(title=cogs[0]+' Command Listing',
-                                                                 description=self.bot.cogs[cogs[0]].__doc__)
-                                for c in self.bot.get_cog(y).get_commands():
-                                    if not c.hidden:
-                                        self.help_message.add_field(name=c.name,
-                                                                    value=(c.help if c.help else 'None'),
-                                                                    inline=False)
-                                found = True
-                    if not found:
-                        print(f'How do you even use {cogs[0]}?')
+class HelpCommands(commands.Cog):
+
+    @commands.command(
+        name='help',
+        description='The help command!',
+        aliases=['commands', 'command'],
+        usage='cog'
+    )
+    async def help_command(self, ctx, cog='all'):
+
+        # The third parameter comes into play when
+        # only one word argument has to be passed by the user
+
+        # Prepare the embed
+
+        help_embed = embeds.Embed(
+            title='Help',
+            colour=embededcoulour,
+            description= "use the '$' prefix with a command. \n for more precision on command type $help with the command category"
+        )
+        help_embed.set_thumbnail(url=thumbmaillink)
+        help_embed.set_footer(
+            text=f'Requested by {ctx.message.author.name}',
+            icon_url=thumbmaillink
+        )
+
+        # Get a list of all cogs
+        cogs = [c for c in bot.cogs.keys()]
+
+        # If cog is not specified by the user, we list all cogs and commands
+
+        if cog == 'all':
+            for cog in cogs:
+                # Get a list of all commands under each cog
+
+                cog_commands = bot.get_cog(cog).get_commands()
+                commands_list = ''
+                for comm in cog_commands:
+                    commands_list += f'**{comm.name}** - *{comm.help}*\n'
+
+                # Add the cog's details to the embed.
+
+                help_embed.add_field(
+                    name=cog,
+                    value=commands_list,
+                    inline=False
+                ).add_field(
+                    name='\u200b', value='\u200b', inline=False
+                )
+
+                # Also added a blank field '\u200b' is a whitespace character.
+            pass
+        else:
+            # If the cog was specified
+
+            lower_cogs = [c.lower() for c in cogs]
+
+            # If the cog actually exists.
+            if cog.lower() in lower_cogs:
+
+                # Get a list of all commands in the specified cog
+                commands_list = bot.get_cog(cogs[lower_cogs.index(cog.lower())]).get_commands()
+                help_text = ''
+
+                # Add details of each command to the help text
+                # Command Name
+                # Description
+                # [Aliases]
+                #
+                # Format
+                for command in commands_list:
+                    help_text += f'```{command.name}```\n' \
+                                 f'**{command.help}**\n\n'
+
+                    # Also add aliases, if there are any
+                    if len(command.aliases) > 0:
+                        help_text += f'**Aliases :** `{"`, `".join(command.aliases)}`\n\n\n'
                     else:
-                        await ctx.message.add_reaction(emoji='✉')
-                    print(self.help_message)
-                    await ctx.message.author.send(embed=self.help_message)
-        except Exception as error:
-            print(f'help command error: {error}')
+                        # Add a newline character to keep it pretty
+                        # That IS the whole purpose of custom help
+                        help_text += '\n'
+
+                    # Finally the format
+                    help_text += f'Format: `@{bot.user.name}#{bot.user.discriminator}' \
+                                 f' {command.name} {command.usage if command.usage is not None else ""}`\n\n\n\n'
+
+                help_embed.description = help_text
+            else:
+                # Notify the user of invalid cog and finish the command
+                await ctx.send('Invalid cog specified.\nUse `help` command to list all cogs.')
+                return
+        await ctx.message.add_reaction(emoji='✉')
+        await ctx.message.author.send(embed=help_embed)
+
+        return
 
 
 def setup(bot):
