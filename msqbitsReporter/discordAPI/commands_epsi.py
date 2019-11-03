@@ -1,7 +1,8 @@
 from msqbitsReporter.behavior import time_table_message
 import msqbitsReporter.discordAPI.connector as discordReporter
 from discord.ext import commands
-from discord import embeds,colour
+from discord import embeds, colour
+
 bot = discordReporter.bot
 embededcoulour = colour.Colour.dark_blue()
 thumbmaillink = 'http://www.epsi.fr/wp-content/uploads/2017/04/Notre-futur-campus-en-video-!-101483_reference.png'

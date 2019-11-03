@@ -1,7 +1,7 @@
 from msqbitsReporter.behavior import news_message, newspaper_manager
 import msqbitsReporter.discordAPI.connector as discordReporter
 from discord.ext import commands
-from discord import embeds,colour
+from discord import embeds, colour
 
 bot = discordReporter.bot
 embededcoulour = colour.Colour.dark_red()
