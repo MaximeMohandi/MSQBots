@@ -18,3 +18,7 @@ def test_getAllCategoriesSaved():
 def test_getAllArticlesFromNewspaper():
     result = newMessage.getAllArticlesFromNewspaper(None)
     assert len(result) == 0
+
+def test_get_all_articles_by_cat():
+    result = newMessage.getArticlesFromNewspaperBycat('TEST')
+    assert len(result) > 0

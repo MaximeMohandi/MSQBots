@@ -95,3 +95,4 @@ def getArticlesFromNewspaperBycat(nomCat):
             articleCounter += 1
         newspapers.append(newspaperarticles)
     return newspapers
+

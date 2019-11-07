@@ -13,10 +13,12 @@ def test_insertJournal():
     assert result > 0
     db.cnx.rollback()
 
+
 def test_getJournauxByCat():
     db = news_database.News()
     result = db.getJournauxByCat('TEST') #here 5 is the index for the test cat
     assert len(result) > 0
+
 
 def test_getJournalByNom():
     db = news_database.News()
@@ -26,15 +28,18 @@ def test_getJournalByNom():
     result = db.getJournalByNom(nomFirstRow)
     assert len(result) > 0
 
+
 def test_getJournalAll():
     db = news_database.News()
     result = db.getJournalAll()
     assert len(result) > 0
 
+
 def test_getListCategory():
     db = news_database.News()
     result = db.getListCategory()
     assert len(result) > 0
+
 
 def test_updateJournal():
     pass
@@ -44,4 +49,4 @@ def test_removeJournal():
     toRemoveJournalList = db.getJournauxByCat('TEST') #get all journal from test category
     toRemoveJournal = toRemoveJournalList[0] #get the first journal from the test journal list
     idJournalToRemove = toRemoveJournal[0]
-    assert db.removeJournal(idJournalToRemove) == True     
+    assert db.removeJournal(idJournalToRemove) == True

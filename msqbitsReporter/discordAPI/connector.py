@@ -1,16 +1,9 @@
 import discord
 from discord.ext import commands
-from msqbitsReporter.common import constant, msqbitsReporterException, JsonDecryptor
+from msqbitsReporter.common import constant, msqbitsReporterException, credentials
 
-def getCredentials():
-    try:
-        reader = JsonDecryptor.JsonDecryptor()
-        reader.chargeJsonFile(constant.DISCORD_CREDENTIALS_FILE)
-        return reader.getJsonObject()
-    except msqbitsReporterException:
-        print('erreur pendant la récupération des credentials')
 
-credentials = getCredentials()
+credentials = credentials.get_credentials('discord')
 bot = commands.Bot(command_prefix=credentials['commandPrefix'])
 
 def load_command_files():
