@@ -1,8 +1,10 @@
-from msqbitsReporter.behavior import news_message, newspaper_manager
+from msqbitsReporter.behavior import news_message
+from msqbitsReporter.database import news_database as db
 import msqbitsReporter.discordAPI.connector as discordReporter
 from discord.ext import commands
 from discord import embeds, colour
 
+db = db.News()
 bot = discordReporter.bot
 embededcoulour = colour.Colour.dark_red()
 thumbmaillink = 'https://raw.githubusercontent.com/MaximeMohandi/MSQBitsReporter2.0/master/msqbitsReporter/ressources/reporterLogo.png'
@@ -16,7 +18,7 @@ class ReporterCommands(commands.Cog):
                       help='Display last four articles for each newspapers saved in database, this command'
                            'can be stop by typing $stop at anytime.')
     async def display_x_news(self, ctx):
-        for message in news_message.getArticlesByNewspaper():
+        for message in news_message.get_all_articles():
             embedmessage = embeds.Embed(
                 title=message['title'],
                 description=message['description'],
@@ -34,7 +36,7 @@ class ReporterCommands(commands.Cog):
                       help='Display a list of all the saved newspapers with their ID and their titles. Useful'
                            'to then get articles for a specific newpaper')
     async def display_list_newspapers(self, ctx):
-        newspaperslist = news_message.getAllNewspapersSaved()
+        newspaperslist = news_message.get_saved_newspapers()
         embedmessage = embeds.Embed(
             title='Newspapers List',
             colour=embededcoulour
@@ -48,7 +50,7 @@ class ReporterCommands(commands.Cog):
                       help='Display a list of all news categories saved with their ID and their titles. Useful'
                            'to then get news from a specific category')
     async def display_list_categories(self, ctx):
-        newspaperslist = news_message.getAllCategoriesSaved()
+        newspaperslist = news_message.get_saved_categories()
         embedmessage = embeds.Embed(
             title='Category List',
             colour=embededcoulour
@@ -64,7 +66,7 @@ class ReporterCommands(commands.Cog):
                       help='Display a list of all news by selected category, this command can be'
                            'by typing $stop')
     async def display_news_by_category(self, ctx, arg):
-        for message in news_message.getArticlesFromNewspaperBycat(arg):
+        for message in news_message.get_articles_by(arg):
             embedmessage = embeds.Embed(
                 title=message['title'],
                 description=message['description'],
@@ -81,7 +83,7 @@ class ReporterCommands(commands.Cog):
                       brief='Display articles from a selected newspaper.',
                       help='Display 8 articles from a selected newspaper. This command can be stopped by typing $stop')
     async def display_news_by_newspaper(self, ctx, arg):
-        for message in news_message.getAllArticlesFromNewspaper(arg):
+        for message in news_message.get_articles_from(arg):
             embedmessage = embeds.Embed(
                 title=message['title'],
                 description=message['description'],
@@ -100,13 +102,7 @@ class ReporterCommands(commands.Cog):
                       usage='name, web_adresse, rss_link, id_category')
     async def add(self, ctx, *args):
         try:
-            newNewspaper = {
-                'nom_flux': args[0],
-                'adresse_flux': args[1],
-                'rss_flux': args[2],
-                'categorie_flux': args[3]
-            }
-            newspaper_manager.addNewsPaper(newNewspaper)
+            db.insert_newspaper(args[0], args[1], args[2], args[3])
             await ctx.message.add_reaction('✅')
         except Exception as ex:
             print(ex)
@@ -118,12 +114,12 @@ class ReporterCommands(commands.Cog):
                       usage='newspaper_name')
     async def remove(self, ctx, arg):
         try:
-            newspaper_manager.removeNewsPaper(arg)
+            db.delete_newspaper(arg)
             await ctx.message.add_reaction('✅')
+
         except Exception:
             print(Exception)
             await ctx.message.add_reaction('❌')
-        pass
 
 
 def setup(bot):

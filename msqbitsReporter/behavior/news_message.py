@@ -3,96 +3,96 @@ import feedparser
 
 db = news_database.News()
 
-def getArticlesByNewspaper() :
+
+def get_all_articles():
     newspapers = []
-    allNewspaper = db.getJournalAll()
+    allNewspaper = db.select_all_newspaper()
 
     for newsPaper in allNewspaper:
-        articleCounter = 0
         newspaperarticles = {}
 
         newspaperarticles['title'] = newsPaper[0]
         newspaperarticles['description'] = newsPaper[2]
         newspaperarticles['footer'] = newsPaper[1]
-        newspaperarticles['articles'] = []
+        newspaperarticles['articles'] = format_articles(newsPaper[3])
 
-        articles = feedparser.parse(newsPaper[3])
-        while len(articles.entries) > 0 and articleCounter < 4:
-            article = articles.entries[articleCounter]
-            newspaperarticles['articles'].append({
-                'titlearticle': article.title,
-                'link': article.link,
-                'date': article.published
-            })
-            articleCounter += 1
         newspapers.append(newspaperarticles)
+
     return newspapers
 
-def getAllNewspapersSaved() :
-    messageStack = []
-    allNewpapers = db.getJournalAll()
 
-    for newspaper in allNewpapers :
+def get_saved_newspapers():
+    messageStack = []
+    allNewpapers = db.select_all_newspaper()
+
+    for newspaper in allNewpapers:
         newspaperdict = {
             'name': "{0} - {1}".format(newspaper[2], newspaper[0]),
             'value': newspaper[1]
         }
         messageStack.append(newspaperdict)
+
     return messageStack
 
-def getAllCategoriesSaved() :
+
+def get_saved_categories():
     messageStack = []
-    allCategories = db.getListCategory()
+    allCategories = db.select_categories()
 
-    for category in allCategories :
-        messageStack.append("{0} - {1}".format(category[0],category[1]))
+    for category in allCategories:
+        messageStack.append("{0} - {1}".format(category[0], category[1]))
+
     return messageStack
 
-def getAllArticlesFromNewspaper(nomJournal) :
+
+def get_articles_from(newspaper):
     newspapers = []
-    allnews = db.getJournalByNom(nomJournal)
+    allnews = db.select_newspaper_by_name(newspaper)
+
     if allnews != None:
-        articleCounter = 0
-        newspaperarticles = {}
-
-        newspaperarticles['title'] = allnews[1]
-        newspaperarticles['description'] = "//"
-        newspaperarticles['footer'] = allnews[2]
-        newspaperarticles['articles'] = []
-
-        articles = feedparser.parse(allnews[3])
-        while len(articles.entries) > 0 and articleCounter < 4:
-            article = articles.entries[articleCounter]
-            newspaperarticles['articles'].append({
-                'titlearticle': article.title,
-                'link': article.link,
-                'date': article.published
-            })
-            articleCounter += 1
+        newspaperarticles = {
+            'title': allnews[1],
+            'description': "//",
+            'footer': allnews[2],
+            'articles': format_articles(allnews[3])
+        }
         newspapers.append(newspaperarticles)
+
     return newspapers
 
-def getArticlesFromNewspaperBycat(nomCat):
-    newspapers = []
-    allnews = db.getJournauxByCat(nomCat)
-    for newsPaper in allnews:
-        articleCounter = 0
-        newspaperarticles = {}
 
-        newspaperarticles['title'] = newsPaper[1]
-        newspaperarticles['description'] = " "
-        newspaperarticles['footer'] = newsPaper[2]
-        newspaperarticles['articles'] = []
+def get_articles_by(category):
+    newspapers = []
+    allnews = db.select_newspaper_by_cat(category)
+
+    for newsPaper in allnews:
+        newspaperarticles = {
+            'title': newsPaper[1],
+            'description': " ",
+            'footer': newsPaper[2],
+            'articles': format_articles(allnews[3])
+        }
 
         articles = feedparser.parse(newsPaper[3])
-        while len(articles.entries) > 0 and articleCounter < 4:
-            article = articles.entries[articleCounter]
-            newspaperarticles['articles'].append({
-                'titlearticle': article.title,
-                'link': article.link,
-                'date': article.published
-            })
-            articleCounter += 1
-        newspapers.append(newspaperarticles)
+        newspaperarticles['articles'] = format_articles(articles)
+
     return newspapers
 
+
+def format_articles(newspaper):
+    newspaperarticles = []
+    nbarticletoget = 4
+    articlecounter = 0
+
+    articles = feedparser.parse(newspaper[3]) # contain the feed link to of the newspaper
+
+    while len(articles.entries) > 0 and articlecounter < nbarticletoget:
+        article = articles.entries[articlecounter]
+        newspaperarticles.append({
+            'titlearticle': article.title,
+            'link': article.link,
+            'date': article.published
+        })
+        articlecounter += 1
+
+    return newspaperarticles
