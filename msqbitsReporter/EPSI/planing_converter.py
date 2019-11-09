@@ -1,11 +1,37 @@
 from datetime import datetime, timedelta
 
 
-def get_first_day_week():
-    numbertoday = datetime.today().weekday()
-    return datetime.today() - timedelta(days=numbertoday)
+def get_starting_timetable_day():
+    """
+    Get the date of the first day of the time-table
 
-def convert_full_french_date(frenchdate):
+    This get the current day then compute substract today's
+    date with the number of day passed to get the firstday date
+
+    :return: The complete date of the first day of the week or the next week if current day is week-end
+    :rtype: datetime
+    """
+    currentdaystr = datetime.today().strftime("%a").lower()
+
+    # if week-end then start number day at next week first day
+    if currentdaystr == 'sat':
+        return datetime.today() + timedelta(days=2)
+    elif currentdaystr == 'sun':
+        return datetime.today() + timedelta(days=1)
+    else:
+        daytosubs = datetime.today().weekday()
+        return datetime.today() - timedelta(days=daytosubs)
+
+
+def french_to_us_date_converter(frenchdate):
+    """
+    convert a french date to us date
+
+    :param frenchdate:
+    :return us date:
+    :rtype: datetime
+    """
+
     dictmonthnumber = [
         ['janvier', '01'], ['février', '02'], ['mars', '03'],
         ['avril', '04'], ['mai', '05'], ['juin', '06'],
@@ -22,9 +48,19 @@ def convert_full_french_date(frenchdate):
 
             return datetime(year=int(yeardate), month=int(datemonth), day=int(dateday)).strftime('%m/%d/%y')
 
-def parse_hmtl_result(parsedhtml):
-    weekdays = parsedhtml.findAll('div', {'class': 'Jour'})  # get the div with the day content in it
-    weekcourses = parsedhtml.findAll('div', {'class': 'Case'})  # get the div with the course information in it
+
+def parse_epsi_planning_html(html):
+    """
+    parse the html of the epsi's school planning into a list of course
+
+    :param html:
+    :rtype: html text
+    :return table of courses:
+    :rtype: table
+    """
+
+    weekdays = html.findAll('div', {'class': 'Jour'})  # get the div with the day content in it
+    weekcourses = html.findAll('div', {'class': 'Case'})  # get the div with the course information in it
     listweekcourse = []
     cursor = 0
 
@@ -32,8 +68,10 @@ def parse_hmtl_result(parsedhtml):
         daytitle = weekdays[cursor].td.text
         daycaseLposition = weekdays[cursor]["style"].split(';')[1].split('.')[0].split(':')[1]  # parse the div to get the left position of the day div
         daycourse ={}
+
         for course in weekcourses:
             coursecasepostion = course["style"].split(';')[3].split('.')[0].split(':')[1]  # parse get the left posiotion of the course div
+
             if coursecasepostion == daycaseLposition:
                 courseinfo = course.findAll('td')
                 coursedetails = {}
@@ -47,7 +85,6 @@ def parse_hmtl_result(parsedhtml):
                         temparray = lastentry['course']
                     else:
                         listweekcourse.append(lastentry) # pop function destroy the entry, if there's no match we restore it
-
 
                 for info in courseinfo:
                     if info['class'][0] == 'TChdeb':

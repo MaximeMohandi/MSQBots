@@ -1,8 +1,8 @@
-from msqbitsReporter.EPSI import time_table
+from msqbitsReporter.EPSI import time_table_api
 
 def getFormatedPlanningWeek():
     messageStack = []
-    allCourse = time_table.get_week_planning()
+    allCourse = time_table_api.get_week_planning()
 
     for daycourse in allCourse:
         embedcourse = {
@@ -21,7 +21,7 @@ def getFormatedPlanningWeek():
 
 def getPlanningFor(date):
     messageStack = []
-    allCourse = time_table.get_detail_course(date)
+    allCourse = time_table_api.get_detail_course(date)
 
     if type(allCourse) is not dict:
         embedcourse = {
@@ -46,7 +46,7 @@ def getPlanningFor(date):
 
 def getThePlanningForToday():
     messageStack = []
-    allcoursethisday = time_table.get_detail_course_today()
+    allcoursethisday = time_table_api.get_detail_course_today()
 
     if type(allcoursethisday) is not dict:
         embedcourse = {
@@ -71,7 +71,7 @@ def getThePlanningForToday():
 
 def getRoomNextClassRoom():
     messageStack = []
-    todaycourses = time_table.get_next_classroom_today()
+    todaycourses = time_table_api.get_next_classroom_today()
     embedcourse = {
         'title': todaycourses,
         'courses': []
