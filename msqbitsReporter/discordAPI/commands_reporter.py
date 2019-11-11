@@ -13,7 +13,7 @@ class ReporterCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='getnews', aliases=['allnews', 'nouvelles'],
+    @commands.command(name='news',
                       brief='Display last four articles for each newspapers saved in database',
                       help='Display last four articles for each newspapers saved in database, this command'
                            'can be stop by typing $stop at anytime.')
@@ -31,7 +31,7 @@ class ReporterCommands(commands.Cog):
 
             await ctx.send(embed=embedmessage)
 
-    @commands.command(name='getnewspapers', aliases=['newspapers', 'journaux'],
+    @commands.command(name='newspapers',
                       brief='Display a list of all the saved newspapers',
                       help='Display a list of all the saved newspapers with their ID and their titles. Useful'
                            'to then get articles for a specific newpaper')
@@ -45,7 +45,7 @@ class ReporterCommands(commands.Cog):
         for message in newspaperslist:
             embedmessage.add_field(name=message['name'], value=message['value'], inline=False)
 
-    @commands.command(name='getcategories', aliases=['categories', 'catégories'],
+    @commands.command(name='categories',
                       brief='Display a list of all news categories saved',
                       help='Display a list of all news categories saved with their ID and their titles. Useful'
                            'to then get news from a specific category')
@@ -61,7 +61,7 @@ class ReporterCommands(commands.Cog):
 
         await ctx.send(embed=embedmessage)
 
-    @commands.command(name='getnewsby', aliases=['newsby', 'parcatégories'],
+    @commands.command(name='newscat',
                       brief='Display a list of all news by selected category',
                       help='Display a list of all news by selected category, this command can be'
                            'by typing $stop')
@@ -79,7 +79,7 @@ class ReporterCommands(commands.Cog):
 
             await ctx.send(embed=embedmessage)
 
-    @commands.command(name='getnewsfrom', aliases=['newsfrom', 'parjournal'],
+    @commands.command(name='newsdaily',
                       brief='Display articles from a selected newspaper.',
                       help='Display 8 articles from a selected newspaper. This command can be stopped by typing $stop')
     async def display_news_by_newspaper(self, ctx, arg):
@@ -96,7 +96,7 @@ class ReporterCommands(commands.Cog):
 
             await ctx.send(embed=embedmessage)
 
-    @commands.command(name='addnewspaper', aliases=['ajouterjournal'],
+    @commands.command(name='addnewspaper',
                       brief='Add a new newspaper',
                       help='Add a new newspaper, all the arguments are mandatory !',
                       usage='name, web_adresse, rss_link, id_category')
@@ -108,7 +108,7 @@ class ReporterCommands(commands.Cog):
             print(ex)
             await ctx.message.add_reaction('❌')
 
-    @commands.command(name='removenewspaper', aliases=['supprimerjournal'],
+    @commands.command(name='removenewspaper',
                       brief='Remove a newspaper',
                       help='Remove a newspaper from the database',
                       usage='newspaper_name')

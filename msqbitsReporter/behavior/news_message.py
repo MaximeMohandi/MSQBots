@@ -79,12 +79,12 @@ def get_articles_by(category):
     return newspapers
 
 
-def format_articles(newspaper):
+def format_articles(feed):
     newspaperarticles = []
     nbarticletoget = 4
     articlecounter = 0
 
-    articles = feedparser.parse(newspaper[3]) # contain the feed link to of the newspaper
+    articles = feedparser.parse(feed) # contain the feed link to of the newspaper
 
     while len(articles.entries) > 0 and articlecounter < nbarticletoget:
         article = articles.entries[articlecounter]
