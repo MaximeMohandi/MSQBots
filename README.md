@@ -1,5 +1,5 @@
 # MSQBitsReporter2.0
-<img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/ressources/reporterLogo.png" width="25%"/>
+<img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/resources/reporterLogo.png" width="25%"/>
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
@@ -26,7 +26,16 @@ The first vesrion of this bot has been developed as a pratical project to train 
 
 To build the msqbitsreporter image you have to execute the [deployReporter.bat](https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/script/deploy/deployReporter.bat) file on Windows and the [deployReporter.sh](https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/script/deploy/deployMsqbitreporter.sh) file on Linux. these scripts will also create the credentials json files needed to connect to your database and dicord
 
-to run the reporter execute :
+
+to run the reporter with docker, first clone this repo then go to script/deploy and execute the script corresponding to your OS
+
+with linux:
+```shell
+sudo bash deployReporter.sh
+```
+with windows: execute the .bat file
+
+Then run the images with:
 ```shell
 docker -d run msqbitreporter
 ```
@@ -36,12 +45,35 @@ _note: you can check if the bot is running by using_
 
 ### 🏠 Local Installation
 * Pro : You just need python installed
-* Cons: You'll have to install all the dependencies and manage eventual compatibility problem and you'll also have to configure a database
+* Cons: You'll have to install all the dependencies on your system and manage the path problem
 
-_TODO put instruction here_
+To write the conf file you can execute the config_file_writer.py or write a config.ini file in msqbitsReporter/resources
 
 ## Commands List
-_TODO put an array with basics command_
+_all the commands have to get prefixed ex:  ```$help``` to get the command list_
+
+There's 2 type of command for now:
+
+* news
+
+| commands  | result |
+| ------------- | ------------- |
+| getnews  | Display last four articles for each newspapers saved in database  |
+| getnewspapers | Display a list of all the saved newspapers | 
+| getcategories | Display a list of all news categories saved | 
+| getnewsby | Display a list of all news by selected category | 
+| getnewsfrom |  Display articles from a selected newspaper |
+| addnewspaper | Add a new newspaper |
+| removenewspaper | Remove a newspaper |
+
+* Planning
+
+| commands  | result |
+| ------------- | ------------- |
+| edt | Display planed course |
+| daycourse | Display planed course for given day |
+| todayedt | display course scheduled today |
+| nextroom | give next classroom |
 
 ## More
 _TODO add link to doc_
