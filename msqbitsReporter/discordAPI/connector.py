@@ -14,6 +14,7 @@ def log_writer():
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
 
+
 def load_command_files():
     try:
         bot.remove_command('help')
@@ -31,6 +32,7 @@ def run():
     except Exception as ex:
         print('erreur lors du démarrage :')
         print(ex)
+        logging.critical(ex)
 
 @bot.event
 async def on_ready():
@@ -39,8 +41,9 @@ async def on_ready():
 
 @bot.event
 async def on_error(event, *args, **kwargs):
-    print('une erreur est survenue')
+    print(event)
 
 @bot.event
 async def on_disconnect():
+    logging.info('bot is shuting down')
     print('Free time !!')
