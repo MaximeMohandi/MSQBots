@@ -1,10 +1,18 @@
 import discord
+import logging
 from discord.ext import commands
 from msqbitsReporter.common import constant, msqbitsReporterException, credentials
 
 
 credentials = credentials.get_credentials('discord')
 bot = commands.Bot(command_prefix=credentials['commandPrefix'])
+
+def log_writer():
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.DEBUG)
+    handler = logging.FileHandler(filename=constant.DISCORD_LOG_FILE, encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
 
 def load_command_files():
     try:
@@ -17,6 +25,7 @@ def load_command_files():
 
 def run():
     try:
+        log_writer()
         load_command_files()
         bot.run(credentials['token'], bot=True, reconnect=True)
     except Exception as ex:
