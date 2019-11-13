@@ -2,6 +2,7 @@
 This module is higly depend of the EPSI school planning website. if you want to use it for your own
 school planning you can test your function with the test module
 """
+import logging
 import requests
 import msqbitsReporter.EPSI.planing_converter as planning
 from bs4 import BeautifulSoup
@@ -20,6 +21,7 @@ def get_week_planning():
 
     except Exception as ex:
         print(ex)
+        logging.exception('unable to get week_planning', exc_info=True)
 
 
 def get_detail_course(date):
@@ -39,7 +41,7 @@ def get_detail_course(date):
 
     except Exception as ex:
         print(ex)
-
+        logging.exception('unable to get detailed course', exc_info=True)
 
 def get_detail_course_today():
     try:
@@ -59,6 +61,7 @@ def get_detail_course_today():
 
     except Exception as ex:
         print(ex)
+        logging.exception('unable to get detailed course for today', exc_info=True)
 
 
 def get_next_classroom_today():
@@ -78,5 +81,5 @@ def get_next_classroom_today():
 
     except Exception as ex:
         print(ex)
-        return 'Probably No event today'
+        logging.exception('unable to get the next classroom', exc_info=True)
 

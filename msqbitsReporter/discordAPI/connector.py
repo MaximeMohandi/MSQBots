@@ -7,14 +7,6 @@ from msqbitsReporter.common import constant, msqbitsReporterException, credentia
 credentials = credentials.get_credentials('discord')
 bot = commands.Bot(command_prefix=credentials['commandPrefix'])
 
-def log_writer():
-    logger = logging.getLogger('discord')
-    logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(filename=constant.DISCORD_LOG_FILE, encoding='utf-8', mode='w')
-    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-    logger.addHandler(handler)
-
-
 def load_command_files():
     try:
         bot.remove_command('help')
@@ -26,13 +18,11 @@ def load_command_files():
 
 def run():
     try:
-        log_writer()
+        logging.basicConfig(level=logging.NOTSET, handlers=[logging.FileHandler(constant.DISCORD_LOG_FILE, 'w', 'utf-8')], format='%(asctime)s:%(levelname)s:%(name)s: %(message)s')
         load_command_files()
         bot.run(credentials['token'], bot=True, reconnect=True)
     except Exception as ex:
-        print('erreur lors du démarrage :')
-        print(ex)
-        logging.critical(ex)
+        logging.exception(f'unable to run', exc_info=True)
 
 @bot.event
 async def on_ready():
@@ -41,7 +31,7 @@ async def on_ready():
 
 @bot.event
 async def on_error(event, *args, **kwargs):
-    print(event)
+    logging.error('something append')
 
 @bot.event
 async def on_disconnect():

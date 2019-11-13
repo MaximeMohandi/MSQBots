@@ -3,6 +3,7 @@ from msqbitsReporter.database import news_database as db
 import msqbitsReporter.discordAPI.connector as discordReporter
 from discord.ext import commands
 from discord import embeds, colour
+import logging
 
 db = db.News()
 bot = discordReporter.bot
@@ -106,6 +107,7 @@ class ReporterCommands(commands.Cog):
             await ctx.message.add_reaction('✅')
         except Exception as ex:
             print(ex)
+            logging.exception('unable to add newspaper', exc_info=True)
             await ctx.message.add_reaction('❌')
 
     @commands.command(name='removenewspaper',
@@ -119,6 +121,7 @@ class ReporterCommands(commands.Cog):
 
         except Exception:
             print(Exception)
+            logging.exception('unable to remove newspaper', exc_info=True)
             await ctx.message.add_reaction('❌')
 
 
