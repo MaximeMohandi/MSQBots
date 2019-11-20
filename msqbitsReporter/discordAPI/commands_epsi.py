@@ -43,16 +43,22 @@ class EpsiCommands(commands.Cog):
         """
         formatting the message in embed style for discord.
 
-    def embed_message(self, rawmessage):
+        :param rawmessage: a dictionnary representing a message.
+
+        .. seealso:: https://discordpy.readthedocs.io/en/latest/api.html?highlight=embed#discord.Embed
+        .. warning:: This is highly dependents of the time_table_message in the behavior module.
+        """
         embedmessage = embeds.Embed(
             title=rawmessage['title'],
             colour=embededcoulour
         )
-        embedmessage.set_footer(text="si vous trouvez ça long faite savoir à C&D que retourner un html aussi claqué en réponse d'API c'est pas très efficace :)")
+        embedmessage.set_footer(
+            text="si vous trouvez ça long faite savoir à C&D que retourner un html aussi claqué en réponse d'API c'est pas très efficace :)")
         embedmessage.set_thumbnail(url=thumbmaillink)
         for fields in rawmessage['courses']:
-            embedmessage.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=True)
-            embedmessage.add_field(name=fields['courseroom'], value=fields['courseteacher'], inline=True)
+            embedmessage.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=False)
+            embedmessage.add_field(name=fields['courseteacher'], value=fields['courseroom'], inline=False)
+
         return embedmessage
 
 
