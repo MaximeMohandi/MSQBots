@@ -8,7 +8,8 @@ embededcoulour = colour.Colour.dark_blue()
 thumbmaillink = 'http://www.epsi.fr/wp-content/uploads/2017/04/Notre-futur-campus-en-video-!-101483_reference.png'
 embedsepsifooter = "https://beecome.io"
 
-class EpsiCommands(commands.Cog) :
+
+class EpsiCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -17,26 +18,30 @@ class EpsiCommands(commands.Cog) :
                       help='Display course programmed for each day nearest the actual week')
     async def display_planning_course(self, ctx):
         for message in time_table_message.getFormatedPlanningWeek():
-            await ctx.send(embed=self.embed_message(message))
+            await ctx.send(embed=self.__embed_message(message))
 
     @commands.command(name='daycourse', aliases=['coursefor', 'cours'],
                       brief='Display planed course for given day',
                       usage='date in format : dd/mm/yyyy')
     async def display_planning_for_date(self, ctx, arg):
         for message in time_table_message.getPlanningFor(arg):
-            await ctx.send(embed=self.embed_message(message))
+            await ctx.send(embed=self.__embed_message(message))
 
-    @commands.command(name="todayedt", aliases=['edttoday','coursjours'],
+    @commands.command(name="todayedt", aliases=['edttoday', 'coursjours'],
                       brief='display course scheduled today')
-    async def display_today_planning(self,ctx):
+    async def display_today_planning(self, ctx):
         for message in time_table_message.getThePlanningForToday():
-            await ctx.send(embed=self.embed_message(message))
+            await ctx.send(embed=self.__embed_message(message))
 
-    @commands.command(name="nextroom", aliases=['classroom','lasalle'],
+    @commands.command(name="nextroom", aliases=['classroom', 'lasalle'],
                       brief="give next classroom")
-    async def display_today_next_classroom(self,ctx):
+    async def display_today_next_classroom(self, ctx):
         for message in time_table_message.getRoomNextClassRoom():
-            await ctx.send(embed=self.embed_message(message))
+            await ctx.send(embed=self.__embed_message(message))
+
+    def __embed_message(self, rawmessage):
+        """
+        formatting the message in embed style for discord.
 
     def embed_message(self, rawmessage):
         embedmessage = embeds.Embed(
