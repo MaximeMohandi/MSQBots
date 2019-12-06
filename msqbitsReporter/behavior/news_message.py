@@ -3,6 +3,7 @@ import feedparser
 import logging
 
 db = news_database.News()
+__NB_ARTICLE_TO_GET = 4
 
 
 def get_all_articles():
@@ -84,7 +85,7 @@ def get_articles_by(category):
                 'title': newsPaper[1],
                 'description': " ",
                 'footer': newsPaper[2],
-                'articles': format_articles(allnews[3])
+                'articles': format_articles(newsPaper[3])
             }
     
             articles = feedparser.parse(newsPaper[3])
@@ -96,14 +97,12 @@ def get_articles_by(category):
 
 
 def format_articles(feed):
+    articles = feedparser.parse(feed)  # contain the feed link to of the newspaper
     try:
         newspaperarticles = []
-        nbarticletoget = 4
         articlecounter = 0
 
-        articles = feedparser.parse(feed) # contain the feed link to of the newspaper
-
-        while len(articles.entries) > 0 and articlecounter < nbarticletoget:
+        while len(articles.entries) > 0 and articlecounter < __NB_ARTICLE_TO_GET:
             article = articles.entries[articlecounter]
             newspaperarticles.append({
                 'titlearticle': article.title,
