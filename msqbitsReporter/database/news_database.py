@@ -1,6 +1,6 @@
+import logging
 import mysql.connector as mysql
 from msqbitsReporter.database.db_connector import DbConnector
-from msqbitsReporter.common import msqbitsReporterException
 
 
 class News(DbConnector):
@@ -18,8 +18,8 @@ class News(DbConnector):
             self.cnx.commit()
             return cursor.lastrowid
 
-        except mysql.Error:
-            raise msqbitsReporterException.InsertException
+        except mysql.Error as error:
+            raise error
 
         finally:
             cursor.close()
@@ -32,8 +32,8 @@ class News(DbConnector):
             cursor.execute(query, (name,))
             return cursor.fetchall()
 
-        except mysql.Error:
-            raise msqbitsReporterException.FetchException
+        except mysql.Error as error:
+            raise error
 
         finally:
             cursor.close()
@@ -46,8 +46,8 @@ class News(DbConnector):
             cursor.execute(query, (name,))
             return cursor.fetchone()
 
-        except mysql.Error:
-            raise msqbitsReporterException.FetchException
+        except mysql.Error as error:
+            raise error
 
         finally:
             cursor.close()
@@ -60,8 +60,8 @@ class News(DbConnector):
             cursor.execute(query)
             return cursor.fetchall()
 
-        except mysql.Error:
-            raise msqbitsReporterException.FetchException
+        except mysql.Error as error:
+            raise error
 
         finally:
             cursor.close()
@@ -74,8 +74,8 @@ class News(DbConnector):
             cursor.execute(query)
             return cursor.fetchall()
 
-        except mysql.Error:
-            raise msqbitsReporterException.FetchException
+        except mysql.Error as error:
+            raise error
 
         finally:
             cursor.close()
@@ -89,8 +89,8 @@ class News(DbConnector):
             self.cnx.commit()
             return True
 
-        except mysql.Error:
-            raise msqbitsReporterException.FetchException
+        except mysql.Error as error:
+            raise error
 
         finally:
             cursor.close()

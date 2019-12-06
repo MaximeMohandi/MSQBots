@@ -1,5 +1,5 @@
 import mysql.connector as mysql
-from msqbitsReporter.common import credentials, msqbitsReporterException
+from msqbitsReporter.common import credentials
 
 class DbConnector:
     def __init__(self):
@@ -17,4 +17,4 @@ class DbConnector:
             )
             return True
         except mysql.Error as error:
-            raise msqbitsReporterException.DatabaseException
+            raise error
