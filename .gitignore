@@ -14,3 +14,4 @@ test/__pycache__/test_jsonDecryptor.cpython-37-pytest-5.1.2.pyc
 ressources/discordsCredentials.json
 ressources/databaseParameter.json
 resources/discord_api.log
+logs/log_*

@@ -1,10 +1,16 @@
+from msqbitsReporter.common import constant, credentials
+from discord.ext import commands
+from datetime import datetime
 import discord
 import logging
-from discord.ext import commands
-from msqbitsReporter.common import constant, credentials
 
 credentials = credentials.get_credentials('discord')
 bot = commands.Bot(command_prefix=credentials['commandPrefix'])
+
+
+def create_log_file():
+    logfile = str(datetime.now().strftime("%m%d%Y%H%M%S")) + '.log'
+    logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler(constant.LOG_FILE + logfile, 'w', 'utf-8')], format='%(asctime)s:%(levelname)s:%(name)s: %(message)s')
 
 
 def load_command_files():
@@ -13,14 +19,15 @@ def load_command_files():
         for file in constant.DISCORD_COMMANDS_FILES:
             bot.load_extension(file)
 
+        logging.info("command_loaded")
+
     except Exception as ex:
-        print('error loading extension :')
-        print(ex)
+        logging.exception(f'error loading extension', exc_info=True)
 
 
 def run():
     try:
-        logging.basicConfig(level=logging.NOTSET, handlers=[logging.FileHandler(constant.DISCORD_LOG_FILE, 'w', 'utf-8')], format='%(asctime)s:%(levelname)s:%(name)s: %(message)s')
+        create_log_file()
         load_command_files()
         bot.run(credentials['token'], bot=True, reconnect=True)
 
@@ -32,6 +39,7 @@ def run():
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name=credentials['messageActivity']))
     print("I'm on the case")
+    logging.info("bot running")
 
 
 @bot.event
