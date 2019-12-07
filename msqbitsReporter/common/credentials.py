@@ -2,6 +2,7 @@ import configparser
 import logging
 from msqbitsReporter.common import constant
 
+
 def get_credentials(section):
     try:
         config = configparser.ConfigParser()

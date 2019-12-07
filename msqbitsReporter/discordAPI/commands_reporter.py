@@ -1,20 +1,26 @@
-from msqbitsReporter.behavior import news_message
 from msqbitsReporter.database import news_database as db
-import msqbitsReporter.discordAPI.automated_message as automsg
-import msqbitsReporter.discordAPI.connector as discordReporter
+from msqbitsReporter.behavior import news_message
+from msqbitsReporter.common import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
+from datetime import datetime
 import logging
 
 db = db.News()
 EMBEDDED_COLOR = colour.Colour.dark_red()
 THUMBNAIL_LINK = 'https://raw.githubusercontent.com/MaximeMohandi/MSQBitsReporter2.0/master/msqbitsReporter' \
-                 '/ressources/reporterLogo.png '
+                 '/resources/reporterLogo.png '
+
+
+def setup(bot):
+    bot.add_cog(ReporterCommands(bot))
 
 
 class ReporterCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.news_channel = int(credentials.get_credentials('discord')['idNewsChannel'])
+        self.display_x_news_daily.start()
 
     @commands.command(name='newspapers',
                       brief='Display a list of all the saved newspapers',
@@ -29,6 +35,8 @@ class ReporterCommands(commands.Cog):
         for message in news_message.get_saved_newspapers():
             embed_message.add_field(name=message['name'], value=message['value'], inline=False)
 
+        await self.bot.get_channel(self.news_channel).send(embed=embed_message)
+
     @commands.command(name='categories',
                       brief='Display a list of all news categories saved',
                       help='Display a list of all news categories saved with their ID and their titles. Useful'
@@ -42,15 +50,27 @@ class ReporterCommands(commands.Cog):
         for message in news_message.get_saved_categories():
             embed_message.add_field(name=message, value="category", inline=False)
 
-        await ctx.send(embed=embed_message)
+        await self.bot.get_channel(self.news_channel).send(embed=embed_message)
 
     @commands.command(name='news',
                       brief='Display last four articles for each newspapers saved in database',
                       help='Display last four articles for each newspapers saved in database, this command'
                            'can be stop by typing $stop at anytime.')
     async def display_x_news(self, ctx):
+        await self.__display_news()
+
+    @tasks.loop(hours=2)
+    async def display_x_news_daily(self):
+        hour = datetime.now().hour
+
+        if 9 <= hour < 11:
+            await self.__display_news()
+        else:
+            print('not time for news')
+
+    async def __display_news(self):
         for message in news_message.get_all_articles():
-            await ctx.send(embed=self.__embed_news(message))
+            await self.bot.get_channel(self.news_channel).send(embed=embed_news(message))
 
     @commands.command(name='newscat',
                       brief='Display a list of all news by selected category',
@@ -58,33 +78,14 @@ class ReporterCommands(commands.Cog):
                            'by typing $stop')
     async def display_news_by_category(self, ctx, arg):
         for message in news_message.get_articles_by(arg):
-            await ctx.send(embed=self.__embed_news(message))
+            await self.bot.get_channel(self.news_channel).send(embed=embed_news(message))
 
     @commands.command(name='newsdaily',
                       brief='Display articles from a selected newspaper.',
                       help='Display 8 articles from a selected newspaper. This command can be stopped by typing $stop')
     async def display_news_by_newspaper(self, ctx, arg):
         for message in news_message.get_articles_from(arg):
-            await ctx.send(embed=self.__embed_news(message))
-
-    def __embed_news(self, non_embed_msg):
-
-        # if one property is None replace by None for more flexibility
-        message_title = non_embed_msg['title'] if non_embed_msg['title'] is not None else "NaN"
-        message_desc = non_embed_msg['description'] if non_embed_msg['description'] is not None else "NaN"
-        message_footer = non_embed_msg['footer'] if non_embed_msg['footer'] is not None else "NaN"
-
-        embed_message = embeds.Embed(
-            title=message_title,
-            description=message_desc,
-            colour=EMBEDDED_COLOR
-        )
-        embed_message.set_footer(text=message_footer)
-        embed_message.set_thumbnail(url=THUMBNAIL_LINK)
-        for article in non_embed_msg['articles']:
-            embed_message.add_field(name=article['titlearticle'], value=article['link'])
-
-        return embed_message
+            await self.bot.get_channel(self.news_channel).send(embed=embed_news(message))
 
     @commands.command(name='addnewspaper',
                       brief='Add a new newspaper',
@@ -114,6 +115,28 @@ class ReporterCommands(commands.Cog):
             await ctx.message.add_reaction('❌')
 
 
-def setup(bot):
-    bot.add_cog(ReporterCommands(bot))
+def embed_news(non_embed_msg):
+    """
+        formatting the news result to return embedded discord messages
 
+        :param non_embed_msg: a dictionnary representing a message.
+
+        .. seealso:: https://discordpy.readthedocs.io/en/latest/api.html?highlight=embed#discord.Embed
+        .. warning:: This is highly dependents of the news return
+    """
+    # if one property is None replace by None for more flexibility
+    message_title = non_embed_msg['title'] if non_embed_msg['title'] is not None else "NaN"
+    message_desc = non_embed_msg['description'] if non_embed_msg['description'] is not None else "NaN"
+    message_footer = non_embed_msg['footer'] if non_embed_msg['footer'] is not None else "NaN"
+
+    embed_message = embeds.Embed(
+        title=message_title,
+        description=message_desc,
+        colour=EMBEDDED_COLOR
+    )
+    embed_message.set_footer(text=message_footer)
+    embed_message.set_thumbnail(url=THUMBNAIL_LINK)
+    for article in non_embed_msg['articles']:
+        embed_message.add_field(name=article['titlearticle'], value=article['link'])
+
+    return embed_message

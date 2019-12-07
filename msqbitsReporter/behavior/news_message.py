@@ -9,17 +9,13 @@ __NB_ARTICLE_TO_GET = 4
 def get_all_articles():
     try:
         newspapers = []
-        allNewspaper = db.select_all_newspaper()
+        all_newspaper = db.select_all_newspaper()
 
-        for newsPaper in allNewspaper:
-            newspaperarticles = {}
+        for newsPaper in all_newspaper:
+            newspaper_articles = {'title': newsPaper[0], 'description': newsPaper[2],
+                                  'footer': newsPaper[1], 'articles': format_articles(newsPaper[3])}
 
-            newspaperarticles['title'] = newsPaper[0]
-            newspaperarticles['description'] = newsPaper[2]
-            newspaperarticles['footer'] = newsPaper[1]
-            newspaperarticles['articles'] = format_articles(newsPaper[3])
-
-            newspapers.append(newspaperarticles)
+            newspapers.append(newspaper_articles)
 
         return newspapers
 
@@ -29,17 +25,17 @@ def get_all_articles():
 
 def get_saved_newspapers():
     try:
-        messageStack = []
-        allNewpapers = db.select_all_newspaper()
+        message_stack = []
+        all_newspapers = db.select_all_newspaper()
 
-        for newspaper in allNewpapers:
+        for newspaper in all_newspapers:
             newspaperdict = {
                 'name': "{0} - {1}".format(newspaper[2], newspaper[0]),
                 'value': newspaper[1]
             }
-            messageStack.append(newspaperdict)
+            message_stack.append(newspaperdict)
 
-        return messageStack
+        return message_stack
     except Exception:
         logging.exception('unable to get saved newspaper', exc_info=True)
 
@@ -60,37 +56,38 @@ def get_saved_categories():
 def get_articles_from(newspaper):
     try:
         newspapers = []
-        allnews = db.select_newspaper_by_name(newspaper)
-    
-        if allnews != None:
-            newspaperarticles = {
-                'title': allnews[1],
+        all_news = db.select_newspaper_by_name(newspaper)
+
+        if all_news != None:
+            newspaper_articles = {
+                'title': all_news[1],
                 'description': "//",
-                'footer': allnews[2],
-                'articles': format_articles(allnews[3])
+                'footer': all_news[2],
+                'articles': format_articles(all_news[3])
             }
-            newspapers.append(newspaperarticles)
-    
+            newspapers.append(newspaper_articles)
+
         return newspapers
     except Exception:
         logging.exception(f'unable to get articles from {newspaper}', exc_info=True)
 
+
 def get_articles_by(category):
     try:
         newspapers = []
-        allnews = db.select_newspaper_by_cat(category)
-    
-        for newsPaper in allnews:
-            newspaperarticles = {
+        all_news = db.select_newspaper_by_cat(category)
+
+        for newsPaper in all_news:
+            newspaper_articles = {
                 'title': newsPaper[1],
                 'description': " ",
                 'footer': newsPaper[2],
                 'articles': format_articles(newsPaper[3])
             }
-    
+
             articles = feedparser.parse(newsPaper[3])
-            newspaperarticles['articles'] = format_articles(articles)
-    
+            newspaper_articles['articles'] = format_articles(articles)
+
         return newspapers
     except Exception:
         logging.exception(f'unable to get articles by {category}', exc_info=True)
@@ -99,18 +96,18 @@ def get_articles_by(category):
 def format_articles(feed):
     articles = feedparser.parse(feed)  # contain the feed link to of the newspaper
     try:
-        newspaperarticles = []
-        articlecounter = 0
+        newspaper_articles = []
+        articles_counter = 0
 
-        while len(articles.entries) > 0 and articlecounter < __NB_ARTICLE_TO_GET:
-            article = articles.entries[articlecounter]
-            newspaperarticles.append({
+        while len(articles.entries) > 0 and articles_counter < __NB_ARTICLE_TO_GET:
+            article = articles.entries[articles_counter]
+            newspaper_articles.append({
                 'titlearticle': article.title,
                 'link': article.link,
                 'date': article.published
             })
-            articlecounter += 1
+            articles_counter += 1
 
-        return newspaperarticles
+        return newspaper_articles
     except Exception:
         logging.exception(f'unable to format articles from {feed}', exc_info=True)
