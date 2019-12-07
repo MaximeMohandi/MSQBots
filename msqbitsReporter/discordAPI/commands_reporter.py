@@ -35,7 +35,7 @@ class ReporterCommands(commands.Cog):
         for message in news_message.get_saved_newspapers():
             embed_message.add_field(name=message['name'], value=message['value'], inline=False)
 
-        await self.bot.get_channel(self.news_channel).send(embed=embed_message)
+        await self.__send_to_news_channel(embed_message)
 
     @commands.command(name='categories',
                       brief='Display a list of all news categories saved',
@@ -50,7 +50,7 @@ class ReporterCommands(commands.Cog):
         for message in news_message.get_saved_categories():
             embed_message.add_field(name=message, value="category", inline=False)
 
-        await self.bot.get_channel(self.news_channel).send(embed=embed_message)
+        await self.__send_to_news_channel(embed_message)
 
     @commands.command(name='news',
                       brief='Display last four articles for each newspapers saved in database',
@@ -70,7 +70,7 @@ class ReporterCommands(commands.Cog):
 
     async def __display_news(self):
         for message in news_message.get_all_articles():
-            await self.bot.get_channel(self.news_channel).send(embed=embed_news(message))
+            await self.__send_to_news_channel(embed_news(message))
 
     @commands.command(name='newscat',
                       brief='Display a list of all news by selected category',
@@ -78,14 +78,20 @@ class ReporterCommands(commands.Cog):
                            'by typing $stop')
     async def display_news_by_category(self, ctx, arg):
         for message in news_message.get_articles_by(arg):
-            await self.bot.get_channel(self.news_channel).send(embed=embed_news(message))
+            await self.__send_to_news_channel(embed_news(message))
 
     @commands.command(name='newsdaily',
                       brief='Display articles from a selected newspaper.',
                       help='Display 8 articles from a selected newspaper. This command can be stopped by typing $stop')
     async def display_news_by_newspaper(self, ctx, arg):
         for message in news_message.get_articles_from(arg):
-            await self.bot.get_channel(self.news_channel).send(embed=embed_news(message))
+            await self.__send_to_news_channel(embed_news(message))
+
+    async def __send_to_news_channel(self, message):
+        try:
+            await self.bot.get_channel(self.news_channel).send(embed=message)
+        except Exception as ex:
+            logging.error(ex)
 
     @commands.command(name='addnewspaper',
                       brief='Add a new newspaper',
@@ -115,6 +121,8 @@ class ReporterCommands(commands.Cog):
             await ctx.message.add_reaction('❌')
 
 
+
+
 def embed_news(non_embed_msg):
     """
         formatting the news result to return embedded discord messages
@@ -137,6 +145,6 @@ def embed_news(non_embed_msg):
     embed_message.set_footer(text=message_footer)
     embed_message.set_thumbnail(url=THUMBNAIL_LINK)
     for article in non_embed_msg['articles']:
-        embed_message.add_field(name=article['titlearticle'], value=article['link'])
+        embed_message.add_field(name=article['titlearticle'], value=article['link'], inline=False)
 
     return embed_message
