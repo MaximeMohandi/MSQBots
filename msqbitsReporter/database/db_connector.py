@@ -1,6 +1,7 @@
 import mysql.connector as mysql
 from msqbitsReporter.common import credentials
 
+
 class DbConnector:
     def __init__(self):
         self.credentials = credentials.get_credentials('database')
@@ -10,7 +11,7 @@ class DbConnector:
         try:
             self.cnx = mysql.connect(
                 host=self.credentials['host'],
-                port=self.credentials['port'],
+                port=int(self.credentials['port']),
                 database=self.credentials['database'],
                 user=self.credentials['user'],
                 password=self.credentials['password']
