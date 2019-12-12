@@ -1,4 +1,4 @@
-# MSQBitsReporter2.0
+# MSQBotsReporter
 <img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/resources/reporterLogo.png" width="25%"/>
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
