@@ -19,7 +19,7 @@ def get_all_articles():
 
         return newspapers
 
-    except Exception:
+    except Exception :
         logging.exception('unable to get all articles', exc_info=True)
 
 

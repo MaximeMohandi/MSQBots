@@ -1,24 +1,51 @@
 import pytest
-import msqbitsReporter.behavior.news_message as newMessage
+import msqbitsReporter.behavior.news_message as news_message
 
-#if the method return a non empty list
-def test_getArticlesByNewsPaper():
-    result = newMessage.get_all_articles()
+
+@pytest.mark.parametrize('expected_key', [
+    'title',
+    'description',
+    'footer',
+    'articles'
+])
+def test_get_all_news_success_when_return_expected_dict_key(expected_key):
+    fetched_key = news_message.get_all_articles()[0].keys()  # get keys from fetched newspaper articles
+    assert expected_key in fetched_key
+
+
+@pytest.mark.parametrize('dict_key, expected_type', [
+    ('title', str),
+    ('description', str),
+    ('footer', str),
+    ('articles', list)
+])
+def test_get_all_news_success_when_returning_expected_type(dict_key, expected_type):
+    fetched_newspapers_keys_type = [type(news[dict_key]) for news in news_message.get_all_articles()]
+    assert fetched_newspapers_keys_type.count(expected_type)
+
+
+
+def test_getArticlesByNewsPaper_return__a():
+    result = news_message.get_all_articles()
     assert len(result) > 0
+
 
 def test_getAllNewspapersSaved():
-    result = newMessage.get_saved_newspapers()
+    result = news_message.get_saved_newspapers()
     assert len(result) > 0
+
 
 def test_getAllCategoriesSaved():
-    result = newMessage.get_saved_categories()
+    result = news_message.get_saved_categories()
     assert len(result) > 0
 
-#if the method return an empty list
+
+# if the method return an empty list
 def test_getAllArticlesFromNewspaper():
-    result = newMessage.get_articles_from(None)
+    result = news_message.get_articles_from(None)
     assert len(result) == 0
 
+
 def test_get_all_articles_by_cat():
-    result = newMessage.get_articles_by('TEST')
+    result = news_message.get_articles_by('TEST')
     assert len(result) > 0

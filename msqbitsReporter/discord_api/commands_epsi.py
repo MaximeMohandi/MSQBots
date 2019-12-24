@@ -1,4 +1,4 @@
-from msqbitsReporter.behavior import time_table_message
+from msqbitsReporter.epsi_api import time_table_api as time_table
 from msqbitsReporter.common import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
@@ -31,26 +31,26 @@ class EpsiCommands(commands.Cog):
             print('not time for planning')
 
     async def __display_planning(self):
-        for message in time_table_message.getFormatedPlanningWeek():
+        for message in time_table.get_week_planning():
             await self.__send_embed_planning(message)
 
     @commands.command(name='daycourse', aliases=['coursefor', 'cours'],
                       brief='Display planed course for given day',
                       usage='date in format : dd/mm/yyyy')
     async def display_planning_for_date(self, ctx, arg):
-        for message in time_table_message.getPlanningFor(arg):
+        for message in time_table.get_planning_for(arg):
             await self.__send_embed_planning(message)
 
     @commands.command(name="todayedt", aliases=['edttoday', 'coursjours'],
                       brief='display course scheduled today')
     async def display_today_planning(self, ctx):
-        for message in time_table_message.getThePlanningForToday():
+        for message in time_table.get_today_planning():
             await self.__send_embed_planning(message)
 
     @commands.command(name="nextroom", aliases=['classroom', 'lasalle'],
                       brief="give next classroom")
     async def display_today_next_classroom(self, ctx):
-        for message in time_table_message.getRoomNextClassRoom():
+        for message in time_table.get_next_classroom():
             await self.__send_embed_planning(message)
 
     async def __send_embed_planning(self, rawmessage):

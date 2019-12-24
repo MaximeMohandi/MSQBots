@@ -1,4 +1,4 @@
-import msqbitsReporter.discordAPI.connector as discordReporter
+import msqbitsReporter.discord_api.connector as discordReporter
 from discord.ext import commands
 from discord import embeds, colour
 
