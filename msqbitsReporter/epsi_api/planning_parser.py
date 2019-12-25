@@ -111,11 +111,11 @@ def parse_epsi_planning_html(html):
                     planned_courses.append(day_detail)
             cursor += 1
 
-        if len(planned_courses) <=0:
+        if len(planned_courses) <= 0:
             raise exception.ParserNoPlanningFound
         else:
             return planned_courses
 
-    except Exception:
+    except (AttributeError, KeyError):
         raise exception.PlanningParsingError
 
