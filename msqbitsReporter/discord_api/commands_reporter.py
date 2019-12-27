@@ -29,13 +29,13 @@ class ReporterCommands(commands.Cog):
                       usage='name, web_adresse, rss_link, id_category')
     async def add(self, ctx, *args):
         try:
-            db.insert_newspaper(args[0], args[1], args[2], args[3])
-            await ctx.message.add_reaction('✅')
+            if self.__is_empty_arg(args):
+                await self.__send_to_news_channel("All the parameter has to be filled")
+            else:
+                db.insert_newspaper(args[0], args[1], args[2], args[3])
+                await ctx.message.add_reaction('✅')
 
-        except news_error.EmptyArgumentError:
-            await self.__send_to_news_channel("All the parameter has to be filled")
-
-        except news_error.NewsError :
+        except (news_error.LocalDatabaseError, news_error.RssParsingError):
             logging.exception('NEWS_ERROR', exc_info=True)
             await ctx.message.add_reaction('❌')
 
@@ -45,11 +45,12 @@ class ReporterCommands(commands.Cog):
                       usage='newspaper_name')
     async def remove(self, ctx, arg):
         try:
-            db.delete_newspaper(arg)
-            await ctx.message.add_reaction('✅')
+            if self.__is_empty_arg(arg):
+                await self.__send_to_news_channel("You didn't give the name of the newspaper you wanted to remove")
+            else:
+                db.delete_newspaper(arg)
+                await ctx.message.add_reaction('✅')
 
-        except news_error.EmptyArgumentError:
-            await self.__send_to_news_channel("You didn't give the name of the newspaper you wanted to remove")
         except news_error.NewsError:
             logging.exception('NEWS_ERROR', exc_info=True)
             await ctx.message.add_reaction('❌')
@@ -65,7 +66,6 @@ class ReporterCommands(commands.Cog):
         try:
             for message in db.select_newspaper():
                 embed_message.add_field(name=message['title'], value=message['website_url'], inline=False)
-
             await self.__send_to_news_channel(embed_message, embed=True)
 
         except news_error.NoNewspaperFound:
@@ -120,7 +120,11 @@ class ReporterCommands(commands.Cog):
                            'by typing $stop')
     async def display_news_by_category(self, ctx, arg):
         try:
-            await self.__send_to_news_channel(db.select_newspaper_by_cat(arg))
+            if self.__is_empty_arg(arg):
+                await self.__send_to_news_channel("You have to give a category name")
+            else:
+                await self.__send_to_news_channel(db.select_newspaper_by_cat(arg))
+
         except news_error.NoNewspaperFound:
             await self.__send_to_news_channel(NO_NEWSPAPER_ERROR_TEXT)
         except news_error.NewsError:
@@ -131,7 +135,10 @@ class ReporterCommands(commands.Cog):
                       help='Display 8 articles from a selected newspaper. This command can be stopped by typing $stop')
     async def display_news_by_title(self, ctx, arg):
         try:
-            await self.__send_embedded_news(db.select_newspaper_by_title(arg))
+            if self.__is_empty_arg(arg):
+                await self.__send_to_news_channel("You have to give a newspaper title")
+            else:
+                await self.__send_embedded_news(db.select_newspaper_by_title(arg))
 
         except news_error.NoNewspaperFound:
             await self.__send_to_news_channel(NO_NEWSPAPER_ERROR_TEXT)
@@ -147,11 +154,10 @@ class ReporterCommands(commands.Cog):
 
     async def __send_to_news_channel(self, message, embed=False):
         try:
-            news_channel = self.bot.get_channel(self.__news_channel_id)
             if embed is True:
-                await news_channel.send(embed=message)
+                await self.bot.get_channel(self.__news_channel_id).send(embed=message)
             else:
-                await news_channel.send(message)
+                await self.bot.get_channel(self.__news_channel_id).send(message)
 
         except Exception as ex:
             logging.error(ex)
@@ -161,6 +167,7 @@ class ReporterCommands(commands.Cog):
             formatting the news result to return embedded discord messages
 
             :param non_embed_msg: a dictionnary representing a message.
+            :type non_embed_msg: dict
 
             .. seealso:: https://discordpy.readthedocs.io/en/latest/api.html?highlight=embed#discord.Embed
             .. warning:: This is highly dependents of the news return
@@ -181,3 +188,21 @@ class ReporterCommands(commands.Cog):
             embed_message.add_field(name=article['titlearticle'], value=article['link'], inline=False)
 
         return embed_message
+
+    def __is_empty_arg(self, *args):
+        """
+            check if a parameter is empty
+
+            :param args: method argument to check
+            :type args: any
+
+            :returns: True if an argument is empty
+            :rtype: bool
+        """
+        if len(args) > 0:
+            for arg in args:
+                if arg is None or len(arg) == 0:
+                    return True
+            return False
+        else:
+            return False

@@ -1,2 +1,0 @@
-this is not a json file.
-this file is used to test json file detection

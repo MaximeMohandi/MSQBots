@@ -6,6 +6,7 @@ import feedparser
 
 class LocalDatabase:
     """Connection to the sqlite database"""
+
     def __init__(self):
         self.conn = db.connect(constant.RESOURCE_FOLDER_PATH + 'msqbreporter_database.db')
         self.__create_news_table()
@@ -52,9 +53,6 @@ class LocalDatabase:
         """
         cursor = self.conn.cursor()
         try:
-            if self.__is_empty_arg(title, website, rss_link, category_name):
-                raise exception.EmptyArgumentError
-
             cursor.execute('''
                 INSERT INTO newspapers (
                     newspaper_title, 
@@ -75,8 +73,6 @@ class LocalDatabase:
 
         except db.DatabaseError:
             raise exception.LocalDatabaseError
-        except exception.RssParsingError:
-            raise
         finally:
             cursor.close()
 
@@ -89,9 +85,6 @@ class LocalDatabase:
         """
         cursor = self.conn.cursor()
         try:
-            if self.__is_empty_arg(newspaper_name):
-                raise exception.EmptyArgumentError
-
             cursor.execute('''DELETE FROM newspapers WHERE newspaper_title ={}'''.format(newspaper_name))
         except db.DatabaseError:
             raise
@@ -135,9 +128,6 @@ class LocalDatabase:
         """
         cursor = self.conn.cursor()
         try:
-            if self.__is_empty_arg(title):
-                raise exception.EmptyArgumentError
-
             cursor.execute('''
                 SELECT *
                 FROM newspapers n
@@ -166,9 +156,6 @@ class LocalDatabase:
         """
         cursor = self.conn.cursor()
         try:
-            if self.__is_empty_arg(category_name):
-                raise exception.EmptyArgumentError
-
             cursor.execute('''
                 SELECT *
                 FROM newspapers n
@@ -247,19 +234,3 @@ class LocalDatabase:
         except (feedparser.CharacterEncodingUnknown, feedparser.CharacterEncodingOverride,
                 feedparser.NonXMLContentType):
             raise exception.RssParsingError
-
-    def __is_empty_arg(self, *args):
-        """
-            check if a parameter is empty
-
-            :param args: method argument to check
-            :type args: any
-
-            :returns: True if an argument is empty
-            :rtype: bool
-        """
-        for arg in args:
-            if arg is None:
-                return True
-        return False
-
