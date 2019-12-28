@@ -7,8 +7,8 @@ import feedparser
 class LocalDatabase:
     """Connection to the sqlite database"""
 
-    def __init__(self):
-        self.conn = db.connect(constant.RESOURCE_FOLDER_PATH + 'msqbreporter_database.db')
+    def __init__(self, database_path=constant.DATABASE_FILE):
+        self.conn = db.connect(database_path)
         self.__create_news_table()
         self.__NB_ARTICLE_MAX = 4
 
@@ -21,6 +21,14 @@ class LocalDatabase:
                     category_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     category_name TEXT NOT NULL
                 );
+                
+                INSERT OR REPLACE INTO `categories` 
+                    (`category_id`, `category_name`) 
+                VALUES
+                    (1, 'IT'),
+                    (2, 'Monde'),
+                    (3, 'Transport'),
+                    (4, 'Jeux Vidéo');
                             
                 CREATE TABLE IF NOT EXISTS newspapers (
                     newspaper_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,8 +39,7 @@ class LocalDatabase:
                     FOREIGN KEY(newspaper_category) REFERENCES categories(category_id)
                 );
             ''')
-
-        except Exception:
+        except (db.IntegrityError, db.InternalError):
             raise exception.LocalDatabaseError
 
         finally:
@@ -60,19 +67,18 @@ class LocalDatabase:
                     newspaper_rss_link, 
                     newspaper_category
                 ) VALUES (
-                    '{}', 
-                    '{}', 
-                    '{}', 
+                    ?, 
+                    ?, 
+                    ?, 
                     (
                         SELECT c.category_id
                         FROM categories c
-                        WHERE c.category_name = '{}'
+                        WHERE c.category_name = ?
                     )
                 );
-            '''.format(title, website, rss_link, category_name))
-
-        except db.DatabaseError:
-            raise exception.LocalDatabaseError
+            ''', (title, website, rss_link, category_name))
+        except (db.DatabaseError, db.InterfaceError):
+            raise exception.SavingDatabaseError
         finally:
             cursor.close()
 
@@ -87,7 +93,7 @@ class LocalDatabase:
         try:
             cursor.execute('''DELETE FROM newspapers WHERE newspaper_title ={}'''.format(newspaper_name))
         except db.DatabaseError:
-            raise
+            raise exception.LocalDatabaseError
 
         finally:
             cursor.close()
