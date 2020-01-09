@@ -64,8 +64,9 @@ class ReporterCommands(commands.Cog):
         embed_message.set_thumbnail(url=THUMBNAIL_LINK)
 
         try:
-            for message in db.select_newspaper():
-                embed_message.add_field(name=message['title'], value=message['website_url'], inline=False)
+            newspapers = db.select_newspapers()
+            for newspaper in newspapers:
+                embed_message.add_field(name=newspaper['title'], value=newspaper['description'], inline=False)
             await self.__send_to_news_channel(embed_message, embed=True)
 
         except news_error.NoNewspaperFound:
@@ -107,7 +108,7 @@ class ReporterCommands(commands.Cog):
 
     async def __display_news(self):
         try:
-            await self.__send_embedded_news(db.select_newspaper())
+            await self.__send_embedded_news(db.select_newspapers())
 
         except news_error.NoNewspaperFound:
             await self.__send_to_news_channel(NO_NEWSPAPER_ERROR_TEXT)
@@ -120,10 +121,11 @@ class ReporterCommands(commands.Cog):
                            'by typing $stop')
     async def display_news_by_category(self, ctx, arg):
         try:
-            if self.__is_empty_arg(arg):
+            category = str(arg)
+            if self.__is_empty_arg(category):
                 await self.__send_to_news_channel("You have to give a category name")
             else:
-                await self.__send_to_news_channel(db.select_newspaper_by_cat(arg))
+                await self.__send_to_news_channel(db.select_newspaper_by_cat(category))
 
         except news_error.NoNewspaperFound:
             await self.__send_to_news_channel(NO_NEWSPAPER_ERROR_TEXT)
@@ -135,10 +137,11 @@ class ReporterCommands(commands.Cog):
                       help='Display 8 articles from a selected newspaper. This command can be stopped by typing $stop')
     async def display_news_by_title(self, ctx, arg):
         try:
-            if self.__is_empty_arg(arg):
+            title = str(arg)
+            if self.__is_empty_arg(title):
                 await self.__send_to_news_channel("You have to give a newspaper title")
             else:
-                await self.__send_embedded_news(db.select_newspaper_by_title(arg))
+                await self.__send_embedded_news(db.select_newspaper_by_title(title))
 
         except news_error.NoNewspaperFound:
             await self.__send_to_news_channel(NO_NEWSPAPER_ERROR_TEXT)
@@ -148,9 +151,8 @@ class ReporterCommands(commands.Cog):
     # private method
 
     async def __send_embedded_news(self, newspapers):
-        for newspaper in newspapers:
-            to_send = self.__embed_news(newspaper)
-            await self.__send_to_news_channel(to_send, embed=True)
+        to_send = self.__embed_news(newspapers)
+        await self.__send_to_news_channel(to_send, embed=True)
 
     async def __send_to_news_channel(self, message, embed=False):
         try:
@@ -185,7 +187,7 @@ class ReporterCommands(commands.Cog):
         embed_message.set_footer(text=message_footer)
         embed_message.set_thumbnail(url=THUMBNAIL_LINK)
         for article in non_embed_msg['articles']:
-            embed_message.add_field(name=article['titlearticle'], value=article['link'], inline=False)
+            embed_message.add_field(name=article['article_title'], value=article['link'], inline=False)
 
         return embed_message
 

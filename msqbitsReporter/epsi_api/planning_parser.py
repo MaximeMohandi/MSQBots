@@ -61,7 +61,7 @@ def parse_epsi_planning_html(html):
     :param html:
     :rtype: html text
     :return list of course dict:
-    :rtype: table
+    :rtype: list
     """
     planned_courses = []
     cursor = 0
@@ -95,7 +95,7 @@ def parse_epsi_planning_html(html):
                     # go through the html table class
                     for details in course_info:
                         if details['class'][0] == 'TChdeb':
-                            course_details['hours'] = details.text
+                            course_details['hours'] = (details.text.split(' - ')[0], details.text.split(' - ')[1])
 
                         elif details['class'][0] == 'TCase':
                             course_details['label'] = details.text

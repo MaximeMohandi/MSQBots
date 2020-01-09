@@ -111,7 +111,7 @@ def __format_courses(planning_details):
     return [{
         'title': planned['date'],
         'courses': [{
-            'hourscourse': course['hours'],
+            'hourscourse': str(course['hours'][0]) + ' - ' + str(course['hours'][1]),
             'courselabel': course['label'],
             'courseroom': course['room'],
             'courseteacher': course['prof']

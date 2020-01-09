@@ -22,6 +22,7 @@ def load_command_files():
         logging.info("command_loaded")
 
     except Exception as ex:
+        print(ex)
         logging.exception(f'error loading extension', exc_info=True)
 
 

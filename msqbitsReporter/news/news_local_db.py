@@ -57,6 +57,9 @@ class LocalDatabase:
         :type website: str
         :type rss_link: str
         :type category_name: str
+
+        :return: the inserted element id
+        :rtype: int
         """
         cursor = self.conn.cursor()
         try:
@@ -76,7 +79,9 @@ class LocalDatabase:
                         WHERE c.category_name = ?
                     )
                 );
-            ''', (title, website, rss_link, category_name))
+            ''', [title, website, rss_link, category_name])
+            self.conn.commit()
+            return cursor.lastrowid
         except (db.DatabaseError, db.InterfaceError):
             raise exception.SavingDatabaseError
         finally:
@@ -91,14 +96,14 @@ class LocalDatabase:
         """
         cursor = self.conn.cursor()
         try:
-            cursor.execute('''DELETE FROM newspapers WHERE newspaper_title ={}'''.format(newspaper_name))
+            cursor.execute('''DELETE FROM newspapers WHERE newspaper_title = (?)''', [newspaper_name])
+            self.conn.commit()
         except db.DatabaseError:
             raise exception.LocalDatabaseError
-
         finally:
             cursor.close()
 
-    def select_newspaper(self):
+    def select_newspapers(self):
         """
             Get all the newspaper stored into the database
 
@@ -113,7 +118,14 @@ class LocalDatabase:
                 INNER JOIN categories c ON c.category_id = n.newspaper_category
             ''')
 
-            return self.__format_news(cursor.fetchall())
+            # specific treatment because the returned list contain only the newspapers and not the articles
+            fetched = cursor.fetchall()
+            return [{
+                'title': newspaper[1],
+                'description': newspaper[6],  # category
+                'website_url': None,
+                'articles': None
+            }for newspaper in fetched]
 
         except db.DatabaseError:
             raise exception.LocalDatabaseError
@@ -138,8 +150,8 @@ class LocalDatabase:
                 SELECT *
                 FROM newspapers n
                 INNER JOIN categories c ON c.category_id = n.newspaper_category
-                WHERE n.newspaper_title = {}
-            '''.format(title))
+                WHERE n.newspaper_title = ?
+            ''', [title])
 
             return self.__format_news(cursor.fetchall())
 
@@ -166,8 +178,8 @@ class LocalDatabase:
                 SELECT *
                 FROM newspapers n
                 INNER JOIN categories c ON c.category_id = n.newspaper_category
-                WHERE c.category_name = {}
-            '''.format(category_name))
+                WHERE c.category_name = ?
+            ''', [category_name])
             return self.__format_news(cursor.fetchall())
 
         except db.DatabaseError:
@@ -213,9 +225,15 @@ class LocalDatabase:
             if raw_news is None or len(raw_news) <= 0:
                 raise exception.NoNewspaperFound
 
+            formatted_newspaper = {
+                'title': raw_news[0][1],
+                'description': "//",  # no description
+                'website_url': raw_news[0][2],
+                'articles':[]
+            }
+
             for newspaper in raw_news:
                 rss_result = feedparser.parse(newspaper[3])
-                newspaper_articles = []
                 article_count = 0
 
                 if len(newspaper[3]) <= 0:
@@ -223,19 +241,14 @@ class LocalDatabase:
                 else:
                     while len(rss_result.entries) > 0 and article_count < self.__NB_ARTICLE_MAX:
                         article = rss_result.entries[article_count]
-                        newspaper_articles.append({
+                        formatted_newspaper['articles'].append({
                             'article_title': article.title,
                             'link': article.link,
                             'date': article.published
                         })
                         article_count += 1
 
-                return {
-                    'title': newspaper[1],
-                    'description': "//",
-                    'website_url': newspaper[2],  # newspaper website
-                    'articles': newspaper_articles
-                }
+            return formatted_newspaper
 
         except (feedparser.CharacterEncodingUnknown, feedparser.CharacterEncodingOverride,
                 feedparser.NonXMLContentType):
