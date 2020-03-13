@@ -1,4 +1,3 @@
-from msqbitsReporter.epsi_api import time_table_api as timetable
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
 
@@ -14,7 +13,7 @@ def make_rectangle(texts, top, bottom, left, right, color):
     """
         Draw rectangle with text inside
 
-        :param texts: list of text to display in rectangle
+        :param text: list of text to display in rectangle
         :param top: rectangle's top x position
         :param bottom: rectangle's bottom x position
         :param left: rectangle's left y position
@@ -47,15 +46,7 @@ x_day_begin = 109
 x_day_end = x_step_day*6
 x_day = [i for i in range(x_day_begin, x_day_end, x_step_day)]
 
-
-planning = timetable.get_week_planning()
-
-for days in planning:
-    for course in days['courses']:
-        make_rectangle(
-            [course['courselabel'],course['courseteacher'],
-                        course['courseroom']],
-                       x_day[0], x_day[1], y[0], y[1], '#3d0c02')
+make_rectangle(['titre', 'prof', 'cours', 'heure'], x_day[0], x_day[1], y[1], y[2], "#ffffff")
 
 
 img.show()

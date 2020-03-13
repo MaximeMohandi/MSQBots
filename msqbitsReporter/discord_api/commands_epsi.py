@@ -98,7 +98,8 @@ class EpsiCommands(commands.Cog):
             text="si vous trouvez ça long faite savoir à C&D que retourner un html aussi claqué en réponse d'API c'est pas très efficace :)")
         embed_message.set_thumbnail(url=THUMBNAIL_LINK)
         for fields in rawmessage['courses']:
-            embed_message.add_field(name=fields['hourscourse'], value=fields['courselabel'], inline=False)
+            hours = '{} - {}'.format(fields['hourscourse'][0], fields['hourscourse'][1])
+            embed_message.add_field(name=hours, value=fields['courselabel'], inline=False)
             embed_message.add_field(name=fields['courseteacher'], value=fields['courseroom'], inline=False)
 
         await self.bot.get_channel(self.planning_channel).send(embed=embed_message)

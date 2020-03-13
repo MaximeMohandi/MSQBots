@@ -10,7 +10,6 @@ def clean_start_day():
     date with the number of day passed to get the firstday date
 
     :return: The complete date of the first day of the week or the next week if current day is week-end
-    :rtype: datetime
     """
     currentdaystr = datetime.today().strftime("%a").lower()
 
@@ -59,9 +58,7 @@ def parse_epsi_planning_html(html):
     parse the html of the epsi's school planning into a list of course
 
     :param html:
-    :rtype: html text
     :return list of course dict:
-    :rtype: list
     """
     planned_courses = []
     cursor = 0
@@ -72,11 +69,13 @@ def parse_epsi_planning_html(html):
 
         while cursor < len(day_div):
             day_date = day_div[cursor].td.text
-            day_case_position = day_div[cursor]["style"].split(';')[1].split('.')[0].split(':')[1]  # get the column position of the day div
+            # get the column position of the day div
+            day_case_position = day_div[cursor]["style"].split(';')[1].split('.')[0].split(':')[1]
             day_detail = {}
 
             for course in course_div:
-                course_case_position = course["style"].split(';')[3].split('.')[0].split(':')[1]  # get the position of the course into the planning html table
+                # get the position of the course into the planning html table
+                course_case_position = course["style"].split(';')[3].split('.')[0].split(':')[1]
 
                 if course_case_position == day_case_position:
                     course_info = course.findAll('td')
@@ -86,11 +85,12 @@ def parse_epsi_planning_html(html):
 
                     # if the day is the same as the previous course we add new entry in course_of_day
                     if len(planned_courses) > 0:
-                        last_entry = planned_courses.pop()  # use pop() to get the last entry but it destroy the entry
+                        last_entry = planned_courses.pop()  # use pop() to get the last entry but it destroy the current entry
                         if last_entry['date'] == day_date:
                             course_of_day = last_entry['course']
                         else:
-                            planned_courses.append(last_entry)  # if there's no match we restore the previously removed entry
+                            # if there's no match we restore the previously removed entry
+                            planned_courses.append(last_entry)
 
                     # go through the html table class
                     for details in course_info:

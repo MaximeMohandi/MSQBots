@@ -19,7 +19,6 @@ def get_week_planning():
     get the planning for the current week
 
     :return: list of courses planned this week
-    :rtype: list
     """
     try:
         request = PLANNING_URI.format(planning_cleaner.clean_start_day())
@@ -41,7 +40,6 @@ def get_planning_for(date):
     get the courses planned for the given day
 
     :return: list of course for the given day
-    :rtype: list
     """
     try:
         given_date = datetime.strptime(date, '%d/%m/%Y').strftime('%m/%d/%y')
@@ -68,7 +66,6 @@ def get_today_planning():
     return the courses planned for the current day
 
     :return: list of course planned for the current day
-    :rtype: list
     """
     try:
         today_formatted = datetime.today().strftime('%m/%d/%y')
@@ -83,7 +80,6 @@ def get_next_classroom():
     get the classroom number for the next course of the current day
 
     :return: next classroom number
-    :rtype: dict
     """
     try:
         current_hour = datetime.now().hour
@@ -105,13 +101,21 @@ def __format_courses(planning_details):
     """
     format the html parsed result into a comprehensible list of courses
 
+    The list contain a dictionnary with the following elements:
+        - title `str` : It's the title of the course
+        - courses `dict`: This is a dictionnary contaning course details
+            - hoursecourse `tuple`: begin and end hours
+            - courselabel `str`: course name
+            - courseroom `str`: room where the course is
+            - courseteacher `str`: name of the teacher
+
+
     :return:  list of dictionary with date and courses
-    :rtype: list
     """
     return [{
         'title': planned['date'],
         'courses': [{
-            'hourscourse': str(course['hours'][0]) + ' - ' + str(course['hours'][1]),
+            'hourscourse': course['hours'],
             'courselabel': course['label'],
             'courseroom': course['room'],
             'courseteacher': course['prof']
