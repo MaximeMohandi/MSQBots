@@ -32,7 +32,7 @@ def run():
         load_command_files()
         bot.run(credentials['token'], bot=True, reconnect=True)
 
-    except Exception as ex:
+    except Exception:
         logging.exception(f'unable to run', exc_info=True)
 
 
