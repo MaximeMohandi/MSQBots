@@ -4,5 +4,8 @@ RESOURCE_FOLDER_PATH = path.join(path.dirname(path.dirname(path.abspath(__file__
 CONFIG_FILE = RESOURCE_FOLDER_PATH + 'config.ini'
 DATABASE_FILE = RESOURCE_FOLDER_PATH + 'msqbreporter_database.db'
 LOG_FILE = path.join(path.dirname(path.dirname(path.abspath(__file__))), '../logs/log_')
-DISCORD_COMMANDS_FILES = ['msqbitsReporter.discord_api.commands_reporter', 'msqbitsReporter.discord_api.commands_epsi',
-                          'msqbitsReporter.discord_api.commands_help']
+DISCORD_COMMANDS_FILES = ['msqbitsReporter.discord_api.commands_reporter',
+                          'msqbitsReporter.discord_api.commands_epsi',
+                          'msqbitsReporter.discord_api.commands_corona',
+                          'msqbitsReporter.discord_api.commands_help',
+                          ]
