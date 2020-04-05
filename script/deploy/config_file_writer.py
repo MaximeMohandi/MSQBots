@@ -65,7 +65,6 @@ def write_discord_config():
     }
 
 
-write_db_config()
 write_discord_config()
 with open(path, 'w+') as configfile:
     config.write(configfile)
