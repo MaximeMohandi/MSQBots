@@ -1,6 +1,6 @@
-from msqbitsReporter.corona import covid_stat as covid
-from msqbitsReporter.common import exception as common_error
-from msqbitsReporter.discord_api import credentials
+from msqbot.corona import covid_stat as covid
+from msqbot.common import exception as common_error
+from msqbot.discord_api import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
 import logging

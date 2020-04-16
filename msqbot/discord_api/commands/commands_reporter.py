@@ -1,5 +1,5 @@
-from news import newspaper as library, news_errors
-from msqbitsReporter.discord_api import credentials
+from news_module import newspaper as library, news_errors
+from msqbot.discord_api import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
 from datetime import datetime

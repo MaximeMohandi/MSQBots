@@ -5,7 +5,7 @@ class LocalDatabase:
     """Connection to the local database"""
 
     def __init__(self,):
-        dataBasePath = "news/msqbreporter_database.db"
+        dataBasePath = "news_module/msqbreporter_database.db"
         self.conn = db.connect(dataBasePath)
         self.__create_news_table__()
 

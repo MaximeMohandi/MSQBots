@@ -27,14 +27,14 @@ _all the commands have to get prefixed ex:  ```$help``` to get the command list_
 
 There's 2 type of command for now:
 
-* news
+* news_module
 
 | commands  | result |
 | ------------- | ------------- |
 | getnews  | Display last four articles for each newspapers saved in database  |
 | getnewspapers | Display a list of all the saved newspapers | 
-| getcategories | Display a list of all news categories saved | 
-| getnewsby | Display a list of all news by selected category | 
+| getcategories | Display a list of all news_module categories saved | 
+| getnewsby | Display a list of all news_module by selected category | 
 | getnewsfrom |  Display articles from a selected newspaper |
 | addnewspaper | Add a new newspaper |
 | removenewspaper | Remove a newspaper |

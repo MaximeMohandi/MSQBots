@@ -3,13 +3,15 @@ from . import exception
 
 
 def clean_start_day():
-    """
-    Get the date of the first day of the time-table
+    """ Get the date of the first day of the time-table
 
     This get the current day then compute substract today's
     date with the number of day passed to get the firstday date
 
-    :return: The complete date of the first day of the week or the next week if current day is week-end
+    Returns
+    -------
+        :class:`datetime`
+            The complete date of the first day of the week or the next week if current day is week-end
     """
     currentdaystr = datetime.today().strftime("%a").lower()
 
@@ -24,15 +26,25 @@ def clean_start_day():
 
 
 def french_to_us_date_converter(frenchdate):
-    """
-    convert a french date to us date
+    """Convert a french date to US date
 
-    :param: frenchdate
-    :return: us date
-    :rtype: datetime
+    Parameters
+    -----------
+        frenchdate: :class:`str`
+            French formated date
+
+    Returns
+    -------
+        :class:`datetime`
+            US formated date
+
+    Raises
+    -------
+        DateFormatError
+            The given date is not in the expected format
     """
     try:
-        datetime.datetime.strptime(frenchdate, '%d/%m/%y')
+        datetime.strptime(frenchdate, '%d/%m/%y')
 
         dictmonthnumber = [
             ['janvier', '01'], ['février', '02'], ['mars', '03'],
@@ -54,11 +66,23 @@ def french_to_us_date_converter(frenchdate):
 
 
 def parse_epsi_planning_html(html):
-    """
-    parse the html of the epsi's school planning into a list of course
+    """Parse the html of Beecome.io school planning into a list of course
 
-    :param html:
-    :return list of course dict:
+    Parameters
+    -----------
+        html: :class:`bs4.BeautifulSoup`
+            HTML code of the page.
+
+    Returns
+    -------
+        :class:`list`
+            list of course
+
+    Raises
+    -------
+    PlanningParsingError
+        An occurred when parsing the planning
+
     """
     planned_courses = []
     cursor = 0

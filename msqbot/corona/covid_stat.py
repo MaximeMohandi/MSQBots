@@ -1,5 +1,5 @@
 from datetime import datetime
-import msqbitsReporter.corona.world_meters_api as corona_api
+import msqbot.corona.world_meters_api as corona_api
 
 
 def get_top_10_worst_stat():

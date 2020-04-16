@@ -1,15 +1,14 @@
-from msqbitsReporter.common import constant
-from msqbitsReporter.discord_api import credentials
+from msqbot.common import constant
+from msqbot.discord_api import credentials
 from discord.ext import commands
 from datetime import datetime
 import discord
 import logging
 
 DISCORD_COMMANDS_FILES = [
-    'msqbitsReporter.discord_api.commands.commands_reporter',
-    'msqbitsReporter.discord_api.commands.commands_epsi',
-    'msqbitsReporter.discord_api.commands.commands_corona',
-    'msqbitsReporter.discord_api.commands.commands_help',
+    'msqbot.discord_api.commands.commands_reporter',
+    'msqbot.discord_api.commands.commands_epsi',
+    'msqbot.discord_api.commands.commands_corona'
 ]
 
 

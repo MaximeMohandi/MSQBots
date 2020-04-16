@@ -1,4 +1,4 @@
-from news import news_errors, news_local_db
+from news_module import news_errors, news_local_db
 import feedparser
 
 
