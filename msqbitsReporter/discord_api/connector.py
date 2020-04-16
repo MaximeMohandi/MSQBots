@@ -1,8 +1,17 @@
-from msqbitsReporter.common import constant, credentials
+from msqbitsReporter.common import constant
+from msqbitsReporter.discord_api import credentials
 from discord.ext import commands
 from datetime import datetime
 import discord
 import logging
+
+DISCORD_COMMANDS_FILES = [
+    'msqbitsReporter.discord_api.commands.commands_reporter',
+    'msqbitsReporter.discord_api.commands.commands_epsi',
+    'msqbitsReporter.discord_api.commands.commands_corona',
+    'msqbitsReporter.discord_api.commands.commands_help',
+]
+
 
 credentials = credentials.get_credentials('discord')
 bot = commands.Bot(command_prefix=credentials['commandPrefix'])
@@ -10,13 +19,15 @@ bot = commands.Bot(command_prefix=credentials['commandPrefix'])
 
 def create_log_file():
     logfile = str(datetime.now().strftime("%m%d%Y%H%M%S")) + '.log'
-    logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler(constant.LOG_FILE + logfile, 'w', 'utf-8')], format='%(asctime)s:%(levelname)s:%(name)s: %(message)s')
+    logging.basicConfig(level=logging.INFO,
+                        handlers=[logging.FileHandler(constant.LOG_FILE + logfile, 'w', 'utf-8')],
+                        format='%(asctime)s:%(levelname)s:%(name)s: %(message)s')
 
 
 def load_command_files():
     try:
         bot.remove_command('help')
-        for file in constant.DISCORD_COMMANDS_FILES:
+        for file in DISCORD_COMMANDS_FILES:
             bot.load_extension(file)
 
         logging.info("command_loaded")

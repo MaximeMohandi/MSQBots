@@ -17,12 +17,10 @@ class HelpCommands(commands.Cog):
         usage='cog'
     )
     async def help_command(self, ctx, cog='all'):
-
         # The third parameter comes into play when
         # only one word argument has to be passed by the user
 
         # Prepare the embed
-
         help_embed = embeds.Embed(
             title='Help',
             colour=embededcoulour,
@@ -38,7 +36,6 @@ class HelpCommands(commands.Cog):
         cogs = [c for c in bot.cogs.keys()]
 
         # If cog is not specified by the user, we list all cogs and commands
-
         if cog == 'all':
             for cog in cogs:
                 # Get a list of all commands under each cog

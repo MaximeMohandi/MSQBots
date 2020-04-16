@@ -1,10 +1,10 @@
 from msqbitsReporter.epsi_api import time_table_api as time_table, exception as epsi_error
-from msqbitsReporter.common import credentials, exception as common_error
+from msqbitsReporter.common import exception as common_error
+from msqbitsReporter.discord_api import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
 from datetime import datetime
 import logging
-
 
 EMBEDDED_COLOR = colour.Colour.dark_blue()
 THUMBNAIL_LINK = 'http://www.epsi.fr/wp-content/uploads/2017/04/Notre-futur-campus-en-video-!-101483_reference.png'
@@ -15,6 +15,8 @@ ERROR_MESSAGE = "hmm something happened, check the logs for more details"
 
 
 class EpsiCommands(commands.Cog):
+    """Commands to get data from epsi module."""
+
     def __init__(self, bot):
         self.bot = bot
         self.planning_channel = int(credentials.get_credentials('discord')['idEdtChannel'])
@@ -27,7 +29,8 @@ class EpsiCommands(commands.Cog):
         await self.__display_planning()
 
     @tasks.loop(hours=24)
-    async def display_planning_course_daily(self):
+    async def display_planning_course_weekly(self):
+        """ Send EPSI planning every sunday."""
         weekday = datetime.now().weekday()
         if weekday is 6:
             await self.__display_planning()
@@ -35,6 +38,7 @@ class EpsiCommands(commands.Cog):
             print('not time for planning')
 
     async def __display_planning(self):
+        """ Send planning entire planning for the week."""
         try:
             for message in time_table.get_week_planning():
                 await self.__send_embed_planning(message)
@@ -90,12 +94,11 @@ class EpsiCommands(commands.Cog):
             logging.exception('Something got wrong with the parsing of time table website', exc_info=True)
 
     async def __send_embed_planning(self, rawmessage):
+        """Format the raw planning into a embed message for discord"""
         embed_message = embeds.Embed(
             title=rawmessage['title'],
             colour=EMBEDDED_COLOR
         )
-        embed_message.set_footer(
-            text="si vous trouvez ça long faite savoir à C&D que retourner un html aussi claqué en réponse d'API c'est pas très efficace :)")
         embed_message.set_thumbnail(url=THUMBNAIL_LINK)
         for fields in rawmessage['courses']:
             hours = '{} - {}'.format(fields['hourscourse'][0], fields['hourscourse'][1])
@@ -105,6 +108,7 @@ class EpsiCommands(commands.Cog):
         await self.bot.get_channel(self.planning_channel).send(embed=embed_message)
 
     async def __send_text(self, message):
+        """The a unique message without format."""
         await self.bot.get_channel(self.planning_channel).send(message)
 
 

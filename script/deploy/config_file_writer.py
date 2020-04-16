@@ -17,30 +17,6 @@ def check_mandatory_fields(fields):
         return True
 
 
-def write_db_config():
-    dbhost = ''
-    dbport = ''
-    dbname = ''
-    dbuser = ''
-    dbpwd = ''
-
-    while not check_mandatory_fields({dbhost, dbport, dbname, dbuser, dbpwd}):
-        print('-----------DATABASE-------------')
-        dbhost = input('host: ')
-        dbport = input('port: ')
-        dbname = input('database: ')
-        dbuser = input('user: ')
-        dbpwd = input('password: ')
-
-    config['DATABASE'] = {
-        'host': dbhost,
-        'port': dbport,
-        'database': dbname,
-        'user': dbuser,
-        'password': dbpwd
-    }
-
-
 def write_discord_config():
     token = ''
     messageActivity = ''

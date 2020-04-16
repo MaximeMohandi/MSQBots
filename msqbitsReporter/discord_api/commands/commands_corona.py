@@ -1,5 +1,6 @@
 from msqbitsReporter.corona import covid_stat as covid
-from msqbitsReporter.common import credentials, exception as common_error
+from msqbitsReporter.common import exception as common_error
+from msqbitsReporter.discord_api import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
 import logging
@@ -48,14 +49,20 @@ class CoronaCommands(commands.Cog):
             title=cases['country'],
             colour=EMBEDDED_COLOR
         )
-        embed_message.set_footer(text="faites vos jeux")
+        embed_message.set_footer(text="{}".format(covid.get_french_quarantines_days()))
         embed_message.set_image(url="attachment:{}//".format(IMAGE_LINK))
 
-        embed_message.add_field(name='Cases', value="Total : {}  |  New : {}"
-                                .format(cases['cases'], cases['new_cases']), inline=False)
-        embed_message.add_field(name='Death', value="Total : {}  |  New : {}"
-                                .format(death['death'], death['new_death']), inline=False)
-        embed_message.add_field(name='Survivor', value="Total : {}".format(survivors['survivors']), inline=False)
+        embed_message.add_field(name='Cases',
+                                value="Total : {}  |  New : {}".format(cases['cases'], cases['new_cases']),
+                                inline=False)
+
+        embed_message.add_field(name='Death',
+                                value="Total : {}  |  New : {}".format(death['death'], death['new_death']),
+                                inline=False)
+
+        embed_message.add_field(name='Survivor',
+                                value="Total : {}".format(survivors['survivors']),
+                                inline=False)
 
         await self.bot.get_channel(self.news_channel).send(embed=embed_message)
 

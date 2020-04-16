@@ -1,19 +1,16 @@
-from . import exception
-import msqbitsReporter.common.constant as constant
 import _sqlite3 as db
-import feedparser
 
 
 class LocalDatabase:
-    """Connection to the sqlite database"""
+    """Connection to the local database"""
 
-    def __init__(self, database_path=constant.DATABASE_FILE):
-        self.conn = db.connect(database_path)
-        self.__create_news_table()
-        self.__NB_ARTICLE_MAX = 4
+    def __init__(self,):
+        dataBasePath = "news/msqbreporter_database.db"
+        self.conn = db.connect(dataBasePath)
+        self.__create_news_table__()
 
-    def __create_news_table(self):
-        """create the tables composing the database"""
+    def __create_news_table__(self):
+        """Create the tables composing the database"""
         cursor = self.conn.cursor()
         try:
             cursor.executescript('''
@@ -39,27 +36,35 @@ class LocalDatabase:
                     FOREIGN KEY(newspaper_category) REFERENCES categories(category_id)
                 );
             ''')
-        except (db.IntegrityError, db.InternalError):
-            raise exception.LocalDatabaseError
+        except (db.IntegrityError, db.InternalError, db.OperationalError):
+            raise
 
         finally:
             cursor.close()
 
     def insert_newspaper(self, title, website, rss_link, category_name):
-        """
-        insert a new newspaper into the database
+        """Insert a new newspaper into the database
 
-        :param title: newspaper title
-        :param website: newspaper website url
-        :param rss_link: newspaper rss link
-        :param category_name: newspapers category id
-        :type title: str
-        :type website: str
-        :type rss_link: str
-        :type category_name: str
+        Parameters
+        -----------
+            title: :class:`str`
+                newspaper title
+            website: :class:`str`
+                newspaper website url
+            rss_link: :class:`str`
+                newspaper rss feed link
+            category_name: :class:`str`
+                newspaper category name
 
-        :return: the inserted element id
-        :rtype: int
+        Returns
+        -------
+            :class:`int`
+                Inserted element id
+
+        Raises
+        -------
+            DatabaseError
+                An occurred with the query on the database
         """
         cursor = self.conn.cursor()
         try:
@@ -69,11 +74,7 @@ class LocalDatabase:
                     newspaper_website, 
                     newspaper_rss_link, 
                     newspaper_category
-                ) VALUES (
-                    ?, 
-                    ?, 
-                    ?, 
-                    (
+                ) VALUES ( ?,  ?,  ?,  (
                         SELECT c.category_id
                         FROM categories c
                         WHERE c.category_name = ?
@@ -83,173 +84,163 @@ class LocalDatabase:
             self.conn.commit()
             return cursor.lastrowid
         except (db.DatabaseError, db.InterfaceError):
-            raise exception.SavingDatabaseError
+            raise
         finally:
             cursor.close()
 
     def delete_newspaper(self, newspaper_name):
-        """
-        Delete the given newspaper
+        """Delete a newspaper from the database
 
-        :param newspaper_name: newspaper name
-        :type newspaper_name: str
+        Parameters
+        -----------
+            newspaper_name: :class:`str`
+                name of the newspaper to delete
+
+        Raises
+        -------
+            DatabaseError
+                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
             cursor.execute('''DELETE FROM newspapers WHERE newspaper_title = (?)''', [newspaper_name])
             self.conn.commit()
         except db.DatabaseError:
-            raise exception.LocalDatabaseError
-        finally:
-            cursor.close()
-
-    def select_newspapers(self):
-        """
-            Get all the newspaper stored into the database
-
-            :returns: list of dictionary with articles from all the newspaper stored in database
-            :rtype:list
-        """
-        cursor = self.conn.cursor()
-        try:
-            cursor.execute('''
-                SELECT *
-                FROM newspapers n
-                INNER JOIN categories c ON c.category_id = n.newspaper_category
-            ''')
-
-            # specific treatment because the returned list contain only the newspapers and not the articles
-            fetched = cursor.fetchall()
-            return [{
-                'title': newspaper[1],
-                'description': newspaper[6],  # category
-                'website_url': None,
-                'articles': None
-            }for newspaper in fetched]
-
-        except db.DatabaseError:
-            raise exception.LocalDatabaseError
-        except (exception.NoNewspaperFound, exception.NoArticlesFound):
             raise
         finally:
             cursor.close()
 
-    def select_newspaper_by_title(self, title):
-        """
-        Get the newspaper with the given name
+    def select_newspapers(self):
+        """Selected all the newspaper stored into the database
 
-        :param title: the newspaper name we want to select
-        :type title: str
+        Returns
+        -------
+            :class:`list`
+                A list of newspapers stored on database
 
-        :return: all newspaper with the given title
-        :rtype: list
+        Raises
+        -------
+            DatabaseError
+                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
             cursor.execute('''
-                SELECT *
+                SELECT 
+                    n.newspaper_title, 
+                    c.category_name, 
+                    n.newspaper_website, 
+                    n.newspaper_rss_link
+                FROM newspapers n
+                INNER JOIN categories c ON c.category_id = n.newspaper_category
+            ''')
+
+            return cursor.fetchall()
+
+        except db.DatabaseError:
+            raise
+
+        finally:
+            cursor.close()
+
+    def select_newspaper_by_title(self, title):
+        """Select newspapers with the given title
+
+        Parameters
+        -----------
+            title: :class:`str`
+                Title of the newspaper wanted to select
+
+        Returns
+        -------
+            :class:`list`
+                List of all newspaper with the given title in database
+
+        Raises
+        -------
+            DatabaseError
+                Error occurred on the database
+        """
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute('''
+                SELECT 
+                    n.newspaper_title, 
+                    c.category_name, 
+                    n.newspaper_website, 
+                    n.newspaper_rss_link
                 FROM newspapers n
                 INNER JOIN categories c ON c.category_id = n.newspaper_category
                 WHERE n.newspaper_title = ?
             ''', [title])
 
-            return self.__format_news(cursor.fetchall())
+            return cursor.fetchall()
 
         except db.DatabaseError:
-            raise exception.LocalDatabaseError
-        except (exception.NoNewspaperFound, exception.NoArticlesFound):
             raise
         finally:
             cursor.close()
 
     def select_newspaper_by_cat(self, category_name):
-        """
-        Get all the newspaper from the given category
+        """Select all the newspaper into the category
 
-        :param category_name: newspaper category
-        :type category_name: str
+        Parameters
+        -----------
+            category_name: :class:`str`
+                Newspaper category nam
 
-        :return: all newspaper with into the given category
-        :rtype: list
+        Returns
+        -------
+            :class:`list`
+                A list of all newspaper with the given category
+
+        Raises
+        -------
+            DatabaseError
+                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
             cursor.execute('''
-                SELECT *
+                SELECT 
+                    n.newspaper_title, 
+                    c.category_name, 
+                    n.newspaper_website, 
+                    n.newspaper_rss_link
                 FROM newspapers n
                 INNER JOIN categories c ON c.category_id = n.newspaper_category
                 WHERE c.category_name = ?
             ''', [category_name])
-            return self.__format_news(cursor.fetchall())
+            return cursor.fetchall()
 
         except db.DatabaseError:
-            raise exception.LocalDatabaseError
-        except (exception.NoNewspaperFound, exception.NoArticlesFound):
             raise
         finally:
             cursor.close()
 
     def select_categories(self):
-        """
-        Get all the categories stored into the database
+        """Get all the categories stored into the database
 
-        :return: all category stored
-        :rtype: list
+        Returns
+        -------
+            :class:`list`
+                A list of category available on the database
+
+        Raises
+        -------
+            DatabaseError
+                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
             cursor.execute('''
-                SELECT *
-                FROM categories
+                SELECT c.category_name
+                FROM categories c
             ''')
             return cursor.fetchall()
 
         except db.DatabaseError:
-            raise exception.LocalDatabaseError
-        except (exception.NoNewspaperFound, exception.NoArticlesFound):
             raise
         finally:
             cursor.close()
 
-    def __format_news(self, raw_news):
-        """
-            format the news fetched from the database to a list of dict
-
-            :param raw_news: list of database row
-            :type raw_news: list
-
-            :returns: a list of dict representing the newspaper with the news
-            :rtype: list
-        """
-        try:
-            if raw_news is None or len(raw_news) <= 0:
-                raise exception.NoNewspaperFound
-
-            formatted_newspaper = {
-                'title': raw_news[0][1],
-                'description': "//",  # no description
-                'website_url': raw_news[0][2],
-                'articles':[]
-            }
-
-            for newspaper in raw_news:
-                rss_result = feedparser.parse(newspaper[3])
-                article_count = 0
-
-                if len(newspaper[3]) <= 0:
-                    raise exception.NoArticlesFound
-                else:
-                    while len(rss_result.entries) > 0 and article_count < self.__NB_ARTICLE_MAX:
-                        article = rss_result.entries[article_count]
-                        formatted_newspaper['articles'].append({
-                            'article_title': article.title,
-                            'link': article.link,
-                            'date': article.published
-                        })
-                        article_count += 1
-
-            return formatted_newspaper
-
-        except (feedparser.CharacterEncodingUnknown, feedparser.CharacterEncodingOverride,
-                feedparser.NonXMLContentType):
-            raise exception.RssParsingError

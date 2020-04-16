@@ -1,5 +1,5 @@
-from msqbitsReporter.news import news_local_db as news, exception as ex
-import sqlite3
+from msqbitsReporter.news import news_local_db as news
+from Reporter import news_errors as ex
 import pytest
 
 TEST_RSS_LINK = 'http://feeds.feedburner.com/TechCrunch/'  # is used to avoid error from feedparser
