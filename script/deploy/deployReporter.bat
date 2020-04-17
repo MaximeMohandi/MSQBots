@@ -2,5 +2,7 @@
 python config_file_writer.py
 Echo "build image"
 cd ../..
-docker build -t msqbitreporter -f %~dp0../deploy/Dockerfile .
+docker build -t msqbot -f %~dp0../deploy/Dockerfile .
+
+docker run --name MSQbot -d msqbot
 Echo done.

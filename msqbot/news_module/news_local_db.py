@@ -1,11 +1,12 @@
 import _sqlite3 as db
+import os
 
 
 class LocalDatabase:
     """Connection to the local database"""
 
     def __init__(self,):
-        dataBasePath = "news_module/msqbreporter_database.db"
+        dataBasePath = "{}/msqbreporter_database.db".format(os.path.dirname(os.path.abspath(__file__)))
         self.conn = db.connect(dataBasePath)
         self.__create_news_table__()
 

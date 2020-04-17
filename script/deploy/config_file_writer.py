@@ -1,7 +1,7 @@
 import configparser
 import os.path as path
 
-path = path.join(path.dirname(path.dirname(path.abspath(__file__))), '../msqbitsReporter/resources/config.ini')
+path = path.join(path.dirname(path.dirname(path.abspath(__file__))), '../msqbot/resources/config.ini')
 config = configparser.ConfigParser()
 
 

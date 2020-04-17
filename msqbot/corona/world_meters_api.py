@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from datetime import datetime
 import requests
 
 WORLD_METER_URL = 'https://www.worldometers.info/coronavirus/'

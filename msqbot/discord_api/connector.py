@@ -1,5 +1,5 @@
-from msqbot.common import constant
-from msqbot.discord_api import credentials
+from common import constant
+from discord_api import credentials
 from discord.ext import commands
 from datetime import datetime
 import discord
