@@ -15,3 +15,4 @@ ressources/discordsCredentials.json
 ressources/databaseParameter.json
 resources/discord_api.log
 logs/log_*
+*.ini
