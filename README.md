@@ -1,19 +1,18 @@
-# MSQBotsReporter
-<img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/resources/reporterLogo.png" width="25%"/>
+# MSQBots
+<img src="https://github.com/MaximeMohandi/MSQBitsReporter2.0/blob/master/msqbitsReporter/resources/mqbot_logo.png" width="25%"/>
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
-This has been originally developed as a practical project to train my python's skills. However, sometimes with time I added some features
-and now I thaught I could just share it.
-
-The bot is entirely developed in Python with Discord.py.
+MSQbot is a Python discord's bot originally developed for my personal needs. Since it's work pretty well I decided to share it with 
+people.  
 
 ## Features
-*I tried to make this bot modular but it need some improvements. In particular for the school API* 
+The features are divide in modules so you can use the one you need.
 
-* Display RSS feed articles
-* Display timetable planning from school API
-* Discord Bot API
+* News module
+* Epsi school api module
+* Covid19 api _(could be removed in the futur)_
+
 
 ## Environment Support
 
@@ -23,23 +22,20 @@ The bot is entirely developed in Python with Discord.py.
 
 
 ## Commands List
-_all the commands have to get prefixed ex:  ```$help``` to get the command list_
 
-There's 2 type of command for now:
-
-* news_module
+### News Commands
 
 | commands  | result |
 | ------------- | ------------- |
-| getnews  | Display last four articles for each newspapers saved in database  |
-| getnewspapers | Display a list of all the saved newspapers | 
-| getcategories | Display a list of all news_module categories saved | 
-| getnewsby | Display a list of all news_module by selected category | 
-| getnewsfrom |  Display articles from a selected newspaper |
-| addnewspaper | Add a new newspaper |
-| removenewspaper | Remove a newspaper |
+| news  | Display last four articles for each newspapers saved in database  |
+| newspapers | Display a list of all the saved newspapers | 
+| categories | Display a list of all news_module categories saved | 
+| newsby | Display a list of all news_module by selected category | 
+| newsfor |  Display articles from a selected newspaper |
+| addnews | Add a new newspaper |
+| rmnewspaper | Remove a newspaper |
 
-* Planning
+### EPSI Commands
 
 | commands  | result |
 | ------------- | ------------- |
@@ -47,5 +43,11 @@ There's 2 type of command for now:
 | daycourse | Display planed course for given day |
 | todayedt | display course scheduled today |
 | nextroom | give next classroom |
+
+### Covid Commands
+
+| commands  | result |
+| ------------- | ------------- |
+| covid | Display stat for a given country or worldwide |
 
 
