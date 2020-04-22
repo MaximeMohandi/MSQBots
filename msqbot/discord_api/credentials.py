@@ -1,6 +1,6 @@
 import configparser
 import logging
-import common.constant as const
+import constant as const
 
 
 def get_credentials(section):

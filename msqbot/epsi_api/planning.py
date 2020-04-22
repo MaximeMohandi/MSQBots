@@ -1,5 +1,5 @@
 import epsi_api.edt_parser as edt_parser
-import common.exception as common_error
+import exception as common_error
 import epsi_api.exception as epsi_error
 from bs4 import BeautifulSoup
 from datetime import datetime

@@ -1,3 +1,0 @@
-here goes the logs file
-
-you can change this preset into msqbitsReporter.common.constant.py file

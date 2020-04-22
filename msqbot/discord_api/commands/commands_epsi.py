@@ -1,5 +1,5 @@
 from epsi_api import planning, exception as epsi_error
-from msqbot.common import exception as common_error
+import exception as common_error
 from msqbot.discord_api import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
