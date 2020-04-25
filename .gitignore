@@ -1,6 +1,5 @@
 /env
 /.idea
-*.pyc
 /.vscode
 /__pycache__
 /.pytest_cache
@@ -16,3 +15,5 @@ ressources/databaseParameter.json
 resources/discord_api.log
 logs/log_*
 *.ini
+*.db
+*.pyc

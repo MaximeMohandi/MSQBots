@@ -4,12 +4,13 @@ import discord
 from discord_api import credentials
 from discord.ext import commands
 from datetime import datetime
-from os import listdir
+from os import listdir, path
 
 
 DISCORD_COMMANDS_FILES = [
     'msqbot.discord_api.commands.commands_reporter',
-    'msqbot.discord_api.commands.commands_epsi'
+    'msqbot.discord_api.commands.commands_epsi',
+    'msqbot.discord_api.commands.commands_meter'
 ]
 
 
@@ -26,7 +27,10 @@ def create_log_file():
 
 def load_command_files():
     try:
-       # test = [f for f in listdir('/commands/')]
+        # TODO analyse auto des fichiers dans le dossier commands
+        # commands_files = [file.replace('.py', '')
+        #                   for file in listdir(path.join(path.dirname(__file__), 'commands'))
+        #                   if '__' not in file]
         for file in DISCORD_COMMANDS_FILES:
             bot.load_extension(file)
 
