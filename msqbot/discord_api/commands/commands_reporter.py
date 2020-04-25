@@ -13,10 +13,6 @@ NO_NEWSPAPER_ERROR_TEXT = "No newspaper found, check if there's one available"
 NO_ARTICLE_ERROR_TEXT = "No Articles found for this newspaper, maybe there's no news today"
 
 
-def setup(bot):
-    bot.add_cog(ReporterCommands(bot))
-
-
 class ReporterCommands(commands.Cog):
     """Commands to get news from the news module."""
     def __init__(self, bot):
@@ -232,3 +228,8 @@ class ReporterCommands(commands.Cog):
             return False
         else:
             return False
+
+
+def setup(bot):
+    bot.add_cog(ReporterCommands(bot))
+

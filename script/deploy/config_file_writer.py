@@ -31,13 +31,15 @@ def write_discord_config():
         commandPrefix = input('command prefix: ')
         news_channel = input('id channel for news: ')
         edt_channel = input('id channel for planning: ')
+        meter_channel = input('id channel for meters: ')
 
     config['DISCORD'] = {
         'token': token,
         'messageActivity': messageActivity,
         'commandPrefix': commandPrefix,
         'idNewsChannel': news_channel,
-        'idEdtChannel': edt_channel
+        'idEdtChannel': edt_channel,
+        'idMeterChannel': meter_channel
     }
 
 
