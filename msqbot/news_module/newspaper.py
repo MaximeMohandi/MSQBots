@@ -77,9 +77,6 @@ class NewsPaper:
                 'category': newspaper[1],
                 'website_url': newspapers[2],
             } for newspaper in newspapers]
-
-        except news_errors:
-            raise
         except Exception:
             raise news_errors.NewsError
 
@@ -116,9 +113,6 @@ class NewsPaper:
         """
         try:
             return self.__format_news__(self.__get_newspaper__())
-
-        except news_errors.NewsError:
-            raise
         except Exception:
             raise news_errors.NewsError
 
@@ -142,8 +136,6 @@ class NewsPaper:
         """
         try:
             return self.__format_news__(self.database.select_newspaper_by_title(title))
-        except news_errors.NewsError:
-            raise
         except Exception:
             raise news_errors.NewsError
 
@@ -234,6 +226,4 @@ class NewsPaper:
         except (feedparser.CharacterEncodingUnknown, feedparser.CharacterEncodingOverride,
                 feedparser.NonXMLContentType):
             raise news_errors.RssParsingError
-        except news_errors.NewsError:
-            raise
 

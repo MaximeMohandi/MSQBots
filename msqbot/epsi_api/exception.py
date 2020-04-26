@@ -17,7 +17,6 @@ class ParserNoPlanningFound(EpsiError):
     """The result from the parser has not found any planning for the given date"""
     def __init__(self):
         super().__init__('No Planning has been found')
-    pass
 
 
 

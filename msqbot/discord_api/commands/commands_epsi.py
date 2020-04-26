@@ -12,6 +12,7 @@ EMBED_FOOTER = "https://beecome.io"
 
 NO_PLANNING_FOUND_MESSAGE = "It seems that nothing is planned"
 ERROR_MESSAGE = "hmm something happened, check the logs for more details"
+PARSING_ERROR = "Something got wrong with the parsing of time table website"
 
 
 class EpsiCommands(commands.Cog):
@@ -40,7 +41,7 @@ class EpsiCommands(commands.Cog):
             await ctx.message.add_reaction('❌')
         except (common_error.HttpError, epsi_error.EpsiError):
             await self.__send_text__(ERROR_MESSAGE)
-            logging.exception('Something got wrong with the parsing of time table website', exc_info=True)
+            logging.exception(PARSING_ERROR, exc_info=True)
             await ctx.message.add_reaction('❌')
 
     @commands.command(name="edttoday", brief='display course scheduled today')
@@ -54,7 +55,7 @@ class EpsiCommands(commands.Cog):
             await ctx.message.add_reaction('❌')
         except (common_error.HttpError, epsi_error.EpsiError):
             await self.__send_text__(ERROR_MESSAGE)
-            logging.exception('Something got wrong with the parsing of time table website', exc_info=True)
+            logging.exception(PARSING_ERROR, exc_info=True)
             await ctx.message.add_reaction('❌')
 
     @commands.command(name="nextroom", brief="give next classroom")
@@ -67,7 +68,7 @@ class EpsiCommands(commands.Cog):
             await ctx.message.add_reaction('❌')
         except (common_error.HttpError, epsi_error.EpsiError):
             await self.__send_text__(ERROR_MESSAGE)
-            logging.exception('Something got wrong with the parsing of time table website', exc_info=True)
+            logging.exception(PARSING_ERROR, exc_info=True)
             await ctx.message.add_reaction('❌')
 
     # private methods
@@ -90,7 +91,7 @@ class EpsiCommands(commands.Cog):
 
         except (common_error.HttpError, epsi_error.EpsiError):
             await self.__send_text__(ERROR_MESSAGE)
-            logging.exception('Something got wrong with the parsing of time table website', exc_info=True)
+            logging.exception(PARSING_ERROR, exc_info=True)
 
     async def __send_embed_planning__(self, rawmessage):
         """Format the raw planning into a embed message for discord"""

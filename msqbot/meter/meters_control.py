@@ -1,7 +1,4 @@
 import meter.meter_db as database
-import exception as ex
-
-
 class MeterControls:
     """Controller for meters"""
     def __init__(self):
@@ -18,18 +15,10 @@ class MeterControls:
                 start score for meter
             rules: :class:`str`
                 meter's rules
-        Raises
-        -------
-            MsqDataBaseError
-                An occurred with the query on the database
         """
-        try:
-
-            self.db.insert_meter(name, rules)
-            for participant in participants:
-                self.add_participant(participant, name)
-        except ex.MsqbitsReporterException:
-            raise
+        self.db.insert_meter(name, rules)
+        for participant in participants:
+            self.add_participant(participant, name)
 
     def add_participant(self, name, meter):
         """Add a participant to a meter
@@ -40,16 +29,9 @@ class MeterControls:
                 participant's name
             meter: :class:`name`
                 meter's name
-        Raises
-        -------
-            MsqDataBaseError
-                An occurred with the query on the database
         """
-        try:
-            self.db.insert_participant(name)
-            self.db.insert_score(meter, name)
-        except ex.MsqbitsReporterException:
-            raise
+        self.db.insert_participant(name)
+        self.db.insert_score(meter, name)
 
     def update_score(self, meter, participant, score):
         """update participant score
@@ -62,15 +44,8 @@ class MeterControls:
                 participant's name
             score: :class:`int`
                 score number
-        Raises
-        -------
-            MsqDataBaseError
-                An occurred with the query on the database
         """
-        try:
-            self.db.update_score(meter, participant, score)
-        except ex.MsqbitsReporterException:
-            raise
+        self.db.update_score(meter, participant, score)
 
     def get_all_meters(self):
         """Get all meters
@@ -79,16 +54,9 @@ class MeterControls:
         -------
             :class:`list`
                 Dict of meters with participants count
-        Raises
-        -------
-            MsqDataBaseError
-                An occurred with the query on the database
         """
-        try:
-            meters = self.db.select_meters()
-            return [meter[1] for meter in meters]
-        except ex.MsqbitsReporterException:
-            raise
+        meters = self.db.select_meters()
+        return [meter[1] for meter in meters]
 
     def get_meter_scoreboard(self, meter):
         """Get the scoreboard for meter
@@ -101,23 +69,16 @@ class MeterControls:
         -------
             :class:`dict`
                 Dict of meters with participants count
-        Raises
-        -------
-            MsqDataBaseError
-                An occurred with the query on the database
         """
-        try:
-            meter_detail = self.db.select_one_meters_details(meter)
-            return{
-                'meter': meter_detail[0][0],
-                'rules': meter_detail[0][1],
-                'participants': [{
-                    'name': detail[2],
-                    'score': detail[3]
-                } for detail in meter_detail]
-            }
-        except ex.MsqbitsReporterException:
-            raise
+        meter_detail = self.db.select_one_meters_details(meter)
+        return{
+            'meter': meter_detail[0][0],
+            'rules': meter_detail[0][1],
+            'participants': [{
+                'name': detail[2],
+                'score': detail[3]
+            } for detail in meter_detail]
+        }
 
     def get_participant_summary(self, name):
         """Get participants details on meter
@@ -130,24 +91,17 @@ class MeterControls:
         -------
             :class:`dict`
                 Dict of meters with participants count
-        Raises
-        -------
-            MsqDataBaseError
-                An occurred with the query on the database
         """
-        try:
-            details = self.db.select_one_participant_details(name)
-            summary = {
-                'nom': details[0][0],
-                'total_score': 0,
-                'meters': []
-            }
-            for detail in details:
-                summary['total_score'] += detail[1]
-                summary['meters'].append({
-                    'name': detail[2],
-                    'score': detail[1]
-                })
-            return summary
-        except ex.MsqbitsReporterException:
-            raise
+        details = self.db.select_one_participant_details(name)
+        summary = {
+            'nom': details[0][0],
+            'total_score': 0,
+            'meters': []
+        }
+        for detail in details:
+            summary['total_score'] += detail[1]
+            summary['meters'].append({
+                'name': detail[2],
+                'score': detail[1]
+            })
+        return summary

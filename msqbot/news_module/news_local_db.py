@@ -6,8 +6,8 @@ class LocalDatabase:
     """Connection to the local database"""
 
     def __init__(self,):
-        dataBasePath = "{}/msqbreporter_database.db".format(os.path.dirname(os.path.abspath(__file__)))
-        self.conn = db.connect(dataBasePath)
+        database_path = "{}/msqbreporter_database.db".format(os.path.dirname(os.path.abspath(__file__)))
+        self.conn = db.connect(database_path)
         self.__create_news_table__()
 
     def __create_news_table__(self):
@@ -37,9 +37,6 @@ class LocalDatabase:
                     FOREIGN KEY(newspaper_category) REFERENCES categories(category_id)
                 );
             ''')
-        except (db.IntegrityError, db.InternalError, db.OperationalError):
-            raise
-
         finally:
             cursor.close()
 
@@ -61,11 +58,6 @@ class LocalDatabase:
         -------
             :class:`int`
                 Inserted element id
-
-        Raises
-        -------
-            DatabaseError
-                An occurred with the query on the database
         """
         cursor = self.conn.cursor()
         try:
@@ -84,8 +76,6 @@ class LocalDatabase:
             ''', [title, website, rss_link, category_name])
             self.conn.commit()
             return cursor.lastrowid
-        except (db.DatabaseError, db.InterfaceError):
-            raise
         finally:
             cursor.close()
 
@@ -96,18 +86,11 @@ class LocalDatabase:
         -----------
             newspaper_name: :class:`str`
                 name of the newspaper to delete
-
-        Raises
-        -------
-            DatabaseError
-                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
             cursor.execute('''DELETE FROM newspapers WHERE newspaper_title = (?)''', [newspaper_name])
             self.conn.commit()
-        except db.DatabaseError:
-            raise
         finally:
             cursor.close()
 
@@ -118,11 +101,6 @@ class LocalDatabase:
         -------
             :class:`list`
                 A list of newspapers stored on database
-
-        Raises
-        -------
-            DatabaseError
-                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
@@ -137,10 +115,6 @@ class LocalDatabase:
             ''')
 
             return cursor.fetchall()
-
-        except db.DatabaseError:
-            raise
-
         finally:
             cursor.close()
 
@@ -156,11 +130,6 @@ class LocalDatabase:
         -------
             :class:`list`
                 List of all newspaper with the given title in database
-
-        Raises
-        -------
-            DatabaseError
-                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
@@ -176,9 +145,6 @@ class LocalDatabase:
             ''', [title])
 
             return cursor.fetchall()
-
-        except db.DatabaseError:
-            raise
         finally:
             cursor.close()
 
@@ -194,11 +160,6 @@ class LocalDatabase:
         -------
             :class:`list`
                 A list of all newspaper with the given category
-
-        Raises
-        -------
-            DatabaseError
-                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
@@ -213,9 +174,6 @@ class LocalDatabase:
                 WHERE c.category_name = ?
             ''', [category_name])
             return cursor.fetchall()
-
-        except db.DatabaseError:
-            raise
         finally:
             cursor.close()
 
@@ -226,11 +184,6 @@ class LocalDatabase:
         -------
             :class:`list`
                 A list of category available on the database
-
-        Raises
-        -------
-            DatabaseError
-                Error occurred on the database
         """
         cursor = self.conn.cursor()
         try:
@@ -239,9 +192,6 @@ class LocalDatabase:
                 FROM categories c
             ''')
             return cursor.fetchall()
-
-        except db.DatabaseError:
-            raise
         finally:
             cursor.close()
 

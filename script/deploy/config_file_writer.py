@@ -18,25 +18,27 @@ def check_mandatory_fields(fields):
 
 
 def write_discord_config():
+
     token = ''
-    messageActivity = ''
-    commandPrefix = ''
+    message_activity = ''
+    command_prefix = ''
     news_channel = ''
     edt_channel = ''
+    meter_channel = ''
 
-    while not check_mandatory_fields({token, messageActivity, commandPrefix}):
+    while not check_mandatory_fields({token, message_activity, command_prefix}):
         print('---------------------DISCORD------------')
         token = input('bot token: ')
-        messageActivity = input('message activity: ')
-        commandPrefix = input('command prefix: ')
+        message_activity = input('message activity: ')
+        command_prefix = input('command prefix: ')
         news_channel = input('id channel for news: ')
         edt_channel = input('id channel for planning: ')
         meter_channel = input('id channel for meters: ')
 
     config['DISCORD'] = {
         'token': token,
-        'messageActivity': messageActivity,
-        'commandPrefix': commandPrefix,
+        'message_activity': message_activity,
+        'command_prefix': command_prefix,
         'idNewsChannel': news_channel,
         'idEdtChannel': edt_channel,
         'idMeterChannel': meter_channel

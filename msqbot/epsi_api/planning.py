@@ -1,6 +1,5 @@
 import epsi_api.edt_parser as edt_parser
 import exception as common_error
-import epsi_api.exception as epsi_error
 from bs4 import BeautifulSoup
 from datetime import datetime
 import requests
@@ -25,9 +24,6 @@ def get_week_courses():
 
         week_courses = edt_parser.parse_epsi_planning_html(soup)
         return __format_courses__(week_courses)
-
-    except (epsi_error.PlanningParsingError, epsi_error.ParserNoPlanningFound):
-        raise
     except requests.ConnectionError:
         raise common_error.HttpError
 
@@ -58,9 +54,6 @@ def get_courses_for(date):
             course_date = edt_parser.french_to_us_date_converter(course['date'])
             if course_date == given_date:
                 return __format_courses__([course])  # put course into array to use it with format_courses
-
-    except (epsi_error.PlanningParsingError, epsi_error.ParserNoPlanningFound):
-        raise
     except requests.ConnectionError:
         raise common_error.HttpError
 
@@ -73,12 +66,8 @@ def get_today_courses():
         :class:`list`
             list of course planned for the current day
     """
-    try:
-        today_formatted = datetime.today().strftime('%m/%d/%y')
-        return get_courses_for(today_formatted)
-
-    except (epsi_error.PlanningParsingError, epsi_error.ParserNoPlanningFound, common_error.HttpError):
-        raise
+    today_formatted = datetime.today().strftime('%m/%d/%y')
+    return get_courses_for(today_formatted)
 
 
 def get_next_classroom():
@@ -89,20 +78,16 @@ def get_next_classroom():
         :class:`int`
             The next classroom number
     """
-    try:
-        current_hour = datetime.now().hour
-        course_planned_today = get_today_courses()['course']
+    current_hour = datetime.now().hour
+    course_planned_today = get_today_courses()['course']
 
-        if course_planned_today is not None:
-            for course in course_planned_today:
-                startHour = int(course['hours'].split('-')[0].split(':')[0])  # parse the result list to get the begining hour
-                endHour = int(course['hours'].split('-')[1].split(':')[0].split(' ')[1])  # parse the result list to get the ending hour
+    if course_planned_today is not None:
+        for course in course_planned_today:
+            start_hour = int(course['hours'].split('-')[0].split(':')[0])  # parse the result list to get the begining hour
+            end_hour = int(course['hours'].split('-')[1].split(':')[0].split(' ')[1])  # parse the result list to get the ending hour
 
-                if startHour <= current_hour < endHour:
-                    return course['room']
-
-    except (epsi_error.PlanningParsingError, epsi_error.ParserNoPlanningFound, common_error.HttpError):
-        raise
+            if start_hour <= current_hour < end_hour:
+                return course['room']
 
 
 def __format_courses__(planning_details):

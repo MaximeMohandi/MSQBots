@@ -6,8 +6,8 @@ import os
 class MeterDatabase:
     """Connection to the nice meter database"""
     def __init__(self):
-        dB_path = os.path.join(os.path.dirname(__file__), 'nice_meter.db')
-        self.conn = sqlite.connect(dB_path)
+        db_path = os.path.join(os.path.dirname(__file__), 'nice_meter.db')
+        self.conn = sqlite.connect(db_path)
         self.__create_meter_tables__()
 
     def __create_meter_tables__(self):

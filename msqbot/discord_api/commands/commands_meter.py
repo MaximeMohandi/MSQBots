@@ -7,10 +7,11 @@ import logging
 
 EMBEDDED_COLOR = colour.Colour.dark_purple()
 EMBEDDED_FOOTER = "Who's the best ??"
+ERROR_NAME = "METER ERROR"
 
 
 class MeterCommands(commands.Cog):
-    """Commands to interract with meter module"""
+    """Commands to interact with meter module"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -27,7 +28,7 @@ class MeterCommands(commands.Cog):
             self.meters.create_meter(name, participants, rules)
             await ctx.message.add_reaction('✅')
         except msqerror.MsqbitsReporterException:
-            logging.exception('METERS ERROR', exc_info=True)
+            logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')
 
     @commands.command(name='meterlist', brief='Display list of meters')
@@ -49,7 +50,7 @@ class MeterCommands(commands.Cog):
             else:
                 await ctx.message.add_reaction('❌')
         except msqerror.MsqbitsReporterException:
-            logging.exception('METERS ERROR', exc_info=True)
+            logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')
 
     @commands.command(name='meterstatfor', brief='display get meter stat for user')
@@ -72,40 +73,43 @@ class MeterCommands(commands.Cog):
             else:
                 await ctx.message.add_reaction('❌')
         except msqerror.MsqbitsReporterException:
-            logging.exception('METERS ERROR', exc_info=True)
+            logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')
 
     @commands.command(name='addpoint', brief='brief score point to user')
     async def add_score_for(self, ctx, *args):
         try:
-            meter_name = str(args[0]),
+            meter_name = args[0],
             participant = self.__get_username_from_tag(args[1])
             score = int(args[2])
-            self.meters.update_score(meter_name, participant, score)
-            await ctx.message.add_reaction('✅')
+            self.meters.update_score(str(meter_name), participant, score)
+            await self.__send_scoreboard__(ctx, meter_name)
         except msqerror.MsqbitsReporterException:
-            logging.exception('METERS ERROR', exc_info=True)
+            logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')
 
     @commands.command(name='scoreboard', brief='display scoreboard for meter')
     async def display_scoreboard(self, ctx, arg):
         try:
-            scoreboard = self.meters.get_meter_scoreboard(arg)
-            if scoreboard:
-                scoreboard_msg = embeds.Embed(
-                    title=scoreboard['meter'],
-                    description=scoreboard['rules'],
-                    colour=EMBEDDED_COLOR
-                )
-                scoreboard_msg.set_footer(text=EMBEDDED_FOOTER)
-                for score in scoreboard['participants']:
-                    scoreboard_msg.add_field(name=score['name'], value=score['score'], inline=False)
-                await self.__send_to_channel__(scoreboard_msg, True)
-                await ctx.message.add_reaction('✅')
-            else:
-                await ctx.message.add_reaction('❌')
+            await self.__send_scoreboard__(ctx, arg)
         except msqerror.MsqbitsReporterException:
-            logging.exception('METERS ERROR', exc_info=True)
+            logging.exception(ERROR_NAME, exc_info=True)
+            await ctx.message.add_reaction('❌')
+
+    async def __send_scoreboard__(self, ctx, meter):
+        scoreboard = self.meters.get_meter_scoreboard(meter)
+        if scoreboard:
+            scoreboard_msg = embeds.Embed(
+                title=scoreboard['meter'],
+                description=scoreboard['rules'],
+                colour=EMBEDDED_COLOR
+            )
+            scoreboard_msg.set_footer(text=EMBEDDED_FOOTER)
+            for score in scoreboard['participants']:
+                scoreboard_msg.add_field(name=score['name'], value=score['score'], inline=False)
+            await self.__send_to_channel__(scoreboard_msg, True)
+            await ctx.message.add_reaction('✅')
+        else:
             await ctx.message.add_reaction('❌')
 
     async def __send_to_channel__(self, message, embed=False):
