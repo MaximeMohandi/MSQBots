@@ -4,7 +4,6 @@ import discord
 from discord_api import credentials
 from discord.ext import commands
 from datetime import datetime
-from os import listdir, path
 
 
 DISCORD_COMMANDS_FILES = [
@@ -15,7 +14,7 @@ DISCORD_COMMANDS_FILES = [
 
 
 credentials = credentials.get_credentials('discord')
-bot = commands.Bot(command_prefix=credentials['commandPrefix'])
+bot = commands.Bot(command_prefix=credentials['command_prefix'])
 
 
 def create_log_file():
@@ -27,10 +26,6 @@ def create_log_file():
 
 def load_command_files():
     try:
-        # TODO analyse auto des fichiers dans le dossier commands
-        # commands_files = [file.replace('.py', '')
-        #                   for file in listdir(path.join(path.dirname(__file__), 'commands'))
-        #                   if '__' not in file]
         for file in DISCORD_COMMANDS_FILES:
             bot.load_extension(file)
 
@@ -53,7 +48,7 @@ def run():
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name=credentials['messageActivity']))
+    await bot.change_presence(activity=discord.Game(name=credentials['message_activity']))
     print("I'm on the case")
     logging.info("bot running")
 
