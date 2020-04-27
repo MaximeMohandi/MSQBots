@@ -83,7 +83,6 @@ class MeterCommands(commands.Cog):
             participant = self.__get_username_from_tag(args[1])
             score = int(args[2])
             self.meters.update_score(str(meter_name), participant, score)
-            await self.__send_scoreboard__(ctx, meter_name)
         except msqerror.MsqbitsReporterException:
             logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')
