@@ -42,7 +42,7 @@ class MeterControls:
                 meter's name
             participant: :class:`str`
                 participant's name
-            score: :class:`int`
+            score: :class:`str`
                 score number
         """
         self.db.update_score(meter, participant, score)

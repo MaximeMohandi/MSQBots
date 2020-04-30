@@ -329,7 +329,7 @@ class MeterDatabase:
                 name of the meter
             name_participant: :class:`str`
                 name of the participant
-            score: :class:`int`
+            score: :class:`str`
                 the participant's score for the selected meter
         Raises
         -------
@@ -347,11 +347,10 @@ class MeterDatabase:
                 AND fk_participant = (
                     SELECT id_participant FROM participants WHERE name_participant=?
                 );
-            ''', [score, str(name_meter), name_participant])
+            ''', [score, name_meter, name_participant])
             self.conn.commit()
             return cursor.lastrowid
-        except (sqlite.DatabaseError, sqlite.InterfaceError) as err:
-            print(err)
+        except (sqlite.DatabaseError, sqlite.InterfaceError):
             raise ex.MsqDataBaseError
         finally:
             cursor.close()

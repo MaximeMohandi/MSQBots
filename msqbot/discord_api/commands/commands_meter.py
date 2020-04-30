@@ -81,8 +81,9 @@ class MeterCommands(commands.Cog):
         try:
             meter_name = args[0],
             participant = self.__get_username_from_tag(args[1])
-            score = int(args[2])
-            self.meters.update_score(str(meter_name), participant, score)
+            score = args[2]
+            self.meters.update_score(meter_name[0], participant, score)  # args[0] return a tuple
+            await ctx.message.add_reaction('✅')
         except msqerror.MsqbitsReporterException:
             logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')
@@ -144,6 +145,7 @@ class MeterCommands(commands.Cog):
         tag = tag.replace(">", "")
         user_id = tag.replace("@!", "")
         return self.bot.get_user(int(user_id)).name
+
 
 def setup(bot):
     bot.add_cog(MeterCommands(bot))
