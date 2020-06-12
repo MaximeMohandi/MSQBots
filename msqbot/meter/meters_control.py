@@ -20,6 +20,16 @@ class MeterControls:
         for participant in participants:
             self.add_participant(participant, name)
 
+    def remove_meter(self, meter):
+        """Add a participant to a meter
+
+        Parameters
+        -----------
+            meter: :class:`name`
+                meter's name
+        """
+        self.db.remove_meter(meter)
+
     def add_participant(self, name, meter):
         """Add a participant to a meter
 
@@ -32,6 +42,18 @@ class MeterControls:
         """
         self.db.insert_participant(name)
         self.db.insert_score(meter, name)
+
+    def remove_participant(self, name, meter):
+        """remove a participant from a meter
+
+        Parameters
+        -----------
+            name: :class:`str`
+                participant's name
+            meter: :class:`name`
+                meter's name
+        """
+        self.db.delete_participant_from(name, meter)
 
     def update_score(self, meter, participant, score):
         """update participant score

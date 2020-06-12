@@ -18,7 +18,6 @@ class MeterCommands(commands.Cog):
         self.meter_channel = int(credentials.get_credentials('discord')['idmeterchannel'])
         self.meters = meter.MeterControls()
 
-    # General Commands
     @commands.command(name='addmeter', brief='add a new meter')
     async def add_new_meter(self, ctx, *args):
         try:
@@ -26,6 +25,16 @@ class MeterCommands(commands.Cog):
             participants = [self.__get_username_from_tag(arg) for arg in args if '@' in arg]
             rules = args[-1]
             self.meters.create_meter(name, participants, rules)
+            await ctx.message.add_reaction('✅')
+        except msqerror.MsqbitsReporterException:
+            logging.exception(ERROR_NAME, exc_info=True)
+            await ctx.message.add_reaction('❌')
+
+    @commands.command(name='rmmeter', brief='remove a meter')
+    async def remove_meter(self, ctx, arg):
+        try:
+            meter_name = arg
+            self.meters.remove_meter(meter_name)
             await ctx.message.add_reaction('✅')
         except msqerror.MsqbitsReporterException:
             logging.exception(ERROR_NAME, exc_info=True)
@@ -92,6 +101,28 @@ class MeterCommands(commands.Cog):
     async def display_scoreboard(self, ctx, arg):
         try:
             await self.__send_scoreboard__(ctx, arg)
+        except msqerror.MsqbitsReporterException:
+            logging.exception(ERROR_NAME, exc_info=True)
+            await ctx.message.add_reaction('❌')
+
+    @commands.command(name='addplayer', brief='add player to meter')
+    async def add_participant_to_meter(self, ctx, *args):
+        try:
+            participant = self.__get_username_from_tag(args[0])
+            meter_name = args[1]
+            self.meters.add_participant(participant, meter_name)
+            await ctx.message.add_reaction('✅')
+        except msqerror.MsqbitsReporterException:
+            logging.exception(ERROR_NAME, exc_info=True)
+            await ctx.message.add_reaction('❌')
+
+    @commands.command(name='rmplayer', brief='remove player from meter')
+    async def remove_participant_from_meter(self, ctx, *args):
+        try:
+            participant = self.__get_username_from_tag(args[0])
+            meter_name = args[1]
+            self.meters.remove_participant(participant, meter_name)
+            await ctx.message.add_reaction('✅')
         except msqerror.MsqbitsReporterException:
             logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')

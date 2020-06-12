@@ -77,7 +77,7 @@ class EpsiCommands(commands.Cog):
     async def __display_planning_weekly__(self):
         """ Send EPSI planning every sunday."""
         weekday = datetime.now().weekday()
-        if weekday is 6:
+        if weekday == 6:
             await self.__display_planning__()
 
     async def __display_planning__(self):

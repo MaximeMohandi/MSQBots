@@ -190,6 +190,44 @@ class MeterDatabase:
         finally:
             cursor.close()
 
+    def delete_participant_from(self, name, meter):
+        """Delete a participant from meter into database
+
+        Parameters
+        -----------
+            name: :class:`str`
+                participant's name
+            meter: :class:`str`
+                meter's name
+        Returns
+        -------
+            :class:`int`
+                Inserted element id
+        Raises
+        -------
+            MsqDataBaseError
+                An occurred with the query on the database
+        """
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute('''
+                DELETE FROM score
+                WHERE fk_participant = (
+                    SELECT id_participant
+                    from participants 
+                    WHERE name_participant = ?
+                ) AND fk_meter = (
+                    SELECT id_meter 
+                    FROM meters
+                    WHERE name_meter = ?
+                )
+            ''', [name, meter])
+            return self.conn.commit()
+        except (sqlite.DatabaseError, sqlite.InterfaceError):
+            raise ex.MsqDataBaseError
+        finally:
+            cursor.close()
+
     def select_participants_details(self):
         """Select all participants registered with details
 
