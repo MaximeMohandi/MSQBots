@@ -14,4 +14,7 @@ echo "run container as service"
 
 docker run -d --name MSQbot -v ./msqbot_logs:/app/logs:ro msqbot
 
+echo "restore database meter"
+docker cp nice_meter.db MSQbot:/app/msqbot/meter/nice_meter.db
+
 echo "done."
