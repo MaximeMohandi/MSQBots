@@ -28,7 +28,7 @@ set_virtual_env () {
 	if [ ! -d $VENV_NAME ]
 	then
 		echo 'create virtual env'
-		python3.7 -m env $VENV_NAME
+		python3.7 -m venv $VENV_NAME
 	fi
 }
 
