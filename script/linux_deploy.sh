@@ -1,10 +1,13 @@
 #!/bin/sh
 
 REPO_SRC=https://github.com/MaximeMohandi/MSQBotsReporter.git
-LOCAL_REPO=MSQBotsReporter
+LOCAL_REPO=MSQBots
 VENV_NAME="env"
 CONFIG_WRITER_PATH="config_file_writer.py"
 PID_FILE=msqbotPID.txt
+
+# return to root
+cd ../..
 
 # clone or pull sources from given repos
 clone_or_pull_reporter () {
