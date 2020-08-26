@@ -3,7 +3,7 @@
 REPO_SRC=https://github.com/MaximeMohandi/MSQBotsReporter.git
 LOCAL_REPO=MSQBots
 VENV_NAME="env"
-CONFIG_WRITER_PATH="config_file_writer.py"
+CONFIG_WRITER_PATH="script/config_file_writer.py"
 PID_FILE=msqbotPID.txt
 
 # return to root
@@ -43,12 +43,11 @@ write_reporter_config_if_not_exist () {
 
 #launch msqbot in background
 start_reporter () {
-	launch_command=`$VENV_NAME/bin/python -m msqbot`
 	if [ ! -f $PID_FILE ]
 	then
 		kill -9 `cat $PID_FILE`
 	fi
-	nohup $launch_command> my.log 2>&1 &
+	nohup $VENV_NAME/bin/python -m msqbot > my.log 2>&1 &
 	echo $! > $PID_FILE
 }
 
