@@ -1,7 +1,7 @@
 import configparser
 # import os.path as path
 
-path = '../msqbot/resources/config.ini'
+path = 'msqbot/resources/config.ini'
 config = configparser.ConfigParser()
 
 
