@@ -34,7 +34,7 @@ set_virtual_env () {
 
 # run reporter configurer
 write_reporter_config_if_not_exist () {
-	if [ ! -d msqbot ]
+	if [ -d msqbot ]
 	then
 		echo 'configure bot'
 		$VENV_NAME/bin/python $CONFIG_WRITER_PATH
