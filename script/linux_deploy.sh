@@ -3,7 +3,6 @@
 REPO_SRC=https://github.com/MaximeMohandi/MSQBotsReporter.git
 LOCAL_REPO=MSQBots
 VENV_NAME="env"
-CONFIG_WRITER_PATH="script/config_file_writer.py"
 PID_FILE=msqbotPID.txt
 
 # return to root
@@ -37,7 +36,9 @@ write_reporter_config_if_not_exist () {
 	if [ -d msqbot ]
 	then
 		echo 'configure bot'
-		$VENV_NAME/bin/python $CONFIG_WRITER_PATH
+		cd script/
+		$VENV_NAME/bin/python config_file_writer.py
+		cd ..
 	fi
 }
 
