@@ -43,12 +43,13 @@ write_reporter_config_if_not_exist () {
 
 #launch msqbot in background
 start_reporter () {
-	if [ ! -f $PID_FILE ]
+	if [ -f $PID_FILE ]
 	then
 		kill -9 `cat $PID_FILE`
 	fi
 	nohup $VENV_NAME/bin/python -m msqbot > my.log 2>&1 &
 	echo $! > $PID_FILE
+	echo 'reporter running'
 }
 
 clone_or_pull_reporter
