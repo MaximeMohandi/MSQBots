@@ -7,7 +7,6 @@ from datetime import datetime
 
 
 DISCORD_COMMANDS_FILES = [
-    'msqbot.discord_api.commands.commands_reporter',
     'msqbot.discord_api.commands.commands_epsi',
     'msqbot.discord_api.commands.commands_meter'
 ]
