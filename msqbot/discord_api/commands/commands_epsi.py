@@ -23,26 +23,15 @@ class EpsiCommands(commands.Cog):
         self.planning_channel = int(credentials.get_credentials('discord')['idEdtChannel'])
         self.__display_planning_weekly__.start()
 
-    # commands
-
+    # ===================================
+    # COMMANDS
+    # ==================================
     @commands.command(name='edt', brief='Display planed course')
-    async def display_planning_week(self, ctx):
-        await self.__display_planning__()
-
-    @commands.command(name='edtfor', brief='Display planed course for given day')
-    async def display_planning_for_date(self, ctx, arg):
-        try:
-            date = arg
-            for message in planning.get_courses_for(date):
-                await self.__send_embed_planning__(message)
-
-        except epsi_error.ParserNoPlanningFound:
-            await self.__send_text__(NO_PLANNING_FOUND_MESSAGE)
-            await ctx.message.add_reaction('❌')
-        except (common_error.HttpError, epsi_error.EpsiError):
-            await self.__send_text__(ERROR_MESSAGE)
-            logging.exception(PARSING_ERROR, exc_info=True)
-            await ctx.message.add_reaction('❌')
+    async def display_planning_week(self, ctx, arg=None):
+        if arg is None:
+            await self.__display_planning__()
+        else:
+            await self.__display_planning_for_date__(arg)
 
     @commands.command(name="edttoday", brief='display course scheduled today')
     async def display_today_planning(self, ctx):
@@ -71,14 +60,17 @@ class EpsiCommands(commands.Cog):
             logging.exception(PARSING_ERROR, exc_info=True)
             await ctx.message.add_reaction('❌')
 
-    # private methods
+    # ===================================
+    # PRIVATE METHODS
+    # ==================================
 
-    @tasks.loop(hours=24)
+    @tasks.loop(hours=2)
     async def __display_planning_weekly__(self):
-        """ Send EPSI planning every sunday."""
+        """ Send EPSI planning for next week every friday between 4pm and 6 pm."""
         weekday = datetime.now().weekday()
-        if weekday == 6:
-            await self.__display_planning__()
+        if weekday == 4:
+            if 16 <= datetime.now().hour <= 18:
+                await self.__display_planning_for_date__(weekday + 3)  # set date to the next monday
 
     async def __display_planning__(self):
         """ Send planning entire planning for the week."""
@@ -89,6 +81,17 @@ class EpsiCommands(commands.Cog):
         except epsi_error.ParserNoPlanningFound:
             await self.__send_text__(NO_PLANNING_FOUND_MESSAGE)
 
+        except (common_error.HttpError, epsi_error.EpsiError):
+            await self.__send_text__(ERROR_MESSAGE)
+            logging.exception(PARSING_ERROR, exc_info=True)
+
+    async def __display_planning_for_date__(self, date):
+        try:
+            for message in planning.get_week_courses_for(date):
+                await self.__send_embed_planning__(message)
+
+        except epsi_error.ParserNoPlanningFound:
+            await self.__send_text__(NO_PLANNING_FOUND_MESSAGE)
         except (common_error.HttpError, epsi_error.EpsiError):
             await self.__send_text__(ERROR_MESSAGE)
             logging.exception(PARSING_ERROR, exc_info=True)

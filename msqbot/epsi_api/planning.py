@@ -21,39 +21,34 @@ def get_week_courses():
         request = PLANNING_URI.format(edt_parser.clean_start_day())
         response = requests.get(request)
         soup = BeautifulSoup(response.text, "html.parser")
-
         week_courses = edt_parser.parse_epsi_planning_html(soup)
         return __format_courses__(week_courses)
+
     except requests.ConnectionError:
         raise common_error.HttpError
 
 
-def get_courses_for(date):
-    """Get the courses planned for a given day
+def get_week_courses_for(date):
+    """ Get the planning for the given date
 
     Parameters
     -----------
         date: :class:`str`
-            newspaper title
+            a day in the wanted week
 
     Returns
     -------
         :class:`list`
-            A list of courses planned for the given day
-
+            A list of course planned into the given day
     """
     try:
-        given_date = datetime.strptime(date, '%d/%m/%Y').strftime('%m/%d/%y')
-        request = PLANNING_URI.format(given_date)
+        week_date = datetime.strptime(date, '%d/%m/%Y').strftime('%m/%d/%y')
+        request = PLANNING_URI.format(week_date)
         response = requests.get(request)
         soup = BeautifulSoup(response.text, "html.parser")
+        planning = edt_parser.parse_epsi_planning_html(soup)
+        return __format_courses__(planning)
 
-        planned_course_date = edt_parser.parse_epsi_planning_html(soup)
-
-        for course in planned_course_date:
-            course_date = edt_parser.french_to_us_date_converter(course['date'])
-            if course_date == given_date:
-                return __format_courses__([course])  # put course into array to use it with format_courses
     except requests.ConnectionError:
         raise common_error.HttpError
 
@@ -68,6 +63,36 @@ def get_today_courses():
     """
     today_formatted = datetime.today().strftime('%m/%d/%y')
     return get_courses_for(today_formatted)
+
+
+def get_courses_for(date):
+    """Get the courses planned for a given day
+
+    Parameters
+    -----------
+        date: :class:`str`
+            the day to get course
+
+    Returns
+    -------
+        :class:`list`
+            A list of courses planned for the given day
+
+    """
+    try:
+        given_date = datetime.strptime(date, '%d/%m/%y').strftime('%m/%d/%y')
+        request = PLANNING_URI.format(given_date)
+        response = requests.get(request)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        planned_course_date = edt_parser.parse_epsi_planning_html(soup)
+
+        for course in planned_course_date:
+            course_date = edt_parser.literal_french_date_to_us_date_converter(course['date'])
+            if course_date == given_date:
+                return __format_courses__([course])  # put course into array to use it with format_courses
+    except requests.ConnectionError:
+        raise common_error.HttpError
 
 
 def get_next_classroom():

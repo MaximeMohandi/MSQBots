@@ -6,7 +6,7 @@ def clean_start_day():
     """ Get the date of the first day of the time-table
 
     This get the current day then compute substract today's
-    date with the number of day passed to get the firstday date
+    date with the number of day passed to get the first day date
 
     Returns
     -------
@@ -25,12 +25,12 @@ def clean_start_day():
         return datetime.today() - timedelta(days=daytosubs)
 
 
-def french_to_us_date_converter(frenchdate):
+def literal_french_date_to_us_date_converter(french_date):
     """Convert a french date to US date
 
     Parameters
     -----------
-        frenchdate: :class:`str`
+        french_date: :class:`str`
             French formated date
 
     Returns
@@ -44,20 +44,19 @@ def french_to_us_date_converter(frenchdate):
             The given date is not in the expected format
     """
     try:
-        datetime.strptime(frenchdate, '%d/%m/%y')
-
-        dictmonthnumber = [
+        datetime.strptime(french_date, '%d/%m/%y')
+        french_months_position = [
             ['janvier', '01'], ['février', '02'], ['mars', '03'],
             ['avril', '04'], ['mai', '05'], ['juin', '06'],
             ['juillet', '07'], ['aout', '08'], ['septembre', '09'],
             ['octobre', '10'], ['novembre', '11'], ['décembre', '12']
         ]
-        correctdate = frenchdate.split(' ')
+        correct_date = french_date.split(' ')
 
-        for date in dictmonthnumber:
-            if correctdate[2].lower() == date[0]:
+        for date in french_months_position:
+            if correct_date[2].lower() == date[0]:
                 yeardate = datetime.today().year
-                dateday = correctdate[1]
+                dateday = correct_date[1]
                 datemonth = date[1]
 
                 return datetime(year=int(yeardate), month=int(datemonth), day=int(dateday)).strftime('%m/%d/%y')
