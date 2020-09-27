@@ -3,7 +3,7 @@ import exception as common_error
 from msqbot.discord_api import credentials
 from discord.ext import commands, tasks
 from discord import embeds, colour
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 EMBEDDED_COLOR = colour.Colour.dark_blue()
@@ -67,10 +67,10 @@ class EpsiCommands(commands.Cog):
     @tasks.loop(hours=2)
     async def __display_planning_weekly__(self):
         """ Send EPSI planning for next week every friday between 4pm and 6 pm."""
-        weekday = datetime.now().weekday()
-        if weekday == 4:
+        today = datetime.now()
+        if today.weekday() == 4:
             if 16 <= datetime.now().hour <= 18:
-                await self.__display_planning_for_date__(weekday + 3)  # set date to the next monday
+                await self.__display_planning_for_date__(today + timedelta(days=3))  # set date to the next monday
 
     async def __display_planning__(self):
         """ Send planning entire planning for the week."""
@@ -86,6 +86,7 @@ class EpsiCommands(commands.Cog):
             logging.exception(PARSING_ERROR, exc_info=True)
 
     async def __display_planning_for_date__(self, date):
+        """ Send planning for the week which contain the given date"""
         try:
             for message in planning.get_week_courses_for(date):
                 await self.__send_embed_planning__(message)
