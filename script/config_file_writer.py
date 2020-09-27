@@ -22,7 +22,6 @@ def write_discord_config():
     token = ''
     message_activity = ''
     command_prefix = ''
-    news_channel = ''
     edt_channel = ''
     meter_channel = ''
 
