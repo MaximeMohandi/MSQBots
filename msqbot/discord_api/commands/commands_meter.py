@@ -127,6 +127,7 @@ class MeterCommands(commands.Cog):
             logging.exception(ERROR_NAME, exc_info=True)
             await ctx.message.add_reaction('❌')
 
+
     async def __send_scoreboard__(self, ctx, meter):
         scoreboard = self.meters.get_meter_scoreboard(meter)
         if scoreboard:

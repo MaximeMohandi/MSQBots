@@ -30,6 +30,30 @@ class MeterControls:
         """
         self.db.remove_meter(meter)
 
+    def add_rule(self, rule, meter):
+        """ Add meter's rule
+
+        :Parameters
+        -----------
+            rule: :class:`str`
+                meter's rule
+            meter: :class:`str`
+                meter's name
+        """
+        self.db.insert_rule(meter, rule)
+
+    def remove_rule(self, rule, meter):
+        """ Remove a meter's rule
+
+        :Parameters
+        -----------
+            rule: :class:`str`
+                meter's rule
+            meter: :class:`str`
+                meter's name
+        """
+        self.db.delete_rule(meter, rule)
+
     def add_participant(self, name, meter):
         """Add a participant to a meter
 

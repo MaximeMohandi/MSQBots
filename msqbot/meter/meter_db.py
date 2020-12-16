@@ -33,6 +33,13 @@ class MeterDatabase:
                     FOREIGN KEY(fk_meter) REFERENCES meters(id_meter),
                     FOREIGN KEY(fk_participant) REFERENCES participants(id_participant)
                 );
+                
+                CREATE TABLE IF NOT EXISTS rules (
+                    id_rules INTEGER PRIMARY KEY AUTOINCREMENT,
+                    rule VARCHAR(255) NOT NULL,
+                    fk_meter INTEGER NOT NULL,
+                    FOREIGN KEY(fk_meter) REFERENCES meters(id_meter)
+                );
             ''')
 
         except (sqlite.IntegrityError, sqlite.InternalError, sqlite.OperationalError):
@@ -388,6 +395,72 @@ class MeterDatabase:
             ''', [score, name_meter, name_participant])
             self.conn.commit()
             return cursor.lastrowid
+        except (sqlite.DatabaseError, sqlite.InterfaceError):
+            raise ex.MsqDataBaseError
+        finally:
+            cursor.close()
+
+    def insert_rule(self, name_meter, rule):
+        """Insert a new rules to a meter
+
+        Parameters
+        -----------
+            name_meter: :class:`str`
+                name of the meter to link
+            rule: :class:`str`
+                a rule of the meter
+        Returns
+        -------
+            :class:`int`
+                last inserted id
+        Raises
+        -------
+            MsqDataBaseError
+                An occurred with the query on the database
+        """
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute('''
+                INSERT INTO rules (
+                    rule,
+                    fk_meter
+                )VALUES (
+                    ?,
+                    (select id_meter FROM meters where name_meter = ?)
+                );
+            ''', [rule, name_meter])
+            self.conn.commit()
+            return cursor.lastrowid
+        except (sqlite.DatabaseError, sqlite.InterfaceError):
+            raise ex.MsqDataBaseError
+        finally:
+            cursor.close()
+
+    def delete_rule(self, name_meter, rule):
+        """Delete rule from meter
+
+        Parameters
+        -----------
+            name_meter: :class:`str`
+                meter associated to the rule
+            rule: :class:`str`
+                rule to delete
+        Raises
+        -------
+            MsqDataBaseError
+                An occurred with the query on the database
+        """
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute('''
+                DELETE FROM rule 
+                WHERE fk_meter = (
+                    SELECT id_meter FROM meters
+                    WHERE name_meter = ?
+                )
+                AND rule = ?
+            ''', [name_meter, rule])
+            return self.conn.commit()
         except (sqlite.DatabaseError, sqlite.InterfaceError):
             raise ex.MsqDataBaseError
         finally:
