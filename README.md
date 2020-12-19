@@ -9,9 +9,8 @@ people.
 ## Features
 The features are divide in modules so you can use the one you need.
 
-* News module
 * Epsi school api module
-* Covid19 api _(could be removed in the futur)_
+* Score meter - let you create a meter and count the scores with your mate
 
 
 ## Environment Support
@@ -23,17 +22,6 @@ The features are divide in modules so you can use the one you need.
 
 ## Commands List
 
-### News Commands
-
-| commands  | result |
-| ------------- | ------------- |
-| news  | Display last four articles for each newspapers saved in database  |
-| newspapers | Display a list of all the saved newspapers | 
-| categories | Display a list of all news_module categories saved | 
-| newsby | Display a list of all news_module by selected category | 
-| newsfor |  Display articles from a selected newspaper |
-| addnews | Add a new newspaper |
-| rmnewspaper | Remove a newspaper |
 
 ### EPSI Commands
 
@@ -44,10 +32,7 @@ The features are divide in modules so you can use the one you need.
 | todayedt | display course scheduled today |
 | nextroom | give next classroom |
 
-### Covid Commands
-
-| commands  | result |
-| ------------- | ------------- |
-| covid | Display stat for a given country or worldwide |
+### Meters (scoreboard)
+TODO
 
 
